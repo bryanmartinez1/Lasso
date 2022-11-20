@@ -1,0 +1,12 @@
+section {
+  background-image: url("../assets/Lasso.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.card {
+  border-radius: 1rem;
+}
+
+.signup-button {
+  color: #dd4b39;
+}

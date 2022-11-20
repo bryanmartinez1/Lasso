@@ -1,0 +1,36 @@
+section {
+  background-image: url("../assets/Lasso.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.signup-card {
+  border-radius: 1rem;
+}
+
+.signin-button {
+  color: #dd4b39;
+}
+
+/* .main-div {
+  min-height: 35%;
+  min-width: 35%;
+} */
+
+/* .fname-cont {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+.st-name {
+  margin-bottom: 50%;
+  justify-content: left;
+} */
+
+/* .lst-name {
+  position: relative;
+  display: flex;
+  width: 50%;
+  justify-content: right;
+} */

@@ -1,0 +1,75 @@
+section {
+  font-family: "Lato", sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+nav {
+  background: linear-gradient(to right, #9c27b0, #0a0b0b);
+  color: white;
+  padding: 20px 20px;
+}
+
+.navTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seach {
+  display: flex;
+  background-color: rgb(229, 216, 216);
+  position: absolute;
+  top: 40px;
+  left: 65%;
+  width: 19%;
+  align-items: center;
+  padding: 15px;
+  border-color: aliceblue;
+  border-radius: 10px;
+}
+
+.searchInput {
+  border: none;
+  background-color: transparent;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 20px;
+}
+
+.profile {
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.cart {
+  cursor: pointer;
+  position: absolute;
+  top: 45px;
+  left: 90%;
+}
+
+.navBottom {
+  display: flex;
+  position: absolute;
+  top: 45px;
+  right: 40%;
+  align-items: center;
+  justify-content: center;
+}
+.menuItem {
+  margin-right: 50px;
+  cursor: pointer;
+}
+
+.slider {
+  width: 100%;
+  height: 100vh;
+  background: url("https://cdn.staticcrate.com/stock-hd/effects/footagecrate-low-poly-background-black-wall-prev-full.png");
+}
+
+.signup-btn {
+  align-items: center;
+}
