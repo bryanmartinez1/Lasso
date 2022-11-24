@@ -19,7 +19,7 @@ function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [toSignin, setToSignin] = useState(false);
 
   if (toSignin) {
@@ -34,6 +34,7 @@ function Signup() {
     const usernameValue = username;
     const emailValue = email;
     const passwordValue = password;
+    const confirmPasswordValue = confirmPassword;
 
     try {
       // Since the signUp method returns a Promise, we need to call it using await
@@ -43,6 +44,9 @@ function Signup() {
       user.set("username", usernameValue);
       user.set("password", passwordValue);
       user.set("email", emailValue);
+      if (passwordValue != confirmPasswordValue) {
+        throw "Mismatching Passwords";
+      }
       // user.set("phone", phoneValue);
       const createdUser = await user.signUp();
       alert(
@@ -121,6 +125,8 @@ function Signup() {
 
                 <div class="form-outline mb-4">
                   <input
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
                     type="password"
                     placeholder="Confirm Passowrd"
                     id="typePasswordX-3"
