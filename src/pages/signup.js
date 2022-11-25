@@ -44,8 +44,9 @@ function Signup() {
       user.set("username", usernameValue);
       user.set("password", passwordValue);
       user.set("email", emailValue);
-      if (passwordValue != confirmPasswordValue) {
-        throw "Mismatching Passwords";
+      user.set("balance", 0);
+      if (passwordValue !== confirmPasswordValue) {
+        throw Error("Mismatching Passwords");
       }
       // user.set("phone", phoneValue);
       const createdUser = await user.signUp();
