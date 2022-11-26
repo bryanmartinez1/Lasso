@@ -45,10 +45,12 @@ function Signup() {
       user.set("password", passwordValue);
       user.set("email", emailValue);
       user.set("balance", 0);
+      user.set("address", "");
+      user.set("phonenumber", "");
+      user.set("creditcardnumber", "");
       if (passwordValue !== confirmPasswordValue) {
         throw Error("Mismatching Passwords");
       }
-      // user.set("phone", phoneValue);
       const createdUser = await user.signUp();
       alert(
         `Success! User ${createdUser.getUsername()} was successfully created!`
