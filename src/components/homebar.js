@@ -16,8 +16,8 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
 import SearchIcon from "@mui/icons-material/Search";
+import logo from './Images/logo_s.jpg';
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,7 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const pages = ["Home", "Products", "Auctions"];
+const pages = ["Home", "Shop by Category", "Auctions", "Orders & Returns"];
 const settings = ["Login", "Sign Up"];
 
 function HomeBar() {
@@ -108,26 +108,34 @@ function HomeBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style= {{ background: '#362419' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+          <img src={logo} alt="Logo" width="50" height= "50" />
           <Typography
             variant="h6"
             noWrap
             component="a"
             href="/"
-            sx={{
+            sx={[{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
+              fontFamily: "verdana",
               fontWeight: 700,
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
-            }}
+              margin:2,
+            },
+            {
+              '&:hover':{
+                color: "#E1AD01",
+              }
+                
+            }]}
           >
-            AUCSALE
+            Lasso
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -138,6 +146,7 @@ function HomeBar() {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              fontFamily="verdana"
             >
               <MenuIcon />
             </IconButton>
