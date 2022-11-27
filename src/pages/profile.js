@@ -11,7 +11,6 @@ function Profile() {
   const data = location.state;
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [address, setAddress] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
@@ -88,17 +87,6 @@ function Profile() {
                       class="form-control form-control-lg"
                     />
                   </div>
-                </div>
-
-                <div class="form-outline mb-4">
-                  <input
-                    value={username}
-                    onChange={(event) => setUsername(event.target.value)}
-                    placeholder={userProfile.attributes.username}
-                    type="text"
-                    id="typeNameX-3"
-                    class="form-control form-control-lg"
-                  />
                 </div>
 
                 <div class="form-outline mb-4">
