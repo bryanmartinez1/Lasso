@@ -17,7 +17,7 @@ import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
-import logo from './Images/logo_s.jpg';
+import logo from "./Images/logo_s.jpg";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,11 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-<<<<<<< HEAD
-const pages = ["Home", "Products", "Auctions", "Sell"];
-=======
 const pages = ["Home", "Shop by Category", "Auctions", "Orders & Returns"];
->>>>>>> 8987cf7550092483192e088cc47193c711df8a5b
 const settings = ["Login", "Sign Up"];
 
 function HomeBar() {
@@ -112,32 +108,33 @@ function HomeBar() {
   };
 
   return (
-    <AppBar position="static" style= {{ background: '#362419' }}>
+    <AppBar position="static" style={{ background: "#362419" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-          <img src={logo} alt="Logo" width="50" height= "50" />
+          <img src={logo} alt="Logo" width="50" height="50" />
           <Typography
             variant="h6"
             noWrap
             component="a"
             href="/"
-            sx={[{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "verdana",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-              margin:2,
-            },
-            {
-              '&:hover':{
-                color: "#E1AD01",
-              }
-                
-            }]}
+            sx={[
+              {
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "verdana",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+                margin: 2,
+              },
+              {
+                "&:hover": {
+                  color: "#E1AD01",
+                },
+              },
+            ]}
           >
             Lasso
           </Typography>
