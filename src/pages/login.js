@@ -30,11 +30,12 @@ function Login() {
       );
       // To verify that this is in fact the current user, `current` can be used
       <Profile name={username} />;
-      navigate("/Profile", { state: { name: usernameValue } });
       const currentUser = await Parse.User.current();
-      console.log(loggedInUser === currentUser);
+      navigate("/Profile", { state: { name: currentUser } });
+      console.log("in login:", loggedInUser === currentUser);
       console.log("username", username);
-
+      console.log("in login:", currentUser);
+      console.log("in login:", loggedInUser);
       // Clear input fields
       setUsername("");
       setPassword("");

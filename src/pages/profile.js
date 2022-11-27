@@ -9,55 +9,55 @@ function Profile() {
   const location = useLocation();
   //the data here will be an object since an object was
   const data = location.state;
+  console.log("Profile:", data);
+
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [address, setAddress] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
   const [creditcardnumber, setCreditCardNumber] = useState("");
-  const [userProfile, setUserProfile] = useState(null);
+  const [currentUser, setCurrentUser] = useState();
 
-  // on load store the current user in userProfile state, to access attributes.
-  useEffect(() => {
-    const getCurrentUser = async function () {
-      try {
-        const currentUser = await Parse.User.current();
-        setUserProfile(currentUser);
-        return true;
-      } catch (error) {
-        // Error can be caused by wrong parameters or lack of Internet connection
-        alert(`Error! ${error.message}`);
-        return false;
-      }
-    };
-    getCurrentUser();
-  }, []);
+  const getCurrentUser = async function () {
+    const currentUser = await Parse.User.current();
+    // Update state variable holding current user
+    setCurrentUser(currentUser);
+    return currentUser;
+  };
+
+  const setUser = async function () {
+    try {
+      getCurrentUser();
+      setFirstName(currentUser.get("firstname"));
+      setLastName(currentUser.get("lastname"));
+      setPassword(currentUser.get("password"));
+      setAddress(currentUser.get("address"));
+      setPhoneNumber(currentUser.get("phonenumber"));
+      setCreditCardNumber(currentUser.get("creditcardnumber"));
+    } catch (error) {
+      alert("user is null");
+    }
+  };
 
   const updateProfile = async function () {
-    const firstNameValue = firstname;
-    const lastNameValue = lastname;
-    const usernameValue = username;
-    const passwordValue = password;
-    const addressValue = address;
-    const phonenumberValue = phonenumber;
-    const creditcardnumberValue = creditcardnumber;
-
     try {
-      userProfile.set("firstname", firstNameValue);
-      userProfile.set("lastname", lastNameValue);
-      userProfile.set("username", usernameValue);
-      userProfile.set("password", passwordValue);
-      userProfile.set("address", addressValue);
-      userProfile.set("phonenumber", phonenumberValue);
-      userProfile.set("creditcardnumber", creditcardnumberValue);
-      console.log(userProfile.attributes);
-      userProfile.save();
+      currentUser.set("firstname", firstname);
+      currentUser.set("lastname", lastname);
+      currentUser.set("password", password);
+      currentUser.set("address", address);
+      currentUser.set("phonenumber", phonenumber);
+      currentUser.set("creditcardnumber", creditcardnumber);
+      currentUser.save();
       return true;
     } catch (error) {
       alert(`Error! ${error}`);
       return false;
     }
   };
+
+  console.log("curentUser in profile:", currentUser);
+  setUser();
 
   return (
     <section class="vh-100">
@@ -74,7 +74,6 @@ function Profile() {
                       value={firstname}
                       onChange={(event) => setFirstName(event.target.value)}
                       type="text"
-                      placeholder={userProfile.attributes.firstname}
                       class="form-control form-control-lg"
                     />
                   </div>
@@ -83,7 +82,6 @@ function Profile() {
                       value={lastname}
                       onChange={(event) => setLastName(event.target.value)}
                       type="text"
-                      placeholder={userProfile.attributes.lastname}
                       class="form-control form-control-lg"
                     />
                   </div>
@@ -93,7 +91,7 @@ function Profile() {
                   <input
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    placeholder="newPassword"
+                    placeholder="Enter New Password"
                     type="password"
                     id="typePasswordX-2"
                     class="form-control form-control-lg"
@@ -104,7 +102,6 @@ function Profile() {
                   <input
                     value={address}
                     onChange={(event) => setAddress(event.target.value)}
-                    placeholder={userProfile.attributes.address}
                     type="text"
                     class="form-control form-control-lg"
                   />
@@ -115,7 +112,6 @@ function Profile() {
                     value={phonenumber}
                     onChange={(event) => setPhoneNumber(event.target.value)}
                     type="text"
-                    placeholder={userProfile.attributes.phonenumber}
                     class="form-control form-control-lg"
                   />
                 </div>
@@ -127,7 +123,6 @@ function Profile() {
                       setCreditCardNumber(event.target.value)
                     }
                     type="text"
-                    placeholder={userProfile.attributes.creditcardnumber}
                     class="form-control form-control-lg"
                   />
                 </div>
