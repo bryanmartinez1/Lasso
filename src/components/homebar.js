@@ -61,7 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const pages = ["Home", "Products", "Auctions"];
+const pages = ["Home", "Products", "Auctions", "Sell"];
 const settings = ["Login", "Sign Up"];
 
 function HomeBar() {

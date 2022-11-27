@@ -30,7 +30,7 @@ function Login() {
       );
       // To verify that this is in fact the current user, `current` can be used
       <Profile name={username} />;
-      navigate("/Profile", { state: { name: usernameValue } });
+      navigate("/Sell", { state: { name: usernameValue } });
       const currentUser = await Parse.User.current();
       console.log(loggedInUser === currentUser);
       console.log("username", username);
