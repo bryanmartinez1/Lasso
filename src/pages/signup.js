@@ -51,10 +51,19 @@ function Signup() {
       if (passwordValue !== confirmPasswordValue) {
         throw Error("Mismatching Passwords");
       }
+
       const createdUser = await user.signUp();
       alert(
         `Success! User ${createdUser.getUsername()} was successfully created!`
       );
+      // setting role
+      let rolesQuery = new Parse.Query(Parse.Role);
+      rolesQuery.equalTo("name", "regular");
+      let roles = await rolesQuery.first();
+      if (roles) {
+        roles.getUsers().add(createdUser);
+        roles.save();
+      }
       navigate("/login");
       return true;
     } catch (error) {
