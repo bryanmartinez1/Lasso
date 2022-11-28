@@ -18,6 +18,7 @@ import InputBase from "@mui/material/InputBase";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import logo from "./Images/logo_s.jpg";
+import { ShoppingBag, ShoppingCart } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -70,6 +71,7 @@ function HomeBar() {
 
   const [toSignup, setToSignup] = React.useState(false);
   const [toLogin, setToLogin] = React.useState(false);
+  const [toCart, setToCart] = React.useState(false);
 
   if (toLogin) {
     return <Navigate to="/login" />;
@@ -99,12 +101,18 @@ function HomeBar() {
     // res.textContent;
   };
 
+  if(toCart){
+    return <Navigate to="/cart" />;
+  }
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+  const gotoCart = () => {
+    setToCart(true);
   };
 
   return (
@@ -229,6 +237,17 @@ function HomeBar() {
               ))}
             </Menu>
           </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Shopping cart">
+              <IconButton onClick={gotoCart} sx={{ p: 2 }}>
+                <Avatar>
+                  <ShoppingCart />
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+          </Box>
+
         </Toolbar>
       </Container>
     </AppBar>
