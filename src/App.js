@@ -6,6 +6,7 @@ import Signup from "./pages/signup";
 import Login from "./pages/login";
 import Profile from "./pages/profile";
 import Sell from "./pages/sell";
+import Admin from "./pages/admin";
 
 // import UserRegistration from "./auth/UserRegistration";
 import { App_Id, JavaScript_key, Host_Server } from "./KEYS.js";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/sell" element={<Sell />} />
+        <Route path="/Admin" element={<Admin />} />
       </Routes>
     </Router>
   );
