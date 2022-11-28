@@ -12,7 +12,7 @@ function Sell() {
   const location = useLocation();
   //the data here will be an object since an object was
   const data = location.state;
-  console.log(data);
+  console.log("Data: " + data);
 
   const [product_name, setProductName] = useState("");
   const [product_condition, setProductCondition] = useState("");
@@ -27,7 +27,7 @@ function Sell() {
     const selectedDate = new Date(time);
     return currentDate.getTime() < selectedDate.getTime();
   };
-
+  // Displays Image and saves base64 of the image for use later
   const [image, setImage] = React.useState("");
   const imageRef = React.useRef(null);
 
@@ -42,15 +42,14 @@ function Sell() {
       reader.addEventListener("load", (e) => {
         setResult(e.target.result);
       });
-
       reader.readAsDataURL(imageFile);
     }
-
     return { result, uploader };
   }
 
   const { result, uploader } = useDisplayImage();
 
+  //Parse Function that will add the creatyed producted into Back4App Parse Server
   async function addProduct() {
     var myProduct = new Products();
     const productNameValue = product_name;
@@ -58,15 +57,10 @@ function Sell() {
     const productBidValue = product_bid;
     const productTagValue = product_tag;
     const productDesValue = product_des;
-    console.log(result);
-
-    const base64 = "V29ya2luZyBhdCBQYXJzZSBpcyBncmVhdCE=";
+    var base64 = result.split(",base64,").pop();
     const file = new Parse.File(image.name, { base64: base64 });
-    console.log("File: " + file);
-    console.log("Image:" + image);
 
-    // const responseFile = await file.save();
-
+    // Sets alls Values to be added to Back4app Parse Server
     myProduct.set("product_name", productNameValue);
     myProduct.set("prod_img", file);
     myProduct.set("product_tag", productTagValue);
@@ -76,6 +70,7 @@ function Sell() {
     myProduct.set("product_condition", productCondValue);
     myProduct.set("product_uploader", data.Object);
 
+    // Saves Function to Back4app Parse Server
     myProduct
       .save()
       .then(function (Products) {
