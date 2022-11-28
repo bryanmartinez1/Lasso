@@ -68,7 +68,8 @@ function Sell() {
     myProduct.set("product_des", productDesValue);
     myProduct.set("date_posted", selectedDate);
     myProduct.set("product_condition", productCondValue);
-    myProduct.set("product_uploader", data.Object);
+    // Fix This
+    //    myProduct.set("product_uploader", data.Object);
 
     // Saves Function to Back4app Parse Server
     myProduct
