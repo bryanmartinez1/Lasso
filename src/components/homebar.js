@@ -76,7 +76,7 @@ function HomeBar() {
   }
 
   if (toSignup) {
-    return <Navigate to="/Signup" />;
+    return <Navigate to="/Admin" />;
   }
 
   const handleOpenNavMenu = (event) => {
