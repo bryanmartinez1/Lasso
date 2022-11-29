@@ -1,6 +1,8 @@
 import { React, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Parse from "parse/dist/parse.min.js";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -11,53 +13,32 @@ function Profile() {
   const data = location.state;
   console.log("Profile:", data);
 
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [phonenumber, setPhoneNumber] = useState("");
-  const [creditcardnumber, setCreditCardNumber] = useState("");
-  const [currentUser, setCurrentUser] = useState();
-
-  const getCurrentUser = async function () {
-    const currentUser = await Parse.User.current();
-    // Update state variable holding current user
-    setCurrentUser(currentUser);
-    return currentUser;
-  };
-
-  const setUser = async function () {
-    try {
-      getCurrentUser();
-      setFirstName(currentUser.get("firstname"));
-      setLastName(currentUser.get("lastname"));
-      setPassword(currentUser.get("password"));
-      setAddress(currentUser.get("address"));
-      setPhoneNumber(currentUser.get("phonenumber"));
-      setCreditCardNumber(currentUser.get("creditcardnumber"));
-    } catch (error) {
-      alert("user is null");
-    }
-  };
+  const [firstname, setFirstName] = useState(data.fname);
+  const [lastname, setLastName] = useState(data.lname);
+  const [password, setPassword] = useState(data.password);
+  const [address, setAddress] = useState(data.address);
+  const [phonenumber, setPhoneNumber] = useState(data.phonenumber);
+  const [creditcardnumber, setCreditCardNumber] = useState(
+    data.creditcardnumber
+  );
 
   const updateProfile = async function () {
     try {
+      const currentUser = await Parse.User.current();
       currentUser.set("firstname", firstname);
       currentUser.set("lastname", lastname);
       currentUser.set("password", password);
       currentUser.set("address", address);
       currentUser.set("phonenumber", phonenumber);
       currentUser.set("creditcardnumber", creditcardnumber);
-      currentUser.save();
+      await currentUser.save();
+      alert("Success, your Profile was updated!");
       return true;
     } catch (error) {
       alert(`Error! ${error}`);
       return false;
     }
   };
-
-  console.log("curentUser in profile:", currentUser);
-  setUser();
 
   return (
     <section class="vh-100">
