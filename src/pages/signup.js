@@ -43,6 +43,7 @@ function Signup() {
       user.set("username", usernameValue);
       user.set("password", passwordValue);
       user.set("email", emailValue);
+
       // user.set("phone", phoneValue);
       const createdUser = await user.signUp();
       alert(
