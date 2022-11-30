@@ -8,9 +8,11 @@ import Profile from "./pages/profile";
 import Sell from "./pages/sell";
 import Cart from "./pages/cart";
 
+
 // import UserRegistration from "./auth/UserRegistration";
 import { App_Id, JavaScript_key, Host_Server } from "./KEYS.js";
 import Parse from "parse/dist/parse.min.js";
+import HomeBar from "./components/homebar";
 
 Parse.initialize(App_Id, JavaScript_key); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
 Parse.serverURL = Host_Server;
@@ -25,7 +27,6 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/product/:id" element={<productDescription />} />
       </Routes>
     </Router>
   );
