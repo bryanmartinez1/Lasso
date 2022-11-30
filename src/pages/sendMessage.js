@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import Parse from "parse/dist/parse.min.js";
 import { useLocation } from "react-router-dom";
+import HomeBar from "../components/homebar";
 
 const Messages = Parse.Object.extend("Messages");
 
@@ -23,7 +24,8 @@ function SendMessage() {
   };
 
   return (
-    <section>
+    <section id="section_background">
+      <HomeBar />
       <h1>Enter a message to send</h1>
       <textarea id="messagetext"></textarea>
       <button onClick={createMessage}>Send</button>

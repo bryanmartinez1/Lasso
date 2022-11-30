@@ -1,0 +1,11 @@
+#section_background {
+    background: white;
+    min-height: 100vh;
+}
+
+#messagetext {
+    height: 200px;
+    width: 400px;
+    align-items: center;
+    flex-wrap: wrap;
+}
