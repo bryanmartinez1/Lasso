@@ -19,6 +19,7 @@ function Sell() {
   const [product_tag, setProductTag] = useState("");
   const [product_bid, setProductBid] = useState("");
   const [product_des, setProductDes] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Date Componets and Function so user cant pick a 30 min interval that was before the current time
   const [selectedDate, setSelectedDate] = useState(null);
@@ -49,6 +50,14 @@ function Sell() {
 
   const { result, uploader } = useDisplayImage();
 
+  const getCurrentUser = async function () {
+    const currentUser = await Parse.User.current();
+    if (currentUser !== null) {
+      setCurrentUser(currentUser);
+    }
+    return currentUser;
+  };
+
   //Parse Function that will add the creatyed producted into Back4App Parse Server
   async function addProduct() {
     var myProduct = new Products();
@@ -57,6 +66,9 @@ function Sell() {
     const productBidValue = product_bid;
     const productTagValue = product_tag;
     const productDesValue = product_des;
+    getCurrentUser();
+    const userName = currentUser.get("username");
+
     var base64 = result.split(",base64,").pop();
     const file = new Parse.File(image.name, { base64: base64 });
 
@@ -68,8 +80,7 @@ function Sell() {
     myProduct.set("product_des", productDesValue);
     myProduct.set("date_posted", selectedDate);
     myProduct.set("product_condition", productCondValue);
-    // Fix This
-    myProduct.set("product_uploader", data.name);
+    myProduct.set("product_uploader", userName);
 
     // Saves Function to Back4app Parse Server
     myProduct
