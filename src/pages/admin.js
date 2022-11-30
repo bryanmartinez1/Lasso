@@ -52,6 +52,15 @@ function Admin() {
             </button>
           </td>
           <td>{user.get("email")}</td>
+          <td>
+            <button
+              onClick={() => {
+                goToMessages(userList[index].get("username"));
+              }}
+            >
+              Messages
+            </button>
+          </td>
         </tr>
       );
     });
@@ -131,15 +140,17 @@ function Admin() {
     }
   };
 
-  function goToMessages() {
-    navigate("/sendmessage");
+  // need to pass sender too.
+  function goToMessages(username) {
+    navigate("/sendmessage", {
+      state: { recipient: username },
+    });
   }
   return (
     <section>
       <button onClick={usersOn}>Display Users</button>
       <button onClick={producstOn}>Display Products</button>
       <button onClick={transactionsOn}>Display Transactions</button>
-      <button onClick={goToMessages}>Messages</button>
       <div>
         {displayUsers && (
           <table className="table">
@@ -149,6 +160,7 @@ function Admin() {
                 <th>Full Name</th>
                 <th>Approved?</th>
                 <th>Email</th>
+                <th>Send Message</th>
               </tr>
             </thead>
             <tbody>{getCustomerRow()}</tbody>
