@@ -1,5 +1,7 @@
 import React from "react";
 import "../styles/home.css";
+import products from "../products"
+import Product from "../components/Product"
 import { useNavigate, Navigate } from "react-router-dom";
 import HomeBar from "../components/homebar.js";
 import { Components } from "antd/lib/date-picker/generatePicker";
@@ -15,21 +17,13 @@ function Home() {
       <div style= {{backgroundColor:"white"}}>
       
       <HomeBar />
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
-      <h1>items</h1>
+      <div>
+        <div className="row justify-content-center">
+          {products.map(product=>{
+            return <Product product={product} />
+          })}
+        </div>
+      </div>
       
       <ScrollButtons />
       <Footer />
