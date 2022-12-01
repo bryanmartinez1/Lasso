@@ -71,7 +71,7 @@ const pages = [
   "Orders & Returns",
   "Sell",
 ];
-const settings = ["Logout"];
+const settings = ["Profile","Logout"];
 
 function HomeBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
