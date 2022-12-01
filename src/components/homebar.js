@@ -16,8 +16,9 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
 import SearchIcon from "@mui/icons-material/Search";
+import logo from "./Images/logo_s.jpg";
+import { ShoppingBag, ShoppingCart } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,8 +61,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
-const pages = ["Home", "Products", "Auctions"];
+// Added "Sell" here
+const pages = [
+  "Home",
+  "Shop by Category",
+  "Auctions",
+  "Orders & Returns",
+  "Sell",
+];
 const settings = ["Login", "Sign Up"];
 
 function HomeBar() {
@@ -70,13 +77,24 @@ function HomeBar() {
 
   const [toSignup, setToSignup] = React.useState(false);
   const [toLogin, setToLogin] = React.useState(false);
+  const [toCart, setToCart] = React.useState(false);
+  //
+  // Added this hook
+  //
+  const [toSell, setToSell] = React.useState(false);
 
   if (toLogin) {
     return <Navigate to="/login" />;
   }
 
   if (toSignup) {
-    return <Navigate to="/Signup" />;
+    return <Navigate to="/Admin" />;
+  }
+  //
+  // Added so that when true will move to sell
+  //
+  if (toSell) {
+    return <Navigate to="/Sell" />;
   }
 
   const handleOpenNavMenu = (event) => {
@@ -99,6 +117,9 @@ function HomeBar() {
     // res.textContent;
   };
 
+  if (toCart) {
+    return <Navigate to="/cart" />;
+  }
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -106,28 +127,46 @@ function HomeBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const gotoCart = () => {
+    setToCart(true);
+  };
+  //
+  // Sets the hook to true to initate the if statement from above and navigate to sell page
+  //
+  const gotoSell = () => {
+    setToSell(true);
+  };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ background: "#362419" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+          <img src={logo} alt="Logo" width="50" height="50" />
           <Typography
             variant="h6"
             noWrap
             component="a"
             href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+            sx={[
+              {
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "verdana",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+                margin: 2,
+              },
+              {
+                "&:hover": {
+                  color: "#E1AD01",
+                },
+              },
+            ]}
           >
-            AUCSALE
+            Lasso
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -138,6 +177,7 @@ function HomeBar() {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              fontFamily="verdana"
             >
               <MenuIcon />
             </IconButton>
@@ -171,7 +211,10 @@ function HomeBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                //
+                // Change this frome handleCloseNavMenu to goToSell to initate the change of pages when clicked
+                //
+                onClick={gotoSell}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
@@ -218,6 +261,16 @@ function HomeBar() {
                 </MenuItem>
               ))}
             </Menu>
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Shopping cart">
+              <IconButton onClick={gotoCart} sx={{ p: 2 }}>
+                <Avatar>
+                  <ShoppingCart />
+                </Avatar>
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </Container>

@@ -19,11 +19,11 @@ function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [toSignin, setToSignin] = useState(false);
 
   if (toSignin) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/admin" />;
   }
 
   // Functions used by the screen components
@@ -34,6 +34,7 @@ function Signup() {
     const usernameValue = username;
     const emailValue = email;
     const passwordValue = password;
+    const confirmPasswordValue = confirmPassword;
 
     try {
       // Since the signUp method returns a Promise, we need to call it using await
@@ -43,12 +44,26 @@ function Signup() {
       user.set("username", usernameValue);
       user.set("password", passwordValue);
       user.set("email", emailValue);
+      user.set("balance", 0);
+      user.set("address", "");
+      user.set("phonenumber", "");
+      user.set("creditcardnumber", "");
+      if (passwordValue !== confirmPasswordValue) {
+        throw Error("Mismatching Passwords");
+      }
 
-      // user.set("phone", phoneValue);
       const createdUser = await user.signUp();
       alert(
         `Success! User ${createdUser.getUsername()} was successfully created!`
       );
+      // setting role
+      let rolesQuery = new Parse.Query(Parse.Role);
+      rolesQuery.equalTo("name", "regular");
+      let roles = await rolesQuery.first();
+      if (roles) {
+        roles.getUsers().add(createdUser);
+        roles.save();
+      }
       navigate("/login");
       return true;
     } catch (error) {
@@ -122,6 +137,8 @@ function Signup() {
 
                 <div class="form-outline mb-4">
                   <input
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
                     type="password"
                     placeholder="Confirm Passowrd"
                     id="typePasswordX-3"
