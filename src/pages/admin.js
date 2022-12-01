@@ -32,7 +32,6 @@ function Admin() {
         return false;
       }
     };
-
     doQuery();
   }, []);
 
