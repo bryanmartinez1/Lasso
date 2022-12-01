@@ -48,6 +48,14 @@ function Signup() {
       user.set("address", "");
       user.set("phonenumber", "");
       user.set("creditcardnumber", "");
+
+      // setting the ACL for the user to allow access for admins to view,change,delete user data
+      let userACL = new Parse.ACL();
+      userACL.setPublicReadAccess(true);
+      userACL.setRoleReadAccess("admin", true);
+      userACL.setRoleWriteAccess("admin", true);
+      user.set("ACL", userACL);
+
       if (passwordValue !== confirmPasswordValue) {
         throw Error("Mismatching Passwords");
       }
@@ -56,6 +64,7 @@ function Signup() {
       alert(
         `Success! User ${createdUser.getUsername()} was successfully created!`
       );
+
       // setting role
       let rolesQuery = new Parse.Query(Parse.Role);
       rolesQuery.equalTo("name", "regular");
@@ -64,6 +73,7 @@ function Signup() {
         roles.getUsers().add(createdUser);
         roles.save();
       }
+
       navigate("/login");
       return true;
     } catch (error) {

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Parse from "parse/dist/parse.min.js";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import HomeBar from "../components/homebar";
+import ProfileNavbar from "../components/profileNavbar";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -43,7 +43,7 @@ function Profile() {
 
   return (
     <section class="vh-100">
-      <HomeBar />
+      <ProfileNavbar />
       <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100 main-div">
           <div class="col-lg-6"></div>

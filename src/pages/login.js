@@ -30,17 +30,32 @@ function Login() {
       );
       // To verify that this is in fact the current user, `current` can be used
       <Profile name={username} />;
+
+      // checking if user is an admin
       const currentUser = await Parse.User.current();
-      navigate("/Profile", {
-        state: {
-          fname: currentUser.get("firstname"),
-          lname: currentUser.get("lastname"),
-          password: currentUser.get("password"),
-          phonenumber: currentUser.get("phonenumber"),
-          address: currentUser.get("address"),
-          creditcardnumber: currentUser.get("creditcardnumber"),
-        },
-      });
+
+      let queryRole = new Parse.Query(Parse.Role);
+      queryRole.equalTo("name", "admin");
+      let role = await queryRole.first();
+      let adminRelation = new Parse.Relation(role, "users");
+      let queryAdmins = adminRelation.query();
+      queryAdmins.equalTo("objectId", currentUser.id);
+      let isUserAdmin = await queryAdmins.first();
+
+      if (isUserAdmin) {
+        navigate("/Admin");
+      } else {
+        navigate("/Profile", {
+          state: {
+            fname: currentUser.get("firstname"),
+            lname: currentUser.get("lastname"),
+            password: currentUser.get("password"),
+            phonenumber: currentUser.get("phonenumber"),
+            address: currentUser.get("address"),
+            creditcardnumber: currentUser.get("creditcardnumber"),
+          },
+        });
+      }
 
       // const currentUser = await Parse.User.current();
       console.log(loggedInUser === currentUser);
@@ -55,23 +70,6 @@ function Login() {
       return true;
     } catch (error) {
       // Error can be caused by wrong parameters or lack of Internet connection
-      alert(`Error! ${error.message}`);
-      return false;
-    }
-  };
-
-  const doUserLogOut = async function () {
-    try {
-      await Parse.User.logOut();
-      // To verify that current user is now empty, currentAsync can be used
-      const currentUser = await Parse.User.current();
-      if (currentUser === null) {
-        alert("Success! No user is logged in anymore!");
-      }
-      // Update state variable holding current user
-      getCurrentUser();
-      return true;
-    } catch (error) {
       alert(`Error! ${error.message}`);
       return false;
     }
