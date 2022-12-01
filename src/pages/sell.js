@@ -9,11 +9,6 @@ import Parse from "parse/dist/parse.min.js";
 var Products = Parse.Object.extend("Products");
 
 function Sell() {
-  const location = useLocation();
-  //the data here will be an object since an object was
-  const data = location.state;
-  console.log("Data: " + data);
-
   const [product_name, setProductName] = useState("");
   const [product_condition, setProductCondition] = useState("");
   const [product_tag, setProductTag] = useState("");
@@ -48,7 +43,7 @@ function Sell() {
   }
 
   const { result, uploader } = useDisplayImage();
-
+  console.log("result:",result);
   //Parse Function that will add the creatyed producted into Back4App Parse Server
   async function addProduct() {
     var myProduct = new Products();
@@ -60,7 +55,7 @@ function Sell() {
     const curr = await Parse.User.current();
     const userName = curr.get("username");
     console.log(userName);
-    var base64 = result.split(",base64,").pop();
+    const base64 = "V29ya2luZyBhdCBQYXJzZSBpcyBncmVhdCE=";
     const file = new Parse.File(image.name, { base64: base64 });
 
     // Sets alls Values to be added to Back4app Parse Server
@@ -80,7 +75,7 @@ function Sell() {
         alert("Product Successfully Added");
         console.log(
           "Products created successful with name: " +
-            data.name +
+            myProduct.get('product_name') +
             " and date: " +
             myProduct.get("date_posted")
         );
