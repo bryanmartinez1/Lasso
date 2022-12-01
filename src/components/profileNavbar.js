@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -19,6 +20,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import logo from "./Images/logo_s.jpg";
 import { ShoppingBag, ShoppingCart } from "@mui/icons-material";
+import Parse from "parse/dist/parse.min.js";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -69,27 +71,20 @@ const pages = [
   "Orders & Returns",
   "Sell",
 ];
-const settings = ["Login", "Sign Up"];
+const settings = ["Logout"];
 
 function HomeBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const [toSignup, setToSignup] = React.useState(false);
-  const [toLogin, setToLogin] = React.useState(false);
+  const [toLogout, setToLogout] = React.useState(false);
   const [toCart, setToCart] = React.useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
   //
   // Added this hook
   //
   const [toSell, setToSell] = React.useState(false);
 
-  if (toLogin) {
-    return <Navigate to="/login" />;
-  }
-
-  if (toSignup) {
-    return <Navigate to="/Signup" />;
-  }
   //
   // Added so that when true will move to sell
   //
@@ -107,11 +102,8 @@ function HomeBar() {
   const clickedSetting = (event) => {
     const res = event.target;
     console.log(res.textContent);
-    if (res.textContent === "Login") {
-      setToLogin(true);
-    }
-    if (res.textContent === "Sign Up") {
-      setToSignup(true);
+    if (res.textContent === "Logout") {
+      doUserLogOut();
     }
 
     // res.textContent;
@@ -135,6 +127,31 @@ function HomeBar() {
   //
   const gotoSell = () => {
     setToSell(true);
+  };
+
+  const doUserLogOut = async function () {
+    try {
+      await Parse.User.logOut();
+      // To verify that current user is now empty, currentAsync can be used
+      const currentUser = await Parse.User.current();
+      if (currentUser === null) {
+        alert("Success! No user is logged in anymore!");
+      }
+      // Update state variable holding current user
+      getCurrentUser();
+      navigate("/");
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  };
+
+  // Function that will return current user and also update current username
+  const getCurrentUser = async function () {
+    const currentUser = await Parse.User.current();
+    // Update state variable holding current user
+    setCurrentUser(currentUser);
+    return currentUser;
   };
 
   return (
