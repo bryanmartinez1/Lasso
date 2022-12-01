@@ -2,6 +2,8 @@ import { React, useState, useEffect } from "react";
 import NavBar from "./../components/NavBar.js";
 import Parse from "parse/dist/parse.min.js";
 import { useNavigate, Navigate } from "react-router-dom";
+import "../styles/admin.css";
+import HomeBar from "../components/homebar";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
@@ -146,51 +148,64 @@ function Admin() {
     });
   }
   return (
-    <section>
-      <button onClick={usersOn}>Display Users</button>
-      <button onClick={producstOn}>Display Products</button>
-      <button onClick={transactionsOn}>Display Transactions</button>
-      <div>
-        {displayUsers && (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Full Name</th>
-                <th>Approved?</th>
-                <th>Email</th>
-                <th>Send Message</th>
-              </tr>
-            </thead>
-            <tbody>{getCustomerRow()}</tbody>
-          </table>
-        )}
+    <section id="section_background">
+      <HomeBar />
+      <div id="row_div">
+        <div id="column_div">
+          <div id="side_bar">
+            <button id="side_nav_bt" onClick={usersOn}>
+              Display Users
+            </button>
+            <button id="side_nav_bt" onClick={producstOn}>
+              Display Products
+            </button>
+            <button id="side_nav_bt" onClick={transactionsOn}>
+              Display Transactions
+            </button>
+          </div>
+        </div>
+        <div>
+          {displayUsers && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Full Name</th>
+                  <th>Approved?</th>
+                  <th>Email</th>
+                  <th>Send Message</th>
+                </tr>
+              </thead>
+              <tbody>{getCustomerRow()}</tbody>
+            </table>
+          )}
 
-        {displayProducts && (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Product Name</th>
-                <th>Uploader Name</th>
-                <th>Approved?</th>
-              </tr>
-            </thead>
-            <tbody>{getProductRow()}</tbody>
-          </table>
-        )}
+          {displayProducts && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Uploader Name</th>
+                  <th>Approved?</th>
+                </tr>
+              </thead>
+              <tbody>{getProductRow()}</tbody>
+            </table>
+          )}
 
-        {displayTransactions && (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Product Name</th>
-                <th>Buyer Name</th>
-                <th>Time of Purchase</th>
-              </tr>
-            </thead>
-            <tbody>{getTransactionRow()}</tbody>
-          </table>
-        )}
+          {displayTransactions && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Buyer Name</th>
+                  <th>Time of Purchase</th>
+                </tr>
+              </thead>
+              <tbody>{getTransactionRow()}</tbody>
+            </table>
+          )}
+        </div>
       </div>
     </section>
   );
