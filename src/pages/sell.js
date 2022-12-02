@@ -43,14 +43,6 @@ function Sell() {
 
   const { result, uploader } = useDisplayImage();
 
-  const getCurrentUser = async function () {
-    const currentUser = await Parse.User.current();
-    if (currentUser !== null) {
-      setCurrentUser(currentUser);
-    }
-    return currentUser;
-  };
-
   //Parse Function that will add the creatyed producted into Back4App Parse Server
   async function addProduct() {
     var myProduct = new Products();

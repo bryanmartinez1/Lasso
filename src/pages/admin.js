@@ -46,7 +46,7 @@ function Admin() {
   function getProductRow() {
     return queryResults.map((product, index) => {
       return (
-        <tr key={("product_name", "product_uploader")}>
+        <tr key={index}>
           <td>{product.get("product_name")}</td>
           <td>{product.get("product_uploader")}</td>
           <td>
@@ -65,12 +65,13 @@ function Admin() {
   }
 
   function getTransactionRow() {
+    console.log(queryResults);
     return queryResults.map((transaction, index) => {
       return (
-        <tr key={"product_name"}>
-          <td></td>
-          <td></td>
-          <td></td>
+        <tr key={("buyer", "product")}>
+          <td>{transaction.get("product")}</td>
+          <td>{transaction.get("buyer")}</td>
+          <td>{transaction.get("createdAt").toString()}</td>
         </tr>
       );
     });
