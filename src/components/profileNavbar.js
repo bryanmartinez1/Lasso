@@ -21,6 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import logo from "./Images/logo_s.jpg";
 import { ShoppingBag, ShoppingCart } from "@mui/icons-material";
 import Parse from "parse/dist/parse.min.js";
+import "../styles/profileNavbar.css";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,13 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 // Added "Sell" here
-const pages = [
-  "Home",
-  "Shop by Category",
-  "Auctions",
-  "Orders & Returns",
-  "Sell",
-];
+const pages = ["Home", "Shop by Category", "Auctions", "Orders & Returns"];
 const settings = ["Logout"];
 
 function HomeBar() {
@@ -78,16 +73,10 @@ function HomeBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [toLogout, setToLogout] = React.useState(false);
   const [toCart, setToCart] = React.useState(false);
+  const [toSell, setToSell] = React.useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
-  //
-  // Added this hook
-  //
-  const [toSell, setToSell] = React.useState(false);
 
-  //
-  // Added so that when true will move to sell
-  //
   if (toSell) {
     return <Navigate to="/Sell" />;
   }
@@ -122,9 +111,7 @@ function HomeBar() {
   const gotoCart = () => {
     setToCart(true);
   };
-  //
-  // Sets the hook to true to initate the if statement from above and navigate to sell page
-  //
+
   const gotoSell = () => {
     setToSell(true);
   };
@@ -228,15 +215,17 @@ function HomeBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                //
-                // Change this frome handleCloseNavMenu to goToSell to initate the change of pages when clicked
-                //
-                onClick={gotoSell}
+                onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
             ))}
+          </Box>
+          <Box>
+            <Tooltip onClick={gotoSell} sx={{ p: 2 }}>
+              <Button id="sellButton">Sell</Button>
+            </Tooltip>
           </Box>
           <Search>
             <SearchIconWrapper>
