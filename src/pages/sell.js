@@ -8,17 +8,11 @@ import Parse from "parse/dist/parse.min.js";
 var Products = Parse.Object.extend("Products");
 
 function Sell() {
-  // const location = useLocation();
-  // //the data here will be an object since an object was
-  // const data = location.state;
-  // console.log("Data: " + data);
-
   const [product_name, setProductName] = useState("");
   const [product_condition, setProductCondition] = useState("");
   const [product_tag, setProductTag] = useState("");
   const [product_bid, setProductBid] = useState("");
   const [product_des, setProductDes] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
 
   // Date Componets and Function so user cant pick a 30 min interval that was before the current time
   const [selectedDate, setSelectedDate] = useState(null);
@@ -53,8 +47,6 @@ function Sell() {
     const currentUser = await Parse.User.current();
     if (currentUser !== null) {
       setCurrentUser(currentUser);
-    } else {
-      alert("You are not logged in");
     }
     return currentUser;
   };
@@ -67,20 +59,12 @@ function Sell() {
     const productBidValue = product_bid;
     const productTagValue = product_tag;
     const productDesValue = product_des;
-
     const curr = await Parse.User.current();
     const userName = curr.get("username");
-    const base64 = result.split("64,").pop();
-    //console.log("Result POPPED: " + base64);
-    try {
-      var file = new Parse.File(image.name, { base64: base64 });
-    } catch {
-      // Error can be caused by wrong parameters or lack of Internet connection
-      alert(
-        "Image is unable to upload please try another image or a screenshot selected image"
-      );
-      return;
-    }
+    console.log(userName);
+    const base64 = "V29ya2luZyBhdCBQYXJzZSBpcyBncmVhdCE=";
+    const file = new Parse.File(image.name, { base64: base64 });
+
     // Sets alls Values to be added to Back4app Parse Server
     myProduct.set("product_name", productNameValue);
     myProduct.set("prod_img", file);
@@ -98,7 +82,7 @@ function Sell() {
         alert("Product Successfully Added");
         console.log(
           "Products created successful with name: " +
-            userName +
+            myProduct.get("product_name") +
             " and date: " +
             myProduct.get("date_posted")
         );
