@@ -67,9 +67,9 @@ function Sell() {
     const productBidValue = product_bid;
     const productTagValue = product_tag;
     const productDesValue = product_des;
-    getCurrentUser();
-    console.log("Current User" + currentUser.get("username"));
-    const userName = currentUser.get("username");
+
+    const curr = await Parse.User.current();
+    const userName = curr.get("username");
     const base64 = result.split("64,").pop();
     //console.log("Result POPPED: " + base64);
     try {

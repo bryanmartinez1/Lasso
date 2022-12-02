@@ -45,16 +45,7 @@ function Login() {
       if (isUserAdmin) {
         navigate("/Admin");
       } else {
-        navigate("/Profile", {
-          state: {
-            fname: currentUser.get("firstname"),
-            lname: currentUser.get("lastname"),
-            password: currentUser.get("password"),
-            phonenumber: currentUser.get("phonenumber"),
-            address: currentUser.get("address"),
-            creditcardnumber: currentUser.get("creditcardnumber"),
-          },
-        });
+        navigate("/Profile");
       }
 
       // const currentUser = await Parse.User.current();
