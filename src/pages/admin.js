@@ -3,7 +3,8 @@ import NavBar from "./../components/NavBar.js";
 import Parse from "parse/dist/parse.min.js";
 import { useNavigate, Navigate } from "react-router-dom";
 import "../styles/admin.css";
-import HomeBar from "../components/homebar";
+// import HomeBar from "../components/homebar";
+import ProfileNavbar from "../components/profileNavbar";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
@@ -149,7 +150,7 @@ function Admin() {
   }
   return (
     <section id="section_background">
-      <HomeBar />
+      <ProfileNavbar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
