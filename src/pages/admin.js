@@ -3,6 +3,7 @@ import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
 import ProfileNavbar from "../components/profileNavbar";
+import SendMessage from "./sendMessage";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
@@ -19,7 +20,7 @@ function Admin() {
           <td>{user.get("username")}</td>
           <td>{user.get("firstname") + " " + user.get("lastname")}</td>
           <td>
-            {user.get("Approved") ? "Approved" : "Unapproved"}
+            {user.get("approved") ? "Approved" : "Unapproved"}
             <button
               onClick={() => {
                 approveUser(queryResults[index]);
@@ -56,7 +57,17 @@ function Admin() {
                 approveProduct(queryResults[index]);
               }}
             >
-              Approve?
+              Approve
+            </button>
+            <button
+              onClick={() => {
+                goToMessages(
+                  product.get("product_uploader"),
+                  product.get("product_name") + " has been rejected"
+                );
+              }}
+            >
+              Reject
             </button>
           </td>
         </tr>
@@ -147,9 +158,9 @@ function Admin() {
   };
 
   // need to pass sender too.
-  function goToMessages(username) {
+  function goToMessages(username, t) {
     navigate("/sendmessage", {
-      state: { recipient: username },
+      state: { recipient: username, topic: t },
     });
   }
 
