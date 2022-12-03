@@ -58,6 +58,7 @@ function Profile() {
         setCreditCardNumber(currentUser.get("creditcardnumber"));
         setDisplayProducts(false);
         setDisplayOrders(false);
+        setDisplayMessgaes(false);
         setDisplayPersonal(true);
       }
       return true;
@@ -85,11 +86,47 @@ function Profile() {
     }
   }
 
-  function userTransactionsOn() {
-    setDisplayProducts(false);
-    setDisplayPersonal(false);
-    setDisplayMessgaes(false);
-    setDisplayOrders(true);
+  function getProductRow() {
+    return queryResults.map((product, index) => {
+      return (
+        <tr key={index}>
+          <td>{product.get("product_name")}</td>
+          <td>{product.get("product_uploader")}</td>
+          <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
+        </tr>
+      );
+    });
+  }
+
+  async function userTransactionsOn() {
+    const curr = await Parse.User.current();
+    const orderQuery = new Parse.Query("Messages");
+    orderQuery.contains("buyer", curr.get("username"));
+    try {
+      const orderResults = await orderQuery.find();
+      setQueryResults(orderResults);
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayMessgaes(false);
+      setDisplayOrders(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getOrderRow() {
+    console.log(queryResults);
+    return queryResults.map((order, index) => {
+      return (
+        <tr key={index}>
+          <td>{order.get("product")}</td>
+          <td>{order.get("amount")}</td>
+          <td>{order.get("rating")}</td>
+        </tr>
+      );
+    });
   }
 
   async function userMessagesOn() {
@@ -110,18 +147,6 @@ function Profile() {
     }
   }
 
-  function getProductRow() {
-    return queryResults.map((product, index) => {
-      return (
-        <tr key={index}>
-          <td>{product.get("product_name")}</td>
-          <td>{product.get("product_uploader")}</td>
-          <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
-        </tr>
-      );
-    });
-  }
-
   function getMessageRow() {
     return queryResults.map((message, index) => {
       return (
@@ -129,7 +154,7 @@ function Profile() {
           <td>{message.get("sender")}</td>
           <td>{message.get("topicline")}</td>
           <td>
-            <textarea disabled>{message.get("content")}</textarea>
+            <textarea readOnly value={message.get("content")}></textarea>
           </td>
         </tr>
       );
@@ -233,6 +258,19 @@ function Profile() {
                 </tr>
               </thead>
               <tbody>{getMessageRow()}</tbody>
+            </table>
+          )}
+
+          {displayOrders && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Rating</th>
+                </tr>
+              </thead>
+              <tbody>{getOrderRow()}</tbody>
             </table>
           )}
         </div>

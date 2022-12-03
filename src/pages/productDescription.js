@@ -1,8 +1,15 @@
-import React from 'react'
-import products from '../products'
+import React from "react";
+import { useLocation } from "react-router-dom";
+import products from "../products";
 
-export default function productDescription() {
+export default function ProductDescription() {
+  const location = useLocation();
+  const data = location.state;
+  console.log(data);
+
   return (
-    <div><h1>Product Description</h1></div>
-  )
+    <div>
+      <h1>Product Description</h1>
+    </div>
+  );
 }

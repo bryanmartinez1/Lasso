@@ -9,7 +9,7 @@ import Sell from "./pages/sell";
 import Admin from "./pages/admin";
 import SendMessage from "./pages/sendMessage";
 import Cart from "./pages/cart";
-
+import ProductDescription from "./pages/productDescription";
 // import UserRegistration from "./auth/UserRegistration";
 import { App_Id, JavaScript_key, Host_Server } from "./KEYS.js";
 import Parse from "parse/dist/parse.min.js";
@@ -29,7 +29,10 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/sendmessage" element={<SendMessage />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/product/:id" element={<productDescription />} />
+        <Route
+          path="/pages/productDescription"
+          element={<ProductDescription />}
+        />
       </Routes>
     </Router>
   );
