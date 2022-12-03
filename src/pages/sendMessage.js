@@ -9,7 +9,7 @@ const Messages = Parse.Object.extend("Messages");
 function SendMessage() {
   const location = useLocation();
   const data = location.state;
-
+  console.log(data);
   function charCount() {
     const textarea = document.getElementById("messagetext");
     var length = textarea.value.length;
@@ -18,7 +18,9 @@ function SendMessage() {
 
   const createMessage = async function () {
     const text = document.getElementById("messagetext");
-    const topic = document.getElementById("topicLine");
+    const topic = document.getElementById("topicline");
+    console.log("text:", text);
+    console.log("topic:", topic);
     try {
       const message = new Messages();
       message.set("recipient", data.recipient);
@@ -44,6 +46,7 @@ function SendMessage() {
             id="topicline"
             placeholder="Topic"
             maxLength="30"
+            defaultValue={data.topic}
           ></input>
         </div>
         <div id="roundedCorner">

@@ -1,7 +1,9 @@
 import { React, useState } from "react";
 import { useLocation } from "react-router-dom";
 import products from "../products";
+import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
+import HomeBar from "../components/homebar";
 
 var Bids = Parse.Object.extend("Bids");
 const Messages = Parse.Object.extend("Messages");
@@ -11,6 +13,8 @@ export default function ProductDescription() {
   const data = location.state;
   console.log("Product name: ", data.productname);
   console.log("Product seller: ", data.sellername);
+  console.log("Product Img URL: " + data.imgURL);
+  const img = data.imgURL;
 
   // pass all relevant info along with state,
   // query on bid request.
@@ -60,9 +64,10 @@ export default function ProductDescription() {
 
   return (
     <div>
+      <ProfileNavbar />
       <h1>Product Description</h1>
       <h2>{data.productname}</h2>
-      <textarea>IMG</textarea>
+      <img src={img} />
       <br></br>
       <div>Sold by: {data.sellername}</div>
       <input
