@@ -4,6 +4,7 @@ import products from "../products";
 import Parse from "parse/dist/parse.min.js";
 
 var Bids = Parse.Object.extend("Bids");
+const Messages = Parse.Object.extend("Messages");
 
 export default function ProductDescription() {
   const location = useLocation();
@@ -35,7 +36,27 @@ export default function ProductDescription() {
     }
   }
 
-  async function report() {}
+  async function report() {
+    const text =
+      "The item: " +
+      data.productname +
+      " posted by " +
+      data.sellername +
+      " has been reported. Please investigate ASAP.";
+    const topic = "Report";
+    try {
+      const message = new Messages();
+      message.set("recipient", "TestUser");
+      message.set("sender", "Anonymous");
+      message.set("content", text);
+      message.set("topicline", topic);
+      message.save();
+      alert("Report was sent successfully, please do not report again.");
+      return true;
+    } catch (error) {
+      alert("Error:" + error.message);
+    }
+  }
 
   return (
     <div>
