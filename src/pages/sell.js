@@ -46,7 +46,7 @@ function Sell() {
   //Parse Function that will add the creatyed producted into Back4App Parse Server
   async function addProduct() {
     const curr = await Parse.User.current();
-    if ((curr = null)) {
+    if (curr == null) {
       alert("You are not logged in, please sign in");
       return;
     }
