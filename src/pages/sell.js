@@ -45,17 +45,34 @@ function Sell() {
 
   //Parse Function that will add the creatyed producted into Back4App Parse Server
   async function addProduct() {
+    const curr = await Parse.User.current();
+    if ((curr = null)) {
+      alert("You are not logged in, please sign in");
+      return;
+    }
+    if (curr.get("approved") === false) {
+      alert("You can not sell a product till your account has been approved");
+      return;
+    }
+    const userName = curr.get("username");
+    console.log(userName);
     var myProduct = new Products();
     const productNameValue = product_name;
     const productCondValue = product_condition;
     const productBidValue = product_bid;
     const productTagValue = product_tag;
     const productDesValue = product_des;
-    const curr = await Parse.User.current();
-    const userName = curr.get("username");
-    console.log(userName);
-    const base64 = "V29ya2luZyBhdCBQYXJzZSBpcyBncmVhdCE=";
-    const file = new Parse.File(image.name, { base64: base64 });
+    const base64 = result.split("64,").pop();
+
+    try {
+      var file = new Parse.File(image.name, { base64: base64 });
+    } catch {
+      // Error can be caused by wrong parameters or lack of Internet connection
+      alert(
+        "Image is unable to upload please try another image or a screenshot selected image"
+      );
+      return;
+    }
 
     // Sets alls Values to be added to Back4app Parse Server
     myProduct.set("product_name", productNameValue);

@@ -10,6 +10,7 @@
 }
 #row_div {
   display: flex;
+  background: white;
   justify-content: flex-start;
   gap: 10 px;
   flex-direction: row;
