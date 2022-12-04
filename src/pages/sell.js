@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import HomeBar from "../components/homebar";
+import ProfileNavbar from "../components/profileNavbar";
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/sell.css";
 import DatePicker from "react-datepicker";
@@ -9,17 +8,11 @@ import Parse from "parse/dist/parse.min.js";
 var Products = Parse.Object.extend("Products");
 
 function Sell() {
-  const location = useLocation();
-  //the data here will be an object since an object was
-  const data = location.state;
-  console.log("Data: " + data);
-
   const [product_name, setProductName] = useState("");
   const [product_condition, setProductCondition] = useState("");
   const [product_tag, setProductTag] = useState("");
   const [product_bid, setProductBid] = useState("");
   const [product_des, setProductDes] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
 
   // Date Componets and Function so user cant pick a 30 min interval that was before the current time
   const [selectedDate, setSelectedDate] = useState(null);
@@ -50,14 +43,6 @@ function Sell() {
 
   const { result, uploader } = useDisplayImage();
 
-  const getCurrentUser = async function () {
-    const currentUser = await Parse.User.current();
-    if (currentUser !== null) {
-      setCurrentUser(currentUser);
-    }
-    return currentUser;
-  };
-
   //Parse Function that will add the creatyed producted into Back4App Parse Server
   async function addProduct() {
     var myProduct = new Products();
@@ -66,10 +51,10 @@ function Sell() {
     const productBidValue = product_bid;
     const productTagValue = product_tag;
     const productDesValue = product_des;
-    getCurrentUser();
-    const userName = currentUser.get("username");
-
-    var base64 = result.split(",base64,").pop();
+    const curr = await Parse.User.current();
+    const userName = curr.get("username");
+    console.log(userName);
+    const base64 = "V29ya2luZyBhdCBQYXJzZSBpcyBncmVhdCE=";
     const file = new Parse.File(image.name, { base64: base64 });
 
     // Sets alls Values to be added to Back4app Parse Server
@@ -89,7 +74,7 @@ function Sell() {
         alert("Product Successfully Added");
         console.log(
           "Products created successful with name: " +
-            data.name +
+            myProduct.get("product_name") +
             " and date: " +
             myProduct.get("date_posted")
         );
@@ -98,18 +83,26 @@ function Sell() {
         console.log("Error: " + error.message);
         alert("Error:" + error.message);
       });
+
+    document.getElementById("productName").value = "";
+    document.getElementById("image_input").value = "";
+    document.getElementById("productBidDate").value = "";
+    document.getElementById("productMinBid").value = "";
+    document.getElementById("productDes").value = "";
+    document.getElementById("productTag").value = "";
+    document.getElementById("productCondition").value = "";
   }
 
   return (
     <div id="screen">
-      <HomeBar />
+      <ProfileNavbar />
       <div id="display">
         <div id="bodyProducts">
           <article class="reg">
             {" "}
             <h2>Add Product</h2>
             {/* Product Name */}
-            <div id="roundedCorner">
+            <div id="sellRoundedCorner">
               <p id="Label">Enter Product's Name</p>
               <p>
                 <input
@@ -123,7 +116,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Min Bid */}
-            <div id="roundedCorner">
+            <div id="sellRoundedCorner">
               <p id="Label">Enter Minimum Bid</p>
               <p>
                 <text> $</text>
@@ -139,7 +132,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Image */}
-            <div id="roundedCorner">
+            <div id="sellRoundedCorner">
               <p id="Label">Insert Image of Product</p>
               <p>
                 <input
@@ -154,7 +147,7 @@ function Sell() {
               </p>
             </div>
             {/* Date Picker*/}
-            <div id="roundedCorner">
+            <div id="sellRoundedCorner">
               <p id="Label">Choose Last Day to Bid for Product</p>
               <p>
                 <DatePicker
@@ -170,7 +163,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Condition */}
-            <div id="roundedCorner">
+            <div id="sellRoundedCorner">
               <p id="Label">Choose Product's Condition</p>
               <p>
                 <input
@@ -184,7 +177,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Tag */}
-            <div id="roundedCorner">
+            <div id="sellRoundedCorner">
               <p id="Label">Choose Product's Tag</p>
               <p>
                 <input
@@ -211,7 +204,7 @@ function Sell() {
         <div id="bodyProducts">
           <img id="display_image" ref={imageRef} src={result} alt=""></img>
           {/* Product Description */}
-          <div id="roundedCorner">
+          <div id="sellRoundedCorner">
             <p id="Label">Enter Product's Description</p>
             <p>
               <textarea

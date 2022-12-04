@@ -1,34 +1,37 @@
 import { React, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import Parse from "parse/dist/parse.min.js";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 import ProfileNavbar from "../components/profileNavbar";
-
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import "../styles/profile.css";
+import { useLocation } from "react-router-dom";
 
 function Profile() {
   const location = useLocation();
   //the data here will be an object since an object was
   const data = location.state;
-  console.log("Profile:", data);
 
-  const [firstname, setFirstName] = useState(data.fname);
-  const [lastname, setLastName] = useState(data.lname);
-  const [password, setPassword] = useState(data.password);
-  const [address, setAddress] = useState(data.address);
-  const [phonenumber, setPhoneNumber] = useState(data.phonenumber);
-  const [creditcardnumber, setCreditCardNumber] = useState(
-    data.creditcardnumber
-  );
+  // queryResults and which page to show
+  const [queryResults, setQueryResults] = useState();
+  const [displayPersonal, setDisplayPersonal] = useState(false);
+  const [displayProducts, setDisplayProducts] = useState(false);
+  const [displayOrders, setDisplayOrders] = useState(false);
+  const [displayMessages, setDisplayMessgaes] = useState(false);
+  // user data info for update profile
+  const [currentUser, setCurrentUser] = useState();
+  const [firstname, setFirstName] = useState();
+  const [lastname, setLastName] = useState();
+  const [address, setAddress] = useState();
+  const [phonenumber, setPhoneNumber] = useState();
+  const [creditcardnumber, setCreditCardNumber] = useState();
+  const [password, setPassword] = useState();
 
-  const updateProfile = async function () {
+  async function updateProfile() {
     try {
       const currentUser = await Parse.User.current();
       currentUser.set("firstname", firstname);
       currentUser.set("lastname", lastname);
-      currentUser.set("password", password);
+      if (password !== "") {
+        currentUser.set("password", password);
+      }
       currentUser.set("address", address);
       currentUser.set("phonenumber", phonenumber);
       currentUser.set("creditcardnumber", creditcardnumber);
@@ -39,86 +42,237 @@ function Profile() {
       alert(`Error! ${error}`);
       return false;
     }
-  };
+  }
+
+  async function personalInfoOn() {
+    const curr = await Parse.User.current();
+    try {
+      setCurrentUser(curr);
+      // put this here because for some reason this will try to use get on null
+      // all it does is require a double click to show user info.
+      if (currentUser != null) {
+        setFirstName(currentUser.get("firstname"));
+        setLastName(currentUser.get("lastname"));
+        setAddress(currentUser.get("address"));
+        setPhoneNumber(currentUser.get("phonenumber"));
+        setCreditCardNumber(currentUser.get("creditcardnumber"));
+        setDisplayProducts(false);
+        setDisplayOrders(false);
+        setDisplayMessgaes(false);
+        setDisplayPersonal(true);
+      }
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  async function userItemsOn() {
+    const curr = await Parse.User.current();
+    const productQuery = new Parse.Query("Products");
+    productQuery.contains("product_uploader", curr.get("username"));
+    try {
+      const productResults = await productQuery.find();
+      setQueryResults(productResults);
+      setDisplayOrders(false);
+      setDisplayPersonal(false);
+      setDisplayMessgaes(false);
+      setDisplayProducts(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getProductRow() {
+    return queryResults.map((product, index) => {
+      return (
+        <tr key={index}>
+          <td>{product.get("product_name")}</td>
+          <td>{product.get("product_uploader")}</td>
+          <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
+        </tr>
+      );
+    });
+  }
+
+  async function userTransactionsOn() {
+    const curr = await Parse.User.current();
+    const orderQuery = new Parse.Query("Messages");
+    orderQuery.contains("buyer", curr.get("username"));
+    try {
+      const orderResults = await orderQuery.find();
+      setQueryResults(orderResults);
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayMessgaes(false);
+      setDisplayOrders(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getOrderRow() {
+    console.log(queryResults);
+    return queryResults.map((order, index) => {
+      return (
+        <tr key={index}>
+          <td>{order.get("product")}</td>
+          <td>{order.get("amount")}</td>
+          <td>{order.get("rating")}</td>
+        </tr>
+      );
+    });
+  }
+
+  async function userMessagesOn() {
+    const curr = await Parse.User.current();
+    const messageQuery = new Parse.Query("Messages");
+    messageQuery.contains("recipient", curr.get("username"));
+    try {
+      const messageResults = await messageQuery.find();
+      setQueryResults(messageResults);
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayOrders(false);
+      setDisplayMessgaes(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getMessageRow() {
+    return queryResults.map((message, index) => {
+      return (
+        <tr key={index}>
+          <td>{message.get("sender")}</td>
+          <td>{message.get("topicline")}</td>
+          <td>
+            <textarea readOnly value={message.get("content")}></textarea>
+          </td>
+        </tr>
+      );
+    });
+  }
 
   return (
-    <section class="vh-100">
+    <section>
       <ProfileNavbar />
-      <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100 main-div">
-          <div class="col-lg-6"></div>
-          <div class="col-md-8 col-lg-6 col-xl-5 sign-col">
-            <div class="card shadow-2-strong signup-card">
-              <div class="card-body p-5 text-center">
-                <h3 class="mb-5">Profile</h3>
-                <div class="fname-cont">
-                  <div class="form-outline mb-4 st-name">
-                    <input
-                      value={firstname}
-                      onChange={(event) => setFirstName(event.target.value)}
-                      type="text"
-                      class="form-control form-control-lg"
-                    />
-                  </div>
-                  <div class="form-outline mb-4 lst-name">
-                    <input
-                      value={lastname}
-                      onChange={(event) => setLastName(event.target.value)}
-                      type="text"
-                      class="form-control form-control-lg"
-                    />
-                  </div>
-                </div>
-
-                <div class="form-outline mb-4">
-                  <input
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    placeholder="Enter New Password"
-                    type="password"
-                    id="typePasswordX-2"
-                    class="form-control form-control-lg"
-                  />
-                </div>
-
-                <div class="form-outline mb-4">
-                  <input
-                    value={address}
-                    onChange={(event) => setAddress(event.target.value)}
-                    type="text"
-                    class="form-control form-control-lg"
-                  />
-                </div>
-
-                <div class="form-outline mb-4 lst-name">
-                  <input
-                    value={phonenumber}
-                    onChange={(event) => setPhoneNumber(event.target.value)}
-                    type="text"
-                    class="form-control form-control-lg"
-                  />
-                </div>
-
-                <div class="form-outline mb-4 lst-name">
-                  <input
-                    value={creditcardnumber}
-                    onChange={(event) =>
-                      setCreditCardNumber(event.target.value)
-                    }
-                    type="text"
-                    class="form-control form-control-lg"
-                  />
-                </div>
-                <div>
-                  <input
-                    type="submit"
-                    value="Submit Edit"
-                    onClick={() => updateProfile()}
-                  ></input>
-                </div>
-              </div>
-            </div>
+      <div id="row_div">
+        <div id="column_div">
+          <div id="side_bar">
+            <button id="side_nav_bt" onClick={personalInfoOn}>
+              Personal Info
+            </button>
+            <button id="side_nav_bt" onClick={userItemsOn}>
+              Your Products
+            </button>
+            <button id="side_nav_bt" onClick={userTransactionsOn}>
+              Your Orders
+            </button>
+            <button id="side_nav_bt" onClick={userMessagesOn}>
+              Messages
+            </button>
           </div>
+        </div>
+        <div>
+          {displayPersonal && (
+            <div>
+              <label htmlFor="firstname">First Name:</label>
+              <input
+                type="text"
+                id="firstname"
+                defaultValue={firstname}
+                onChange={(event) => setFirstName(event.target.value)}
+              ></input>
+              <br></br>
+              <label htmlFor="lastname">Last Name:</label>
+              <input
+                type="text"
+                id="lastname"
+                defaultValue={lastname}
+                onChange={(event) => setLastName(event.target.value)}
+              ></input>
+              <br></br>
+              <label htmlFor="address">Address:</label>
+              <input
+                type="text"
+                id="address"
+                defaultValue={address}
+                onChange={(event) => setAddress(event.target.value)}
+              ></input>
+              <br></br>
+              <label htmlFor="phonenumber">Phone Number:</label>
+              <input
+                type="text"
+                id="phonenumber"
+                defaultValue={phonenumber}
+                onChange={(event) => setPhoneNumber(event.target.value)}
+              ></input>
+              <br></br>
+              <label htmlFor="creditcard">Credit Card:</label>
+              <input
+                type="text"
+                id="creditcard"
+                defaultValue={creditcardnumber}
+                onChange={(event) => setCreditCardNumber(event.target.value)}
+              ></input>
+              <br></br>
+              <label htmlFor="password">Enter new password here:</label>
+              <input
+                type="text"
+                id="password"
+                onChange={(event) => setPassword(event.target.value)}
+              ></input>
+              <br></br>
+              <button onClick={updateProfile}>Submit Changes</button>
+            </div>
+          )}
+
+          {displayProducts && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Uploader Name</th>
+                  <th>Approved?</th>
+                </tr>
+              </thead>
+              <tbody>{getProductRow()}</tbody>
+            </table>
+          )}
+
+          {displayMessages && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Sender</th>
+                  <th>Topic</th>
+                  <th>Content</th>
+                </tr>
+              </thead>
+              <tbody>{getMessageRow()}</tbody>
+            </table>
+          )}
+
+          {displayOrders && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Rating</th>
+                </tr>
+              </thead>
+              <tbody>{getOrderRow()}</tbody>
+            </table>
+          )}
         </div>
       </div>
     </section>

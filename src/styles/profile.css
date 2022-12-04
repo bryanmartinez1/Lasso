@@ -1,0 +1,29 @@
+#section_background {
+  background: white;
+  min-height: 100vh;
+}
+#side_bar {
+  background: #89CFF0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#row_div {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10 px;
+  flex-direction: row;
+}
+#column_div {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10 px;
+  flex-direction: column;
+}
+#side_nav_bt {
+  background-color:  inherit;
+  height: 100px;
+  width: 140px;
+  font-weight: bolder;
+  font-size: larger;
+}

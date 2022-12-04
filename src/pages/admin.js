@@ -1,53 +1,29 @@
-import { React, useState, useEffect } from "react";
-import NavBar from "./../components/NavBar.js";
+import { React, useState } from "react";
 import Parse from "parse/dist/parse.min.js";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
-// import HomeBar from "../components/homebar";
 import ProfileNavbar from "../components/profileNavbar";
+import SendMessage from "./sendMessage";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
-  const [userList, setUserList] = useState();
   const [displayProducts, setDisplayProducts] = useState(false);
-  const [productList, setProductList] = useState();
-  const [transactionList, setTransactionList] = useState();
   const [displayTransactions, setDisplayTransactions] = useState(false);
+  const [queryResults, setQueryResults] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const doQuery = async function () {
-      const userQuery = new Parse.Query("User");
-      const productQuery = new Parse.Query("Products");
-      const orderQuery = new Parse.Query("Orders");
-      try {
-        const userResults = await userQuery.find();
-        setUserList(userResults);
-        const productResults = await productQuery.find();
-        setProductList(productResults);
-        const orderResults = await orderQuery.find();
-        setTransactionList(orderResults);
-        return true;
-      } catch (error) {
-        alert(`Error! ${error.message}`);
-        return false;
-      }
-    };
-    doQuery();
-  }, []);
 
   // builds the table of customer information
   function getCustomerRow() {
-    return userList.map((user, index) => {
+    return queryResults.map((user, index) => {
       return (
         <tr key={user.get("username")}>
           <td>{user.get("username")}</td>
           <td>{user.get("firstname") + " " + user.get("lastname")}</td>
           <td>
-            {user.get("Approved") ? "Approved" : "Unapproved"}
+            {user.get("approved") ? "Approved" : "Unapproved"}
             <button
               onClick={() => {
-                approveUser(userList[index]);
+                approveUser(queryResults[index]);
               }}
             >
               Approve?
@@ -57,7 +33,7 @@ function Admin() {
           <td>
             <button
               onClick={() => {
-                goToMessages(userList[index].get("username"));
+                goToMessages(queryResults[index].get("username"));
               }}
             >
               Messages
@@ -69,54 +45,93 @@ function Admin() {
   }
 
   function getProductRow() {
-    return productList.map((product, index) => {
+    return queryResults.map((product, index) => {
       return (
-        <tr key={("product_name", "product_uploader")}>
+        <tr key={index}>
           <td>{product.get("product_name")}</td>
           <td>{product.get("product_uploader")}</td>
           <td>
-            {product.get("Approved") ? "Approved" : "Unapproved"}
+            {product.get("approved") ? "Approved" : "Unapproved"}
             <button
               onClick={() => {
-                approveProduct(productList[index]);
+                approveProduct(queryResults[index]);
               }}
             >
-              Approve?
+              Approve
+            </button>
+            <button
+              onClick={() => {
+                goToMessages(
+                  product.get("product_uploader"),
+                  product.get("product_name") + " has been rejected"
+                );
+              }}
+            >
+              Reject
             </button>
           </td>
         </tr>
       );
     });
   }
+
   function getTransactionRow() {
-    console.log(transactionList[0]);
-    return transactionList.map((transaction, index) => {
+    console.log(queryResults);
+    return queryResults.map((transaction, index) => {
       return (
-        <tr key={"product_name"}>
-          <td></td>
-          <td></td>
-          <td></td>
+        <tr key={("buyer", "product")}>
+          <td>{transaction.get("product")}</td>
+          <td>{transaction.get("buyer")}</td>
+          <td>{transaction.get("createdAt").toString()}</td>
         </tr>
       );
     });
   }
   // function to display users.
-  function usersOn() {
-    setDisplayProducts(false);
-    setDisplayUsers(true);
-    setDisplayTransactions(false);
+  async function usersOn() {
+    const userQuery = new Parse.Query("User");
+    try {
+      const userResults = await userQuery.find();
+      setQueryResults(userResults);
+      setDisplayProducts(false);
+      setDisplayUsers(true);
+      setDisplayTransactions(false);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
   }
 
-  function producstOn() {
-    setDisplayProducts(true);
-    setDisplayUsers(false);
-    setDisplayTransactions(false);
+  async function producstOn() {
+    const productQuery = new Parse.Query("Products");
+    try {
+      const productResults = await productQuery.find();
+      setQueryResults(productResults);
+      setDisplayProducts(true);
+      setDisplayUsers(false);
+      setDisplayTransactions(false);
+      console.log("checking approval: ", queryResults[0].get("approved"));
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
   }
 
-  function transactionsOn() {
-    setDisplayProducts(false);
-    setDisplayUsers(false);
-    setDisplayTransactions(true);
+  async function transactionsOn() {
+    const orderQuery = new Parse.Query("Orders");
+    try {
+      const orderResults = await orderQuery.find();
+      setQueryResults(orderResults);
+      setDisplayProducts(false);
+      setDisplayUsers(false);
+      setDisplayTransactions(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
   }
 
   const approveUser = async function (user) {
@@ -143,11 +158,12 @@ function Admin() {
   };
 
   // need to pass sender too.
-  function goToMessages(username) {
+  function goToMessages(username, t) {
     navigate("/sendmessage", {
-      state: { recipient: username },
+      state: { recipient: username, topic: t },
     });
   }
+
   return (
     <section id="section_background">
       <ProfileNavbar />

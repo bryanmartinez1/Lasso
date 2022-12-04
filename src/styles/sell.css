@@ -60,9 +60,11 @@
     background-color: #D7BDE2;
 }
 
-#roundedCorner {
+#sellRoundedCorner {
     border-radius: 15px;
     background: #EDEDED;
     padding: 10px;
     margin: 5px;
+    width: auto;
+    justify-content: center;
 }

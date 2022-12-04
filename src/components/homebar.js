@@ -61,14 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-// Added "Sell" here
-const pages = [
-  "Home",
-  "Shop by Category",
-  "Auctions",
-  "Orders & Returns",
-  "Sell",
-];
+const pages = ["Home", "Shop by Category", "Auctions", "Orders & Returns"];
 const settings = ["Login", "Sign Up"];
 
 function HomeBar() {
@@ -78,10 +71,6 @@ function HomeBar() {
   const [toSignup, setToSignup] = React.useState(false);
   const [toLogin, setToLogin] = React.useState(false);
   const [toCart, setToCart] = React.useState(false);
-  //
-  // Added this hook
-  //
-  const [toSell, setToSell] = React.useState(false);
 
   if (toLogin) {
     return <Navigate to="/login" />;
@@ -89,12 +78,6 @@ function HomeBar() {
 
   if (toSignup) {
     return <Navigate to="/Signup" />;
-  }
-  //
-  // Added so that when true will move to sell
-  //
-  if (toSell) {
-    return <Navigate to="/Sell" />;
   }
 
   const handleOpenNavMenu = (event) => {
@@ -129,12 +112,6 @@ function HomeBar() {
   };
   const gotoCart = () => {
     setToCart(true);
-  };
-  //
-  // Sets the hook to true to initate the if statement from above and navigate to sell page
-  //
-  const gotoSell = () => {
-    setToSell(true);
   };
 
   return (
@@ -211,10 +188,7 @@ function HomeBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                //
-                // Change this frome handleCloseNavMenu to goToSell to initate the change of pages when clicked
-                //
-                onClick={gotoSell}
+                onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}

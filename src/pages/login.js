@@ -47,12 +47,7 @@ function Login() {
       } else {
         navigate("/Profile", {
           state: {
-            fname: currentUser.get("firstname"),
-            lname: currentUser.get("lastname"),
-            password: currentUser.get("password"),
-            phonenumber: currentUser.get("phonenumber"),
-            address: currentUser.get("address"),
-            creditcardnumber: currentUser.get("creditcardnumber"),
+            username: currentUser.get("username"),
           },
         });
       }

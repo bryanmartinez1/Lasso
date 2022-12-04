@@ -1,7 +1,12 @@
-import React from 'react'
+import React from "react";
+import ProfileNavbar from "../components/profileNavbar";
 
 export default function cart() {
   return (
-    <div>i am cart</div>
-  )
+    <div>
+      {" "}
+      <ProfileNavbar />
+      <div>I am Cart</div>
+    </div>
+  );
 }
