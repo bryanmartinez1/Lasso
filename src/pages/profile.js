@@ -24,6 +24,14 @@ function Profile() {
   const [creditcardnumber, setCreditCardNumber] = useState();
   const [password, setPassword] = useState();
 
+  // to add: View bids on their items, i.e. highest bid only, then when the time is over
+  // put in a list of all the bids they can see, if they select a non-highest bid, they must
+  // provide a reason to the admins. In any case, also add balance changer, and upon sale
+  // they must click agree, then they must wait for the buyer to select pay on their end.
+  // on the buyer end their balance will decrease in their account
+  // then they will receive a message where they can click accept, and on their end they
+  // will raise their balance by the accepted paid amount, and also they will receive shipping details.
+  // Also have to add a delete message function. And upon item sold delete all bids for the item.
   async function updateProfile() {
     try {
       const currentUser = await Parse.User.current();

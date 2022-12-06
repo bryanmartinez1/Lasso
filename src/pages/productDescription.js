@@ -5,7 +5,6 @@ import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
 import HomeBar from "../components/homebar";
 
-var Bids = Parse.Object.extend("Bids");
 const Messages = Parse.Object.extend("Messages");
 
 export default function ProductDescription() {
@@ -32,12 +31,15 @@ export default function ProductDescription() {
     return true;
   }
   async function submitBid() {
+    // to add: check if bid is higher than current highest bid.
+    // and check if a user is trying to input a bid higher than their last
+    // they should only be allowed to do this.
+
     // check if logged in or not approved
     const curr = await Parse.User.current();
     if (!validateUser(curr)) {
       return;
     }
-
     // check if the current user has bid on this item, if so, just change
     // that bid. Otherwise make a new bid.
     const bidQuery = new Parse.Query("Bids");
@@ -45,11 +47,10 @@ export default function ProductDescription() {
       .contains("buyer", curr.get("username"))
       .contains("seller", data.sellername)
       .contains("productname", data.productname);
+
     try {
       const bidResult = await bidQuery.find();
-      //console.log(bidResult);
-      //console.log(bidResult[0].id);
-      // make new bid
+      // make entirely new bid
       if (bidResult.length === 0) {
         let myBid = new Parse.Object("Bids");
         myBid.set("buyer", curr.get("username"));
@@ -57,7 +58,9 @@ export default function ProductDescription() {
         myBid.set("bidamount", bidAmount);
         myBid.set("productname", data.productname);
         await myBid.save().then(alert("Your bid has been submitted!"));
-      } else {
+      }
+      // update old bid
+      else {
         let myBid = new Parse.Object("Bids");
         myBid.set("objectId", bidResult[0].id);
         myBid.set("bidamount", bidAmount);
