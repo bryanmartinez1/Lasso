@@ -83,7 +83,7 @@ export default function ProductDescription() {
     const topic = "Report";
     try {
       const message = new Messages();
-      message.set("recipient", "TestUser");
+      message.set("recipient", "Tad");
       message.set("sender", "Anonymous");
       message.set("content", text);
       message.set("topicline", topic);
