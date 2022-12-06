@@ -20,23 +20,49 @@ export default function ProductDescription() {
   // query on bid request.
   const [bidAmount, setBidAmount] = useState();
 
-  async function submitBid() {
-    // get current user
-    const curr = await Parse.User.current();
+  async function validateUser(curr) {
     if (curr == null) {
       alert("You are not logged in, please sign in");
-      return;
+      return false;
     }
     if (curr.get("approved") === false) {
       alert("You can not sell a product till your account has been approved");
+      return false;
+    }
+    return true;
+  }
+  async function submitBid() {
+    // check if logged in or not approved
+    const curr = await Parse.User.current();
+    if (!validateUser(curr)) {
       return;
     }
+
+    // check if the current user has bid on this item, if so, just change
+    // that bid. Otherwise make a new bid.
+    const bidQuery = new Parse.Query("Bids");
+    bidQuery
+      .contains("buyer", curr.get("username"))
+      .contains("seller", data.sellername)
+      .contains("productname", data.productname);
     try {
-      let myBid = new Bids();
-      myBid.set("buyer", curr.get("username"));
-      myBid.set("seller", data.sellername);
-      myBid.set("bidamount", bidAmount);
-      await myBid.save();
+      const bidResult = await bidQuery.find();
+      //console.log(bidResult);
+      //console.log(bidResult[0].id);
+      // make new bid
+      if (bidResult.length === 0) {
+        let myBid = new Parse.Object("Bids");
+        myBid.set("buyer", curr.get("username"));
+        myBid.set("seller", data.sellername);
+        myBid.set("bidamount", bidAmount);
+        myBid.set("productname", data.productname);
+        await myBid.save().then(alert("Your bid has been submitted!"));
+      } else {
+        let myBid = new Parse.Object("Bids");
+        myBid.set("objectId", bidResult[0].id);
+        myBid.set("bidamount", bidAmount);
+        await myBid.save().then(alert("Your bid has been updated!"));
+      }
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
