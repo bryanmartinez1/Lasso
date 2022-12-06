@@ -23,15 +23,19 @@ export default function ProductDescription() {
   async function submitBid() {
     // get current user
     const curr = await Parse.User.current();
-    const productQuery = new Parse.Query("Products");
-    productQuery
-      .contains("product_uploader", data.sellername)
-      .contains("product_name", data.productname);
+    if (curr == null) {
+      alert("You are not logged in, please sign in");
+      return;
+    }
+    if (curr.get("approved") === false) {
+      alert("You can not sell a product till your account has been approved");
+      return;
+    }
     try {
-      const productResult = productQuery.first();
       let myBid = new Bids();
       myBid.set("buyer", curr.get("username"));
-      myBid.set("amount", bidAmount);
+      myBid.set("seller", data.sellername);
+      myBid.set("bidamount", bidAmount);
       await myBid.save();
       return true;
     } catch (error) {
