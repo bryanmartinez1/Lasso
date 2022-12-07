@@ -1,5 +1,6 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import Parse from "parse/dist/parse.min.js";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -72,6 +73,25 @@ function HomeBar() {
   const [toLogin, setToLogin] = React.useState(false);
   const [toCart, setToCart] = React.useState(false);
 
+  const navigate = useNavigate();
+  const cart = () => navigate("/cart");
+  const signup = () => navigate("/sell");
+  const login = () => navigate("/login");
+  const sell = () => navigate("/sell");
+  const profile = () => navigate("/profile");
+  const admin = () => navigate("/admin");
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      console.log("Enter key pressed ✅");
+      navigate("/searchresult", {
+        state: {
+          searchResult: document.getElementById("searchResult").value,
+        },
+      });
+    }
+  };
+
   if (toLogin) {
     return <Navigate to="/login" />;
   }
@@ -91,10 +111,11 @@ function HomeBar() {
     const res = event.target;
     console.log(res.textContent);
     if (res.textContent === "Login") {
-      setToLogin(true);
+      navigate("/login");
     }
     if (res.textContent === "Sign Up") {
       setToSignup(true);
+      navigate("/signup");
     }
 
     // res.textContent;
@@ -202,9 +223,10 @@ function HomeBar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              id="searchResult"
+              onKeyDown={handleKeyDown}
             />
           </Search>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Account settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -239,7 +261,7 @@ function HomeBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Shopping cart">
-              <IconButton onClick={gotoCart} sx={{ p: 2 }}>
+              <IconButton onClick={cart} sx={{ p: 2 }}>
                 <Avatar>
                   <ShoppingCart />
                 </Avatar>
