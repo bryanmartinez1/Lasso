@@ -9,7 +9,6 @@ function Profile() {
   const location = useLocation();
   //the data here will be an object since an object was
   const data = location.state;
-
   // queryResults and which page to show
   const [queryResults, setQueryResults] = useState();
   const [displayPersonal, setDisplayPersonal] = useState(false);

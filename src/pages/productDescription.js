@@ -19,7 +19,7 @@ export default function ProductDescription() {
   // query on bid request.
   const [bidAmount, setBidAmount] = useState();
 
-  async function validateUser(curr) {
+  function validateUser(curr) {
     if (curr == null) {
       alert("You are not logged in, please sign in");
       return false;
@@ -31,24 +31,21 @@ export default function ProductDescription() {
     return true;
   }
 
-  async function validateBid(curr) {}
+  function validateBid(bidResult) {
+    if (bidResult.length === 0) {
+      return true;
+    }
+    let checkBid = new Parse.Object("Bids");
+    checkBid.set("objectId", bidResult[0].id);
+    if (checkBid.get("bidamount") >= bidAmount) {
+      alert("You must enter a bid higher than your last");
+      return false;
+    }
+    return true;
+  }
 
   async function submitBid() {
-    // check if logged in or not approved
     const curr = await Parse.User.current();
-    if (!validateUser(curr)) {
-      return;
-    }
-    // to add: check if bid is higher than current highest bid.
-    // and check if a user is trying to input a bid higher than their last
-    // they should only be allowed to do this. Also check
-    // if their bid is less than their current balance
-    if (!validateBid(curr)) {
-      return;
-    }
-
-    // check if the current user has bid on this item, if so, just change
-    // that bid. Otherwise make a new bid.
     const bidQuery = new Parse.Query("Bids");
     bidQuery
       .contains("buyer", curr.get("username"))
@@ -57,12 +54,23 @@ export default function ProductDescription() {
 
     try {
       const bidResult = await bidQuery.find();
+      if (!validateUser(curr)) {
+        return false;
+      }
+      if (bidAmount <= 0) {
+        alert("You must bid something more than $0");
+        return false;
+      }
+      if (!validateBid(bidResult)) {
+        console.log("returned from bad bid");
+        return false;
+      }
       // make entirely new bid
       if (bidResult.length === 0) {
         let myBid = new Parse.Object("Bids");
         myBid.set("buyer", curr.get("username"));
         myBid.set("seller", data.sellername);
-        myBid.set("bidamount", bidAmount);
+        myBid.set("bidamount", Number(bidAmount));
         myBid.set("productname", data.productname);
         await myBid.save().then(alert("Your bid has been submitted!"));
       }
@@ -70,7 +78,7 @@ export default function ProductDescription() {
       else {
         let myBid = new Parse.Object("Bids");
         myBid.set("objectId", bidResult[0].id);
-        myBid.set("bidamount", bidAmount);
+        myBid.set("bidamount", Number(bidAmount));
         await myBid.save().then(alert("Your bid has been updated!"));
       }
       return true;
