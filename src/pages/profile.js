@@ -3,20 +3,23 @@ import Parse from "parse/dist/parse.min.js";
 import ProfileNavbar from "../components/profileNavbar";
 import "../styles/profile.css";
 import { useLocation } from "react-router-dom";
+import DescriptionsItem from "antd/lib/descriptions/Item";
 
 function Profile() {
   const location = useLocation();
   //the data here will be an object since an object was
   const data = location.state;
-
   // queryResults and which page to show
   const [queryResults, setQueryResults] = useState();
   const [displayPersonal, setDisplayPersonal] = useState(false);
   const [displayProducts, setDisplayProducts] = useState(false);
   const [displayOrders, setDisplayOrders] = useState(false);
   const [displayMessages, setDisplayMessgaes] = useState(false);
+  const [displayBalance, setDisplayBalance] = useState(false);
+  const [balanceChange, setBalanceChange] = useState();
+  const [displayBids, setDisplayBids] = useState(false);
   // user data info for update profile
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(null);
   const [firstname, setFirstName] = useState();
   const [lastname, setLastName] = useState();
   const [address, setAddress] = useState();
@@ -24,6 +27,14 @@ function Profile() {
   const [creditcardnumber, setCreditCardNumber] = useState();
   const [password, setPassword] = useState();
 
+  // to add: View bids on their items,
+  // put in a list of all the bids they can see, if they select a non-highest bid, they must
+  // provide a reason to the admins. In any case, also add balance changer, and upon sale
+  // they must click agree, then they must wait for the buyer to select pay on their end.
+  // on the buyer end their balance will decrease in their account
+  // then they will receive a message where they can click accept, and on their end they
+  // will raise their balance by the accepted paid amount, and also they will receive shipping details.
+  // Also have to add a delete message function.
   async function updateProfile() {
     try {
       const currentUser = await Parse.User.current();
@@ -59,6 +70,7 @@ function Profile() {
         setDisplayProducts(false);
         setDisplayOrders(false);
         setDisplayMessgaes(false);
+        setDisplayBalance(false);
         setDisplayPersonal(true);
       }
       return true;
@@ -78,6 +90,8 @@ function Profile() {
       setDisplayOrders(false);
       setDisplayPersonal(false);
       setDisplayMessgaes(false);
+      setDisplayBalance(false);
+      setDisplayBids(false);
       setDisplayProducts(true);
       return true;
     } catch (error) {
@@ -93,6 +107,53 @@ function Profile() {
           <td>{product.get("product_name")}</td>
           <td>{product.get("product_uploader")}</td>
           <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
+          <td>
+            <button
+              onClick={() => {
+                productBidsOn(queryResults[index]);
+              }}
+            >
+              View Bids
+            </button>
+          </td>
+        </tr>
+      );
+    });
+  }
+
+  async function productBidsOn(product) {
+    console.log(product.attributes.product_name);
+    const curr = await Parse.User.current();
+    const bidQuery = new Parse.Query("Bids");
+    bidQuery
+      .contains("seller", curr.get("username"))
+      .contains("productname", product.attributes.product_name);
+    try {
+      const bidResults = await bidQuery.find();
+      setQueryResults(bidResults);
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayMessgaes(false);
+      setDisplayBalance(false);
+      setDisplayOrders(false);
+      setDisplayBids(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getBidRow() {
+    return queryResults.map((bid, index) => {
+      return (
+        <tr key={index}>
+          <td>{bid.get("productname")}</td>
+          <td>{bid.get("buyer")}</td>
+          <td>${bid.get("bidamount")}</td>
+          <td>
+            <button>Accept</button>
+          </td>
         </tr>
       );
     });
@@ -100,7 +161,7 @@ function Profile() {
 
   async function userTransactionsOn() {
     const curr = await Parse.User.current();
-    const orderQuery = new Parse.Query("Messages");
+    const orderQuery = new Parse.Query("Orders");
     orderQuery.contains("buyer", curr.get("username"));
     try {
       const orderResults = await orderQuery.find();
@@ -108,6 +169,8 @@ function Profile() {
       setDisplayProducts(false);
       setDisplayPersonal(false);
       setDisplayMessgaes(false);
+      setDisplayBalance(false);
+      setDisplayBids(false);
       setDisplayOrders(true);
       return true;
     } catch (error) {
@@ -139,6 +202,8 @@ function Profile() {
       setDisplayProducts(false);
       setDisplayPersonal(false);
       setDisplayOrders(false);
+      setDisplayBalance(false);
+      setDisplayBids(false);
       setDisplayMessgaes(true);
       return true;
     } catch (error) {
@@ -161,6 +226,58 @@ function Profile() {
     });
   }
 
+  // separate balance into its own class adjust these accordingly.
+  async function balanceOn() {
+    const curr = await Parse.User.current();
+    try {
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayOrders(false);
+      setDisplayMessgaes(false);
+      setDisplayBids(false);
+      setDisplayBalance(true);
+      setCurrentUser(curr);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  async function deposit() {
+    const curr = await Parse.User.current();
+    try {
+      setCurrentUser(curr);
+      const currBalance = currentUser.get("balance");
+      currentUser.set("balance", currBalance + Number(balanceChange));
+      await currentUser.save();
+      alert("Your balance was changed");
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  async function withdraw() {
+    const curr = await Parse.User.current();
+    try {
+      setCurrentUser(curr);
+      const currBalance = currentUser.get("balance");
+      if (Number(balanceChange) > currBalance) {
+        alert("You cannot withdraw more than your current balance");
+        return;
+      }
+      currentUser.set("balance", currBalance - Number(balanceChange));
+      await currentUser.save();
+      alert("Your balance was changed");
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
   return (
     <section>
       <ProfileNavbar />
@@ -169,6 +286,9 @@ function Profile() {
           <div id="side_bar">
             <button id="side_nav_bt" onClick={personalInfoOn}>
               Personal Info
+            </button>
+            <button id="side_nav_bt" onClick={balanceOn}>
+              Balance
             </button>
             <button id="side_nav_bt" onClick={userItemsOn}>
               Your Products
@@ -235,6 +355,19 @@ function Profile() {
             </div>
           )}
 
+          {displayBalance && (
+            <div>
+              <h1>Balance</h1>
+              <h2>${currentUser.get("balance")}</h2>
+              <h3>Enter the amount you'd like to deposit or withdraw here:</h3>
+              <input
+                type="number"
+                onChange={(event) => setBalanceChange(event.target.value)}
+              ></input>
+              <button onClick={deposit}>Deposit</button>
+              <button onClick={withdraw}>Withdraw</button>
+            </div>
+          )}
           {displayProducts && (
             <table className="table">
               <thead>
@@ -242,9 +375,24 @@ function Profile() {
                   <th>Product Name</th>
                   <th>Uploader Name</th>
                   <th>Approved?</th>
+                  <th>Bids</th>
                 </tr>
               </thead>
               <tbody>{getProductRow()}</tbody>
+            </table>
+          )}
+
+          {displayBids && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Bidder</th>
+                  <th>Bid Amount</th>
+                  <th>Accept Bid?</th>
+                </tr>
+              </thead>
+              <tbody>{getBidRow()}</tbody>
             </table>
           )}
 

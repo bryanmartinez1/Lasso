@@ -15,11 +15,15 @@ function Home() {
   const [queryResults, setQueryResults] = useState();
   const [showProducts, setShowProducts] = useState(false);
   const [welcome, setWelcome] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
+  // filter products to only display approved
   const doQuery = async function () {
     const productQuery = new Parse.Query("Products");
+    const curr = await Parse.User.current();
     try {
       const productResults = await productQuery.find();
+      setCurrentUser(curr);
       setQueryResults(productResults);
       setWelcome(false);
       setShowProducts(true);
@@ -47,6 +51,7 @@ function Home() {
         {welcome && <button onClick={doQuery}>Welcome!!!!!</button>}
         {showProducts && (
           <div>
+            <h1>Hello {currentUser.get("username")}</h1>
             <div className="row justify-content-center">{getProducts()}</div>
           </div>
         )}
