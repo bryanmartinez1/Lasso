@@ -7,7 +7,7 @@ export default function Product({ product }) {
   const imageURL = stringify.split('url":"').pop().slice(0, -2);
 
   return (
-    <div className="col-md-3 m-5 card p-2">
+    <div className="col-md-2 m-5 card p-2">
       <div>
         <Link
           to="/pages/productDescription"
@@ -18,9 +18,9 @@ export default function Product({ product }) {
           }}
         >
           <img src={imageURL} className="img-fluid" />
-          <h1>Name: {product.get("product_name")}</h1>
-          <h1>Description: {product.get("product_des")}</h1>
-          <h1>Tags: {product.get("product_tag")}</h1>
+          <p>Name: {product.get("product_name")}</p>
+          <p>Description: {product.get("product_des")}</p>
+          <p>Tags: {product.get("product_tag")}</p>
         </Link>
       </div>
     </div>

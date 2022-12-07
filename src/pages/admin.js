@@ -9,6 +9,7 @@ function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
   const [displayProducts, setDisplayProducts] = useState(false);
   const [displayTransactions, setDisplayTransactions] = useState(false);
+  const [displayMessages, setDisplayMessgaes] = useState(false);
   const [queryResults, setQueryResults] = useState();
   const navigate = useNavigate();
 
@@ -95,6 +96,7 @@ function Admin() {
       setQueryResults(userResults);
       setDisplayProducts(false);
       setDisplayUsers(true);
+      setDisplayMessgaes(false);
       setDisplayTransactions(false);
       return true;
     } catch (error) {
@@ -110,6 +112,7 @@ function Admin() {
       setQueryResults(productResults);
       setDisplayProducts(true);
       setDisplayUsers(false);
+      setDisplayMessgaes(false);
       setDisplayTransactions(false);
       console.log("checking approval: ", queryResults[0].get("approved"));
       return true;
@@ -126,12 +129,45 @@ function Admin() {
       setQueryResults(orderResults);
       setDisplayProducts(false);
       setDisplayUsers(false);
+      setDisplayMessgaes(false);
       setDisplayTransactions(true);
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
       return false;
     }
+  }
+
+  async function userMessagesOn() {
+    const curr = await Parse.User.current();
+    const messageQuery = new Parse.Query("Messages");
+    messageQuery.contains("recipient", curr.get("username"));
+    try {
+      const messageResults = await messageQuery.find();
+      setQueryResults(messageResults);
+      setDisplayProducts(false);
+      setDisplayUsers(false);
+      setDisplayTransactions(false);
+      setDisplayMessgaes(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getMessageRow() {
+    return queryResults.map((message, index) => {
+      return (
+        <tr key={index}>
+          <td>{message.get("sender")}</td>
+          <td>{message.get("topicline")}</td>
+          <td>
+            <textarea readOnly value={message.get("content")}></textarea>
+          </td>
+        </tr>
+      );
+    });
   }
 
   const approveUser = async function (user) {
@@ -179,6 +215,9 @@ function Admin() {
             <button id="side_nav_bt" onClick={transactionsOn}>
               Display Transactions
             </button>
+            <button id="side_nav_bt" onClick={userMessagesOn}>
+              Messages
+            </button>
           </div>
         </div>
         <div>
@@ -220,6 +259,19 @@ function Admin() {
                 </tr>
               </thead>
               <tbody>{getTransactionRow()}</tbody>
+            </table>
+          )}
+
+          {displayMessages && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Sender</th>
+                  <th>Topic</th>
+                  <th>Content</th>
+                </tr>
+              </thead>
+              <tbody>{getMessageRow()}</tbody>
             </table>
           )}
         </div>

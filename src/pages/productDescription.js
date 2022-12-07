@@ -5,7 +5,6 @@ import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
 import HomeBar from "../components/homebar";
 
-var Bids = Parse.Object.extend("Bids");
 const Messages = Parse.Object.extend("Messages");
 
 export default function ProductDescription() {
@@ -20,19 +19,68 @@ export default function ProductDescription() {
   // query on bid request.
   const [bidAmount, setBidAmount] = useState();
 
+  function validateUser(curr) {
+    if (curr == null) {
+      alert("You are not logged in, please sign in");
+      return false;
+    }
+    if (curr.get("approved") === false) {
+      alert("You can not sell a product till your account has been approved");
+      return false;
+    }
+    return true;
+  }
+
+  function validateBid(bidResult) {
+    if (bidResult.length === 0) {
+      return true;
+    }
+    let checkBid = new Parse.Object("Bids");
+    checkBid.set("objectId", bidResult[0].id);
+    if (checkBid.get("bidamount") >= bidAmount) {
+      alert("You must enter a bid higher than your last");
+      return false;
+    }
+    return true;
+  }
+
   async function submitBid() {
-    // get current user
     const curr = await Parse.User.current();
-    const productQuery = new Parse.Query("Products");
-    productQuery
-      .contains("product_uploader", data.sellername)
-      .contains("product_name", data.productname);
+    const bidQuery = new Parse.Query("Bids");
+    bidQuery
+      .contains("buyer", curr.get("username"))
+      .contains("seller", data.sellername)
+      .contains("productname", data.productname);
+
     try {
-      const productResult = productQuery.first();
-      let myBid = new Bids();
-      myBid.set("buyer", curr.get("username"));
-      myBid.set("amount", bidAmount);
-      await myBid.save();
+      const bidResult = await bidQuery.find();
+      if (!validateUser(curr)) {
+        return false;
+      }
+      if (bidAmount <= 0) {
+        alert("You must bid something more than $0");
+        return false;
+      }
+      if (!validateBid(bidResult)) {
+        console.log("returned from bad bid");
+        return false;
+      }
+      // make entirely new bid
+      if (bidResult.length === 0) {
+        let myBid = new Parse.Object("Bids");
+        myBid.set("buyer", curr.get("username"));
+        myBid.set("seller", data.sellername);
+        myBid.set("bidamount", Number(bidAmount));
+        myBid.set("productname", data.productname);
+        await myBid.save().then(alert("Your bid has been submitted!"));
+      }
+      // update old bid
+      else {
+        let myBid = new Parse.Object("Bids");
+        myBid.set("objectId", bidResult[0].id);
+        myBid.set("bidamount", Number(bidAmount));
+        await myBid.save().then(alert("Your bid has been updated!"));
+      }
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
@@ -50,7 +98,7 @@ export default function ProductDescription() {
     const topic = "Report";
     try {
       const message = new Messages();
-      message.set("recipient", "TestUser");
+      message.set("recipient", "Tad");
       message.set("sender", "Anonymous");
       message.set("content", text);
       message.set("topicline", topic);
