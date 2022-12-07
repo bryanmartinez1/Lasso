@@ -49,6 +49,10 @@ function Signup() {
       user.set("phonenumber", "");
       user.set("creditcardnumber", "");
 
+      let newBalance = new Parse.Object("UserBalance");
+      newBalance.set("username", usernameValue);
+      newBalance.set("amount", 0);
+      newBalance.save();
       // setting the ACL for the user to allow access for admins to view,change,delete user data
       let userACL = new Parse.ACL();
       userACL.setPublicReadAccess(true);
@@ -65,7 +69,7 @@ function Signup() {
         `Success! User ${createdUser.getUsername()} was successfully created!`
       );
 
-      // setting role
+      // setting role currently does not work
       let rolesQuery = new Parse.Query(Parse.Role);
       rolesQuery.equalTo("name", "regular");
       let roles = await rolesQuery.first();

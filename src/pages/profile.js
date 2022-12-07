@@ -17,6 +17,7 @@ function Profile() {
   const [displayMessages, setDisplayMessgaes] = useState(false);
   const [displayBalance, setDisplayBalance] = useState(false);
   const [balanceChange, setBalanceChange] = useState();
+  const [displayBids, setDisplayBids] = useState(false);
   // user data info for update profile
   const [currentUser, setCurrentUser] = useState(null);
   const [firstname, setFirstName] = useState();
@@ -90,6 +91,7 @@ function Profile() {
       setDisplayPersonal(false);
       setDisplayMessgaes(false);
       setDisplayBalance(false);
+      setDisplayBids(false);
       setDisplayProducts(true);
       return true;
     } catch (error) {
@@ -105,6 +107,53 @@ function Profile() {
           <td>{product.get("product_name")}</td>
           <td>{product.get("product_uploader")}</td>
           <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
+          <td>
+            <button
+              onClick={() => {
+                productBidsOn(queryResults[index]);
+              }}
+            >
+              View Bids
+            </button>
+          </td>
+        </tr>
+      );
+    });
+  }
+
+  async function productBidsOn(product) {
+    console.log(product.attributes.product_name);
+    const curr = await Parse.User.current();
+    const bidQuery = new Parse.Query("Bids");
+    bidQuery
+      .contains("seller", curr.get("username"))
+      .contains("productname", product.attributes.product_name);
+    try {
+      const bidResults = await bidQuery.find();
+      setQueryResults(bidResults);
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayMessgaes(false);
+      setDisplayBalance(false);
+      setDisplayOrders(false);
+      setDisplayBids(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getBidRow() {
+    return queryResults.map((bid, index) => {
+      return (
+        <tr key={index}>
+          <td>{bid.get("productname")}</td>
+          <td>{bid.get("buyer")}</td>
+          <td>${bid.get("bidamount")}</td>
+          <td>
+            <button>Accept</button>
+          </td>
         </tr>
       );
     });
@@ -112,7 +161,7 @@ function Profile() {
 
   async function userTransactionsOn() {
     const curr = await Parse.User.current();
-    const orderQuery = new Parse.Query("Messages");
+    const orderQuery = new Parse.Query("Orders");
     orderQuery.contains("buyer", curr.get("username"));
     try {
       const orderResults = await orderQuery.find();
@@ -121,6 +170,7 @@ function Profile() {
       setDisplayPersonal(false);
       setDisplayMessgaes(false);
       setDisplayBalance(false);
+      setDisplayBids(false);
       setDisplayOrders(true);
       return true;
     } catch (error) {
@@ -153,6 +203,7 @@ function Profile() {
       setDisplayPersonal(false);
       setDisplayOrders(false);
       setDisplayBalance(false);
+      setDisplayBids(false);
       setDisplayMessgaes(true);
       return true;
     } catch (error) {
@@ -175,6 +226,7 @@ function Profile() {
     });
   }
 
+  // separate balance into its own class adjust these accordingly.
   async function balanceOn() {
     const curr = await Parse.User.current();
     try {
@@ -182,6 +234,7 @@ function Profile() {
       setDisplayPersonal(false);
       setDisplayOrders(false);
       setDisplayMessgaes(false);
+      setDisplayBids(false);
       setDisplayBalance(true);
       setCurrentUser(curr);
       return true;
@@ -322,9 +375,24 @@ function Profile() {
                   <th>Product Name</th>
                   <th>Uploader Name</th>
                   <th>Approved?</th>
+                  <th>Bids</th>
                 </tr>
               </thead>
               <tbody>{getProductRow()}</tbody>
+            </table>
+          )}
+
+          {displayBids && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Bidder</th>
+                  <th>Bid Amount</th>
+                  <th>Accept Bid?</th>
+                </tr>
+              </thead>
+              <tbody>{getBidRow()}</tbody>
             </table>
           )}
 
