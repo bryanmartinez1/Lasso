@@ -3,6 +3,7 @@ import Parse from "parse/dist/parse.min.js";
 import ProfileNavbar from "../components/profileNavbar";
 import "../styles/profile.css";
 import { useLocation } from "react-router-dom";
+import DescriptionsItem from "antd/lib/descriptions/Item";
 
 function Profile() {
   const location = useLocation();
@@ -15,8 +16,10 @@ function Profile() {
   const [displayProducts, setDisplayProducts] = useState(false);
   const [displayOrders, setDisplayOrders] = useState(false);
   const [displayMessages, setDisplayMessgaes] = useState(false);
+  const [displayBalance, setDisplayBalance] = useState(false);
+  const [balanceChange, setBalanceChange] = useState();
   // user data info for update profile
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(null);
   const [firstname, setFirstName] = useState();
   const [lastname, setLastName] = useState();
   const [address, setAddress] = useState();
@@ -67,6 +70,7 @@ function Profile() {
         setDisplayProducts(false);
         setDisplayOrders(false);
         setDisplayMessgaes(false);
+        setDisplayBalance(false);
         setDisplayPersonal(true);
       }
       return true;
@@ -86,6 +90,7 @@ function Profile() {
       setDisplayOrders(false);
       setDisplayPersonal(false);
       setDisplayMessgaes(false);
+      setDisplayBalance(false);
       setDisplayProducts(true);
       return true;
     } catch (error) {
@@ -116,6 +121,7 @@ function Profile() {
       setDisplayProducts(false);
       setDisplayPersonal(false);
       setDisplayMessgaes(false);
+      setDisplayBalance(false);
       setDisplayOrders(true);
       return true;
     } catch (error) {
@@ -147,6 +153,7 @@ function Profile() {
       setDisplayProducts(false);
       setDisplayPersonal(false);
       setDisplayOrders(false);
+      setDisplayBalance(false);
       setDisplayMessgaes(true);
       return true;
     } catch (error) {
@@ -169,6 +176,56 @@ function Profile() {
     });
   }
 
+  async function balanceOn() {
+    const curr = await Parse.User.current();
+    try {
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayOrders(false);
+      setDisplayMessgaes(false);
+      setDisplayBalance(true);
+      setCurrentUser(curr);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  async function deposit() {
+    const curr = await Parse.User.current();
+    try {
+      setCurrentUser(curr);
+      const currBalance = currentUser.get("balance");
+      currentUser.set("balance", currBalance + Number(balanceChange));
+      await currentUser.save();
+      alert("Your balance was changed");
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  async function withdraw() {
+    const curr = await Parse.User.current();
+    try {
+      setCurrentUser(curr);
+      const currBalance = currentUser.get("balance");
+      if (Number(balanceChange) > currBalance) {
+        alert("You cannot withdraw more than your current balance");
+        return;
+      }
+      currentUser.set("balance", currBalance - Number(balanceChange));
+      await currentUser.save();
+      alert("Your balance was changed");
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
   return (
     <section>
       <ProfileNavbar />
@@ -177,6 +234,9 @@ function Profile() {
           <div id="side_bar">
             <button id="side_nav_bt" onClick={personalInfoOn}>
               Personal Info
+            </button>
+            <button id="side_nav_bt" onClick={balanceOn}>
+              Balance
             </button>
             <button id="side_nav_bt" onClick={userItemsOn}>
               Your Products
@@ -243,6 +303,19 @@ function Profile() {
             </div>
           )}
 
+          {displayBalance && (
+            <div>
+              <h1>Balance</h1>
+              <h2>${currentUser.get("balance")}</h2>
+              <h3>Enter the amount you'd like to deposit or withdraw here:</h3>
+              <input
+                type="number"
+                onChange={(event) => setBalanceChange(event.target.value)}
+              ></input>
+              <button onClick={deposit}>Deposit</button>
+              <button onClick={withdraw}>Withdraw</button>
+            </div>
+          )}
           {displayProducts && (
             <table className="table">
               <thead>

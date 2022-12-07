@@ -23,7 +23,7 @@ function Signup() {
   const [toSignin, setToSignin] = useState(false);
 
   if (toSignin) {
-    return <Navigate to="/admin" />;
+    return <Navigate to="/login" />;
   }
 
   // Functions used by the screen components

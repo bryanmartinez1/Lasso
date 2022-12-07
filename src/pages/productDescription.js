@@ -30,16 +30,23 @@ export default function ProductDescription() {
     }
     return true;
   }
-  async function submitBid() {
-    // to add: check if bid is higher than current highest bid.
-    // and check if a user is trying to input a bid higher than their last
-    // they should only be allowed to do this.
 
+  async function validateBid(curr) {}
+
+  async function submitBid() {
     // check if logged in or not approved
     const curr = await Parse.User.current();
     if (!validateUser(curr)) {
       return;
     }
+    // to add: check if bid is higher than current highest bid.
+    // and check if a user is trying to input a bid higher than their last
+    // they should only be allowed to do this. Also check
+    // if their bid is less than their current balance
+    if (!validateBid(curr)) {
+      return;
+    }
+
     // check if the current user has bid on this item, if so, just change
     // that bid. Otherwise make a new bid.
     const bidQuery = new Parse.Query("Bids");

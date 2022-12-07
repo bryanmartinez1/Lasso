@@ -17,6 +17,7 @@ function Home() {
   const [welcome, setWelcome] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
+  // filter products to only display approved ones.
   const doQuery = async function () {
     const productQuery = new Parse.Query("Products");
     const curr = await Parse.User.current();
