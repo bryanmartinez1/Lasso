@@ -4,6 +4,7 @@ import products from "../products";
 import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
 import HomeBar from "../components/homebar";
+import "../styles/description.css";
 
 const Messages = Parse.Object.extend("Messages");
 
@@ -113,18 +114,20 @@ export default function ProductDescription() {
   return (
     <div>
       <ProfileNavbar />
-      <h1>Product Description</h1>
-      <h2>{data.productname}</h2>
-      <img src={img} />
+      <div id="backdrop"> 
+      <h1 style={{ color: "purple" }}>Product Description</h1>
+      <h3 class="text-center">{data.productname}</h3>
+      <img id="image" src={img} />
       <br></br>
       <div>Sold by: {data.sellername}</div>
       <input
         type="number"
         onChange={(event) => setBidAmount(event.target.value)}
       ></input>
-      <button onClick={submitBid}>Submit Bid</button>
+      <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>Submit Bid</button>
       <br></br>
-      <button onClick={report}>Report</button>
+      <button class="m-2 btn btn-primary btn-block" onClick={report}>Report</button>
+    </div>
     </div>
   );
 }

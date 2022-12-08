@@ -301,10 +301,14 @@ function Profile() {
             </button>
           </div>
         </div>
-        <div>
+
+        <div id="box1">
           {displayPersonal && (
-            <div>
+
+            <div id="box2">
+              <div id="head"><h1>Update Personal Information</h1> </div>
               <label htmlFor="firstname">First Name:</label>
+
               <input
                 type="text"
                 id="firstname"
@@ -351,31 +355,45 @@ function Profile() {
                 onChange={(event) => setPassword(event.target.value)}
               ></input>
               <br></br>
-              <button onClick={updateProfile}>Submit Changes</button>
+              <button id="bt" onClick={updateProfile}>Submit Changes</button>
             </div>
           )}
 
           {displayBalance && (
             <div>
-              <h1>Balance</h1>
-              <h2>${currentUser.get("balance")}</h2>
+              <h1 style={{ color: "Blue" }}>Balance</h1>
+              <h2 style={{ color: "red" }}>${currentUser.get("balance")}</h2>
               <h3>Enter the amount you'd like to deposit or withdraw here:</h3>
               <input
                 type="number"
                 onChange={(event) => setBalanceChange(event.target.value)}
               ></input>
-              <button onClick={deposit}>Deposit</button>
-              <button onClick={withdraw}>Withdraw</button>
+              <button class="m-2 btn btn-primary btn-block"
+                onClick={deposit}>Deposit</button>
+              <button
+                onClick={withdraw} style={{ marginLeft: '25px' }} className="btn btn-success">Withdraw</button>
             </div>
           )}
           {displayProducts && (
             <table className="table">
               <thead>
                 <tr>
-                  <th>Product Name</th>
-                  <th>Uploader Name</th>
-                  <th>Approved?</th>
-                  <th>Bids</th>
+                  <th style={{
+                    color: "white", border: "solid", backgroundColor: "skyblue",
+                    padding: "10px", fontFamily: "Arial"
+                  }}>Product Name</th>
+                  <th style={{
+                    color: "white", border: "solid", backgroundColor: "skyblue",
+                    padding: "10px", fontFamily: "Arial"
+                  }}>Uploader Name</th>
+                  <th style={{
+                    color: "white", border: "solid", backgroundColor: "skyblue",
+                    padding: "10px", fontFamily: "Arial"
+                  }}>Approved?</th>
+                  <th style={{
+                    color: "white", border: "solid", backgroundColor: "skyblue",
+                    padding: "10px", fontFamily: "Arial"
+                  }}>Bids</th>
                 </tr>
               </thead>
               <tbody>{getProductRow()}</tbody>

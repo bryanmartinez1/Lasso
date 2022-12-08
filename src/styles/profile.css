@@ -1,5 +1,8 @@
 #section_background {
-  background: white;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.7),
+    rgba(255,255,255, 0.3)
+  ), url(https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v1013-p-0009a_1-krxfulwe.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=19eaa1b284bd38ab2d07b004d203fa80);
   min-height: 100vh;
 }
 #side_bar {
@@ -27,4 +30,48 @@
   width: 140px;
   font-weight: bolder;
   font-size: larger;
+}
+
+#head{
+  color: rgb(77, 1, 77);
+}
+
+#box1{
+  background-image: url("../assets/background.png");
+  background-size: cover;
+  width: 100%;
+  text-align: center;
+  
+  font-weight: bold;
+  
+}
+#box2{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 10px 0px;
+  width: 280px;
+  
+}
+#bt{
+  width: 100%;
+  height: 50px;
+  padding:10px;
+  border:none;
+  background-color: rgb(112, 17, 200);
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  border-radius: 5px;
+}
+#bt2{
+  width: 100%;
+  height: 50px;
+  padding:10px;
+  border:none;
+  background-color: rgb(31, 108, 224);
+  font-weight: bold;
+  color: white;
+  font-size: 14px;
+  border-radius: 5px;
 }

@@ -46,12 +46,13 @@ function Home() {
 
   return (
     <section>
-      <div style={{ backgroundColor: "white" }}>
+      <div id="homebackground">
         <HomeBar />
-        {welcome && <button onClick={doQuery}>Welcome!!!!!</button>}
+        {welcome && 
+        <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>Click to access</button>}
         {showProducts && (
           <div>
-            <h1>Hello {currentUser.get("username")}</h1>
+            <h2 style={{ color: "purple" }}>Welcome, {currentUser.get("username")}!</h2>
             <div className="row justify-content-center">{getProducts()}</div>
           </div>
         )}
