@@ -75,3 +75,12 @@
   font-size: 14px;
   border-radius: 5px;
 }
+form{
+  
+  background-color: aliceblue;
+  padding: 0px 60px;
+  width: 800px;
+  height: fit-content;
+  margin-top: 80px;
+  border-radius: 5px;
+}

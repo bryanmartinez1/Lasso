@@ -9,6 +9,7 @@ import Footer from "../components/footer.js";
 import ScrollButtons from "../components/backtoTop";
 import Parse from "parse/dist/parse.min.js";
 import { useParseQuery } from "@parse/react";
+import {  useCart } from "react-use-cart";
 
 function Home() {
   const [toSignup, setToSignup] = React.useState(false);
@@ -16,6 +17,9 @@ function Home() {
   const [showProducts, setShowProducts] = useState(false);
   const [welcome, setWelcome] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+
+  //for cart
+  const { emptyCart, clearCartMetadata, items } = useCart();
 
   // filter products to only display approved
   const doQuery = async function () {
