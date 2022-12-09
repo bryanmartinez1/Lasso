@@ -203,9 +203,18 @@ function Profile() {
       let p = new Parse.Object("Products");
       p.set("objectId", productResult.id);
       p.set("sold", true);
-      // generate a new transaction
       await p.save();
+
+      // generate a new transaction
+      let newTransac = new Parse.Object("Orders");
+      newTransac.set("product", bid.get("productname"));
+      newTransac.set("buyer", bid.get("buyer"));
+      newTransac.set("seller", bid.get("seller"));
+      newTransac.set("amount", bid.get("bidamount"));
+      await newTransac.save();
+
       alert("Your purchase was successful");
+      // if index != 0, then they must send a message.
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
