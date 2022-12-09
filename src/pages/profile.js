@@ -108,13 +108,16 @@ function Profile() {
           <td>{product.get("product_uploader")}</td>
           <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
           <td>
-            <button
-              onClick={() => {
-                productBidsOn(queryResults[index]);
-              }}
-            >
-              View Bids
-            </button>
+            {!product.get("sold") && (
+              <button
+                onClick={() => {
+                  productBidsOn(queryResults[index]);
+                }}
+              >
+                View Bids
+              </button>
+            )}
+            {product.get("sold") && "SOLD"}
           </td>
         </tr>
       );
@@ -127,7 +130,8 @@ function Profile() {
     const bidQuery = new Parse.Query("Bids");
     bidQuery
       .contains("seller", curr.get("username"))
-      .contains("productname", product.attributes.product_name);
+      .contains("productname", product.attributes.product_name)
+      .descending("bidamount");
     try {
       const bidResults = await bidQuery.find();
       setQueryResults(bidResults);
@@ -152,11 +156,61 @@ function Profile() {
           <td>{bid.get("buyer")}</td>
           <td>${bid.get("bidamount")}</td>
           <td>
-            <button>Accept</button>
+            <button onClick={() => acceptBid(bid, index)}>Accept</button>
           </td>
         </tr>
       );
     });
+  }
+
+  async function acceptBid(bid, index) {
+    const buyerBalanceQuery = new Parse.Query("UserBalance").contains(
+      "username",
+      bid.get("buyer")
+    );
+    const sellerBalanceQuery = new Parse.Query("UserBalance").contains(
+      "username",
+      bid.get("seller")
+    );
+    const productQuery = new Parse.Query("Products")
+      .contains("product_uploader", bid.get("seller"))
+      .contains("product_name", bid.get("productname"));
+    // edit the buyer balance and then the seller balance
+    // mark item sold
+    // alert the user their sale went through
+    // if the bid was not the highest, i.e. index != 0,
+    // navigate to sendMessage to send message to Admin
+    try {
+      const buyerBalanceResult = await buyerBalanceQuery.first();
+      const sellerBalanceResult = await sellerBalanceQuery.first();
+      const productResult = await productQuery.first();
+
+      let bBalance = new Parse.Object("UserBalance");
+      const bAmount = buyerBalanceResult.get("amount");
+      bBalance.set("objectId", buyerBalanceResult.id);
+      bBalance.set("amount", bAmount - Number(bid.get("bidamount")));
+      await bBalance.save();
+
+      let sBalance = new Parse.Object("UserBalance");
+      const sAmount = sellerBalanceResult.get("amount");
+      sBalance.set("objectId", sellerBalanceResult.id);
+      sBalance.set(
+        "amount",
+        sBalance.get("amount") + Number(bid.get("bidamount"))
+      );
+      await sBalance.save();
+
+      let p = new Parse.Object("Products");
+      p.set("objectId", productResult.id);
+      p.set("sold", true);
+      // generate a new transaction
+      await p.save();
+      alert("Your purchase was successful");
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
   }
 
   async function userTransactionsOn() {
@@ -179,6 +233,7 @@ function Profile() {
     }
   }
 
+  // replies?
   function getOrderRow() {
     console.log(queryResults);
     return queryResults.map((order, index) => {

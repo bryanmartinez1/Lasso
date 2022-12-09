@@ -29,6 +29,16 @@ function Admin() {
             >
               Approve?
             </button>
+            <button
+              onClick={() => {
+                goToMessages(
+                  queryResults[index].get("username"),
+                  "Account Rejected"
+                );
+              }}
+            >
+              Reject
+            </button>
           </td>
           <td>{user.get("email")}</td>
           <td>
@@ -80,7 +90,7 @@ function Admin() {
     console.log(queryResults);
     return queryResults.map((transaction, index) => {
       return (
-        <tr key={("buyer", "product")}>
+        <tr key={index}>
           <td>{transaction.get("product")}</td>
           <td>{transaction.get("buyer")}</td>
           <td>{transaction.get("createdAt").toString()}</td>
@@ -90,7 +100,7 @@ function Admin() {
   }
   // function to display users.
   async function usersOn() {
-    const userQuery = new Parse.Query("User");
+    const userQuery = new Parse.Query("User").descending("createdAt");
     try {
       const userResults = await userQuery.find();
       setQueryResults(userResults);
@@ -114,7 +124,6 @@ function Admin() {
       setDisplayUsers(false);
       setDisplayMessgaes(false);
       setDisplayTransactions(false);
-      console.log("checking approval: ", queryResults[0].get("approved"));
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
