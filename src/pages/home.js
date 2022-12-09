@@ -9,7 +9,7 @@ import Footer from "../components/footer.js";
 import ScrollButtons from "../components/backtoTop";
 import Parse from "parse/dist/parse.min.js";
 import { useParseQuery } from "@parse/react";
-import {  useCart } from "react-use-cart";
+import { useCart } from "react-use-cart";
 
 function Home() {
   const [toSignup, setToSignup] = React.useState(false);
@@ -52,11 +52,14 @@ function Home() {
     <section>
       <div id="homebackground">
         <HomeBar />
-        {welcome && 
-        <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>Click to access</button>}
+        {welcome && (
+          <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
+            Click to access
+          </button>
+        )}
         {showProducts && (
           <div>
-            <h2 style={{ color: "purple" }}>Welcome, {currentUser.get("username")}!</h2>
+            <h2 style={{ color: "purple" }}></h2>
             <div className="row justify-content-center">{getProducts()}</div>
           </div>
         )}

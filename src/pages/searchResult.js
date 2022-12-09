@@ -22,7 +22,7 @@ export default function SearchResult() {
     <div>
       {" "}
       {currentUser === null ? <HomeBar /> : <ProfileNavbar />}
-      <div>I am {data.searchResult}</div>
+      <div>You searched {data.searchResult}</div>
     </div>
   );
 }
