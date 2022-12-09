@@ -183,6 +183,7 @@ function Admin() {
     try {
       user.set("approved", true);
       await user.save({ useMasterKey: true });
+      alert("User has been approved");
       return true;
     } catch (error) {
       alert(`Error! ${error}`);

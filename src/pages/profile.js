@@ -28,6 +28,7 @@ function Profile() {
   const [phonenumber, setPhoneNumber] = useState();
   const [creditcardnumber, setCreditCardNumber] = useState();
   const [password, setPassword] = useState();
+  const [rating, setRating] = useState();
 
   // to add: View bids on their items,
   // put in a list of all the bids they can see, if they select a non-highest bid, they must
@@ -73,6 +74,7 @@ function Profile() {
         setDisplayOrders(false);
         setDisplayMessgaes(false);
         setDisplayBalance(false);
+        setDisplayBids(false);
         setDisplayPersonal(true);
       }
       return true;
@@ -262,15 +264,56 @@ function Profile() {
     }
   }
 
+  async function addRating(order) {
+    // add rating to sellers rating
+    const ratingQuery = new Parse.Query("Ratings");
+    ratingQuery.contains("username", order.get("seller"));
+    try {
+      const ratingResults = await ratingQuery.first();
+      let ratingsChange = ratingResults.get("ratings");
+      ratingsChange.push(Number(rating));
+      const oldNumRatings = ratingResults.get("numratings");
+      let ratingUpdate = new Parse.Object("Ratings");
+      ratingUpdate.set("objectId", ratingResults.id);
+      ratingUpdate.set("ratings", ratingsChange);
+      ratingUpdate.set("numratings", oldNumRatings + 1);
+      await ratingUpdate.save();
+
+      let orderUpdate = new Parse.Object("Orders");
+      orderUpdate.set("objectId", order.id);
+      orderUpdate.set("rated", true);
+      orderUpdate.set("rating", Number(rating));
+      await orderUpdate.save();
+      alert("Rating Submitted");
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
   // replies?
   function getOrderRow() {
-    console.log(queryResults);
     return queryResults.map((order, index) => {
       return (
         <tr key={index}>
           <td>{order.get("product")}</td>
           <td>{order.get("amount")}</td>
-          <td>{order.get("rating")}</td>
+          <td>
+            {!order.get("rated") && (
+              <div>
+                <input
+                  type="number"
+                  min="1"
+                  max="5"
+                  onChange={(event) => setRating(event.target.value)}
+                ></input>
+                <button onClick={() => addRating(queryResults[index])}>
+                  Submit Rating
+                </button>
+              </div>
+            )}
+            {order.get("rated") && order.get("rating")}
+          </td>
         </tr>
       );
     });

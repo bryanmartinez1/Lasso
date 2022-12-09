@@ -115,6 +115,7 @@ export default function ProductDescription() {
     }
   }
 
+  // if an item is sold, remove the bidding box.
   return (
     <div>
       <ProfileNavbar />
