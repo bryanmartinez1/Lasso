@@ -2,11 +2,13 @@ import { React, useState, useEffect } from "react";
 import Parse from "parse/dist/parse.min.js";
 import ProfileNavbar from "../components/profileNavbar";
 import "../styles/profile.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import DescriptionsItem from "antd/lib/descriptions/Item";
+import SendMessage from "./sendMessage";
 
 function Profile() {
   const location = useLocation();
+  const navigate = useNavigate();
   //the data here will be an object since an object was
   const data = location.state;
   // queryResults and which page to show
@@ -148,6 +150,7 @@ function Profile() {
     }
   }
 
+  // if index != 0, then they should be sent to the sendMessage page.
   function getBidRow() {
     return queryResults.map((bid, index) => {
       return (
@@ -156,11 +159,27 @@ function Profile() {
           <td>{bid.get("buyer")}</td>
           <td>${bid.get("bidamount")}</td>
           <td>
-            <button onClick={() => acceptBid(bid, index)}>Accept</button>
+            <button
+              onClick={() =>
+                acceptBid(bid, index).then(
+                  goToMessages(index, "Tad", "Chose non-highest bid")
+                )
+              }
+            >
+              Accept
+            </button>
           </td>
         </tr>
       );
     });
+  }
+
+  function goToMessages(index, username, t) {
+    if (index !== 0) {
+      navigate("/sendmessage", {
+        state: { recipient: username, topic: t },
+      });
+    }
   }
 
   async function acceptBid(bid, index) {
@@ -189,7 +208,6 @@ function Profile() {
       const bAmount = buyerBalanceResult.get("amount");
       bBalance.set("objectId", buyerBalanceResult.id);
       bBalance.set("amount", bAmount - Number(bid.get("bidamount")));
-      await bBalance.save();
 
       let sBalance = new Parse.Object("UserBalance");
       const sAmount = sellerBalanceResult.get("amount");
@@ -198,12 +216,10 @@ function Profile() {
         "amount",
         sBalance.get("amount") + Number(bid.get("bidamount"))
       );
-      await sBalance.save();
 
       let p = new Parse.Object("Products");
       p.set("objectId", productResult.id);
       p.set("sold", true);
-      await p.save();
 
       // generate a new transaction
       let newTransac = new Parse.Object("Orders");
@@ -211,10 +227,14 @@ function Profile() {
       newTransac.set("buyer", bid.get("buyer"));
       newTransac.set("seller", bid.get("seller"));
       newTransac.set("amount", bid.get("bidamount"));
+
+      // save all the stuff
+      await bBalance.save();
+      await sBalance.save();
+      await p.save();
       await newTransac.save();
 
       alert("Your purchase was successful");
-      // if index != 0, then they must send a message.
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);

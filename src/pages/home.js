@@ -60,9 +60,6 @@ function Home() {
         )}
         {showProducts && (
           <div>
-            <h2 style={{ color: "purple" }}>
-              Welcome, {currentUser.get("username")}!
-            </h2>
             <div className="row justify-content-center">{getProducts()}</div>
           </div>
         )}
