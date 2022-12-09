@@ -229,7 +229,12 @@ function Profile() {
   // separate balance into its own class adjust these accordingly.
   async function balanceOn() {
     const curr = await Parse.User.current();
+    const balanceQuery = new Parse.Query("UserBalance");
+    balanceQuery.contains("username", curr.get("username"));
     try {
+      const balanceResult = await balanceQuery.first();
+      setQueryResults(balanceResult);
+
       setDisplayProducts(false);
       setDisplayPersonal(false);
       setDisplayOrders(false);
@@ -237,6 +242,7 @@ function Profile() {
       setDisplayBids(false);
       setDisplayBalance(true);
       setCurrentUser(curr);
+      console.log(queryResults);
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
@@ -245,12 +251,12 @@ function Profile() {
   }
 
   async function deposit() {
-    const curr = await Parse.User.current();
     try {
-      setCurrentUser(curr);
-      const currBalance = currentUser.get("balance");
-      currentUser.set("balance", currBalance + Number(balanceChange));
-      await currentUser.save();
+      const currBalance = queryResults.get("amount");
+      let cBalance = new Parse.Object("UserBalance");
+      cBalance.set("objectId", queryResults.id);
+      cBalance.set("amount", currBalance + Number(balanceChange));
+      await cBalance.save();
       alert("Your balance was changed");
       return true;
     } catch (error) {
@@ -260,16 +266,16 @@ function Profile() {
   }
 
   async function withdraw() {
-    const curr = await Parse.User.current();
     try {
-      setCurrentUser(curr);
-      const currBalance = currentUser.get("balance");
+      const currBalance = queryResults.get("amount");
       if (Number(balanceChange) > currBalance) {
         alert("You cannot withdraw more than your current balance");
-        return;
+        return true;
       }
-      currentUser.set("balance", currBalance - Number(balanceChange));
-      await currentUser.save();
+      let cBalance = new Parse.Object("UserBalance");
+      cBalance.set("objectId", queryResults.id);
+      cBalance.set("amount", currBalance - Number(balanceChange));
+      await cBalance.save();
       alert("Your balance was changed");
       return true;
     } catch (error) {
@@ -304,105 +310,151 @@ function Profile() {
 
         <div id="box1">
           <center>
-          <form>
-            {displayPersonal && (
+            <form>
+              {displayPersonal && (
+                <div id="box2">
+                  <div id="head">
+                    <h1>Update Personal Information</h1>{" "}
+                  </div>
+                  <label htmlFor="firstname">First Name:</label>
 
-              <div id="box2">
-                <div id="head"><h1>Update Personal Information</h1> </div>
-                <label htmlFor="firstname">First Name:</label>
-
-                <input
-                  type="text"
-                  id="firstname"
-                  defaultValue={firstname}
-                  onChange={(event) => setFirstName(event.target.value)}
-                ></input>
-                <br></br>
-                <label htmlFor="lastname">Last Name:</label>
-                <input
-                  type="text"
-                  id="lastname"
-                  defaultValue={lastname}
-                  onChange={(event) => setLastName(event.target.value)}
-                ></input>
-                <br></br>
-                <label htmlFor="address">Address:</label>
-                <input
-                  type="text"
-                  id="address"
-                  defaultValue={address}
-                  onChange={(event) => setAddress(event.target.value)}
-                ></input>
-                <br></br>
-                <label htmlFor="phonenumber">Phone Number:</label>
-                <input
-                  type="text"
-                  id="phonenumber"
-                  defaultValue={phonenumber}
-                  onChange={(event) => setPhoneNumber(event.target.value)}
-                ></input>
-                <br></br>
-                <label htmlFor="creditcard">Credit Card:</label>
-                <input
-                  type="text"
-                  id="creditcard"
-                  defaultValue={creditcardnumber}
-                  onChange={(event) => setCreditCardNumber(event.target.value)}
-                ></input>
-                <br></br>
-                <label htmlFor="password">Enter new password here:</label>
-                <input
-                  type="text"
-                  id="password"
-                  onChange={(event) => setPassword(event.target.value)}
-                ></input>
-                <br></br>
-                <button id="bt" onClick={updateProfile}>Submit Changes</button>
-              </div>
-            )}
-          </form>
+                  <input
+                    type="text"
+                    id="firstname"
+                    defaultValue={firstname}
+                    onChange={(event) => setFirstName(event.target.value)}
+                  ></input>
+                  <br></br>
+                  <label htmlFor="lastname">Last Name:</label>
+                  <input
+                    type="text"
+                    id="lastname"
+                    defaultValue={lastname}
+                    onChange={(event) => setLastName(event.target.value)}
+                  ></input>
+                  <br></br>
+                  <label htmlFor="address">Address:</label>
+                  <input
+                    type="text"
+                    id="address"
+                    defaultValue={address}
+                    onChange={(event) => setAddress(event.target.value)}
+                  ></input>
+                  <br></br>
+                  <label htmlFor="phonenumber">Phone Number:</label>
+                  <input
+                    type="text"
+                    id="phonenumber"
+                    defaultValue={phonenumber}
+                    onChange={(event) => setPhoneNumber(event.target.value)}
+                  ></input>
+                  <br></br>
+                  <label htmlFor="creditcard">Credit Card:</label>
+                  <input
+                    type="text"
+                    id="creditcard"
+                    defaultValue={creditcardnumber}
+                    onChange={(event) =>
+                      setCreditCardNumber(event.target.value)
+                    }
+                  ></input>
+                  <br></br>
+                  <label htmlFor="password">Enter new password here:</label>
+                  <input
+                    type="text"
+                    id="password"
+                    onChange={(event) => setPassword(event.target.value)}
+                  ></input>
+                  <br></br>
+                  <button id="bt" onClick={updateProfile}>
+                    Submit Changes
+                  </button>
+                </div>
+              )}
+            </form>
           </center>
 
-<center>
-          <form>
-          {displayBalance && (
-            <div>
-              <h1 style={{ color: "Blue" }}>Balance</h1>
-              <h2 style={{ color: "red" }}>${currentUser.get("balance")}</h2>
-              <h3>Enter the amount you'd like to deposit or withdraw here:</h3>
-              <input
-                type="number"
-                onChange={(event) => setBalanceChange(event.target.value)}
-              ></input>
-              <button class="m-2 btn btn-primary btn-block"
-                onClick={deposit}>Deposit</button>
-              <button
-                onClick={withdraw} style={{ marginLeft: '25px' }} className="btn btn-success">Withdraw</button>
-            </div>
-          )}
-          </form>
+          <center>
+            <form>
+              {displayBalance && (
+                <div>
+                  <h1 style={{ color: "Blue" }}>Balance</h1>
+                  <h2 style={{ color: "red" }}>
+                    ${queryResults.get("amount").toFixed(2)}
+                  </h2>
+                  <h3>
+                    Enter the amount you'd like to deposit or withdraw here:
+                  </h3>
+                  <input
+                    type="number"
+                    onChange={(event) => setBalanceChange(event.target.value)}
+                  ></input>
+                  <button
+                    class="m-2 btn btn-primary btn-block btn-success"
+                    onClick={deposit}
+                  >
+                    Deposit
+                  </button>
+                  <button
+                    onClick={withdraw}
+                    style={{ marginLeft: "25px" }}
+                    className="btn btn-success"
+                  >
+                    Withdraw
+                  </button>
+                </div>
+              )}
+            </form>
           </center>
-          
+
           {displayProducts && (
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{
-                    color: "white", border: "solid", backgroundColor: "skyblue",
-                    padding: "10px", fontFamily: "Arial"
-                  }}>Product Name</th>
-                  <th style={{
-                    color: "white", border: "solid", backgroundColor: "skyblue",
-                    padding: "10px", fontFamily: "Arial"
-                  }}>Uploader Name</th>
-                  <th style={{
-                    color: "white", border: "solid", backgroundColor: "skyblue",
-                    padding: "10px", fontFamily: "Arial"
-                  }}>Approved?</th>
-                  <th style={{
-                    color: "white", border: "solid", backgroundColor: "skyblue",
-                    padding: "10px", fontFamily: "Arial"
-                  }}>Bids</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Product Name
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Uploader Name
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Approved?
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Bids
+                  </th>
                 </tr>
               </thead>
               <tbody>{getProductRow()}</tbody>
