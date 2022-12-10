@@ -53,6 +53,12 @@ function Signup() {
       newBalance.set("username", usernameValue);
       newBalance.set("amount", 0);
       newBalance.save();
+
+      let newRating = new Parse.Object("Ratings");
+      newRating.set("username", usernameValue);
+      newRating.set("numratings", 0);
+      newRating.set("ratings", []);
+      newRating.save();
       // setting the ACL for the user to allow access for admins to view,change,delete user data
       let userACL = new Parse.ACL();
       userACL.setPublicReadAccess(true);

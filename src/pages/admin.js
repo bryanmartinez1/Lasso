@@ -2,18 +2,23 @@ import { React, useState } from "react";
 import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
-import ProfileNavbar from "../components/profileNavbar";
-import SendMessage from "./sendMessage";
+import AdminNavbar from "../components/adminNavbar";
+import DatePicker from "react-datepicker";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
   const [displayProducts, setDisplayProducts] = useState(false);
   const [displayTransactions, setDisplayTransactions] = useState(false);
   const [displayMessages, setDisplayMessgaes] = useState(false);
+  const [displayUserTransactions, setDisplayUserTransactions] = useState(false);
   const [queryResults, setQueryResults] = useState();
   const navigate = useNavigate();
+  // Date Componets and Function so user cant pick a 30 min interval that was before the current time
+  const [selectedDate, setSelectedDate] = useState(null);
 
   // builds the table of customer information
+  // get rating query, sort by creation date along with user query,
+  // ratingResults[index].rating
   function getCustomerRow() {
     return queryResults.map((user, index) => {
       return (
@@ -29,6 +34,16 @@ function Admin() {
             >
               Approve?
             </button>
+            <button
+              onClick={() => {
+                goToMessages(
+                  queryResults[index].get("username"),
+                  "Account Rejected"
+                );
+              }}
+            >
+              Reject
+            </button>
           </td>
           <td>{user.get("email")}</td>
           <td>
@@ -40,9 +55,58 @@ function Admin() {
               Messages
             </button>
           </td>
+          <td>
+            <button onClick={() => getUserTransactions(user.get("username"))}>
+              View Transactions
+            </button>
+          </td>
+          <td>
+            <button onClick={() => sendWarning(user)}>Send Warning</button>
+          </td>
+          <td>
+            <button onClick={() => removeUser(user)}>BLACKLIST</button>
+          </td>
         </tr>
       );
     });
+  }
+
+  function sendWarning(user) {
+    async function warn(user) {
+      console.log(user);
+      // add strike
+      try {
+        const currStrikes = user.get("strikes");
+        user.set("strikes", currStrikes + 1);
+        if (currStrikes === 1) {
+          user.set("approved", false);
+          alert(user.get("username") + " has been banned.");
+        }
+        await user.save({ useMasterKey: true });
+        return true;
+      } catch (error) {
+        alert(`Error! ${error.message}`);
+        return false;
+      }
+    }
+    warn(user);
+    console.log("user: ", user);
+    goToMessages(user.get("username"), "Warning");
+  }
+
+  function removeUser(user) {
+    async function remove(user) {
+      try {
+        user.set("approved", false);
+        await user.save();
+        return true;
+      } catch (error) {
+        alert(`Error! ${error.message}`);
+        return false;
+      }
+    }
+    remove(user);
+    goToMessages(user.get("username"), "You have been banned");
   }
 
   function getProductRow() {
@@ -77,12 +141,13 @@ function Admin() {
   }
 
   function getTransactionRow() {
-    console.log(queryResults);
     return queryResults.map((transaction, index) => {
       return (
-        <tr key={("buyer", "product")}>
+        <tr key={index}>
           <td>{transaction.get("product")}</td>
           <td>{transaction.get("buyer")}</td>
+          <td>{transaction.get("seller")}</td>
+          <td>${transaction.get("amount")}</td>
           <td>{transaction.get("createdAt").toString()}</td>
         </tr>
       );
@@ -90,13 +155,14 @@ function Admin() {
   }
   // function to display users.
   async function usersOn() {
-    const userQuery = new Parse.Query("User");
+    const userQuery = new Parse.Query("User").descending("createdAt");
     try {
       const userResults = await userQuery.find();
       setQueryResults(userResults);
       setDisplayProducts(false);
       setDisplayUsers(true);
       setDisplayMessgaes(false);
+      setDisplayUserTransactions(false);
       setDisplayTransactions(false);
       return true;
     } catch (error) {
@@ -113,8 +179,8 @@ function Admin() {
       setDisplayProducts(true);
       setDisplayUsers(false);
       setDisplayMessgaes(false);
+      setDisplayUserTransactions(false);
       setDisplayTransactions(false);
-      console.log("checking approval: ", queryResults[0].get("approved"));
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
@@ -129,6 +195,7 @@ function Admin() {
       setQueryResults(orderResults);
       setDisplayProducts(false);
       setDisplayUsers(false);
+      setDisplayUserTransactions(false);
       setDisplayMessgaes(false);
       setDisplayTransactions(true);
       return true;
@@ -136,6 +203,59 @@ function Admin() {
       alert(`Error! ${error.message}`);
       return false;
     }
+  }
+
+  async function getUserTransactions(username) {
+    const transactionQuery = new Parse.Query("Orders").contains(
+      "buyer",
+      username
+    );
+    try {
+      const transactionResults = await transactionQuery.find();
+      setQueryResults(transactionResults);
+      setDisplayProducts(false);
+      setDisplayUsers(false);
+      setDisplayMessgaes(false);
+      setDisplayTransactions(false);
+      setDisplayUserTransactions(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  async function getTransactionByDate() {
+    const transactionQuery = new Parse.Query("Orders").greaterThan(
+      "testdate",
+      selectedDate
+    );
+    try {
+      const transactionResults = await transactionQuery.find();
+      setQueryResults(transactionResults);
+      setDisplayProducts(false);
+      setDisplayUsers(false);
+      setDisplayMessgaes(false);
+      setDisplayTransactions(true);
+      setDisplayUserTransactions(false);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getUserTransactionRow() {
+    return queryResults.map((transaction, index) => {
+      return (
+        <tr key={index}>
+          <td>{transaction.get("product")}</td>
+          <td>{transaction.get("seller")}</td>
+          <td>${transaction.get("amount")}</td>
+          <td>{transaction.get("createdAt").toString()}</td>
+        </tr>
+      );
+    });
   }
 
   async function userMessagesOn() {
@@ -147,6 +267,7 @@ function Admin() {
       setQueryResults(messageResults);
       setDisplayProducts(false);
       setDisplayUsers(false);
+      setDisplayUserTransactions(false);
       setDisplayTransactions(false);
       setDisplayMessgaes(true);
       return true;
@@ -174,6 +295,7 @@ function Admin() {
     try {
       user.set("approved", true);
       await user.save({ useMasterKey: true });
+      alert("User has been approved");
       return true;
     } catch (error) {
       alert(`Error! ${error}`);
@@ -186,6 +308,7 @@ function Admin() {
     try {
       product.set("approved", true);
       await product.save();
+      alert("Product approved");
       return true;
     } catch (error) {
       alert(`Error! ${error}`);
@@ -202,7 +325,7 @@ function Admin() {
 
   return (
     <section id="section_background">
-      <ProfileNavbar />
+      <AdminNavbar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
@@ -230,6 +353,9 @@ function Admin() {
                   <th>Approved?</th>
                   <th>Email</th>
                   <th>Send Message</th>
+                  <th>Transactions</th>
+                  <th>Warning</th>
+                  <th>Blacklist</th>
                 </tr>
               </thead>
               <tbody>{getCustomerRow()}</tbody>
@@ -250,15 +376,49 @@ function Admin() {
           )}
 
           {displayTransactions && (
+            <div>
+              {/* Date Picker*/}
+              <div id="sellRoundedCorner">
+                <p id="Label">Choose Last Day to Bid for Product</p>
+                <p>
+                  <DatePicker
+                    id="productBidDate"
+                    placeholderText="Press here to enter Date"
+                    selected={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    showDisabledMonthNavigation
+                  />
+                </p>
+                <button onClick={getTransactionByDate}>View By Date</button>
+              </div>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Buyer Name</th>
+                    <th>Seller Name</th>
+                    <th>Amount</th>
+                    <th>Time of Purchase</th>
+                  </tr>
+                </thead>
+                <tbody>{getTransactionRow()}</tbody>
+              </table>
+            </div>
+          )}
+
+          {displayUserTransactions && (
             <table className="table">
               <thead>
                 <tr>
                   <th>Product Name</th>
-                  <th>Buyer Name</th>
+                  <th>Seller Name</th>
+                  <th>Amount</th>
                   <th>Time of Purchase</th>
                 </tr>
               </thead>
-              <tbody>{getTransactionRow()}</tbody>
+              <tbody>{getUserTransactionRow()}</tbody>
             </table>
           )}
 

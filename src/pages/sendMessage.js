@@ -17,6 +17,7 @@ function SendMessage() {
   }
 
   const createMessage = async function () {
+    const curr = await Parse.User.current();
     const text = document.getElementById("messagetext");
     const topic = document.getElementById("topicline");
     console.log("text:", text);
@@ -24,7 +25,7 @@ function SendMessage() {
     try {
       const message = new Messages();
       message.set("recipient", data.recipient);
-      message.set("sender", "testing");
+      message.set("sender", curr.get("username"));
       message.set("content", text.value);
       message.set("topicline", topic.value);
       message.save();

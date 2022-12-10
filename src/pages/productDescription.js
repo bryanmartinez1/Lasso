@@ -29,6 +29,10 @@ export default function ProductDescription() {
       alert("You can not sell a product till your account has been approved");
       return false;
     }
+    if (curr.get("username") == data.sellername) {
+      alert("You can't bid on your own product");
+      return false;
+    }
     return true;
   }
 
@@ -111,23 +115,28 @@ export default function ProductDescription() {
     }
   }
 
+  // if an item is sold, remove the bidding box.
   return (
     <div>
       <ProfileNavbar />
-      <div id="backdrop"> 
-      <h1 style={{ color: "purple" }}>Product Description</h1>
-      <h3 class="text-center">{data.productname}</h3>
-      <img id="image" src={img} />
-      <br></br>
-      <div>Sold by: {data.sellername}</div>
-      <input
-        type="number"
-        onChange={(event) => setBidAmount(event.target.value)}
-      ></input>
-      <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>Submit Bid</button>
-      <br></br>
-      <button class="m-2 btn btn-primary btn-block" onClick={report}>Report</button>
-    </div>
+      <div id="backdrop">
+        <h1 style={{ color: "purple" }}>Product Description</h1>
+        <h3 class="text-center">{data.productname}</h3>
+        <img id="image" src={img} />
+        <br></br>
+        <div>Sold by: {data.sellername}</div>
+        <input
+          type="number"
+          onChange={(event) => setBidAmount(event.target.value)}
+        ></input>
+        <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
+          Submit Bid
+        </button>
+        <br></br>
+        <button class="m-2 btn btn-primary btn-block" onClick={report}>
+          Report
+        </button>
+      </div>
     </div>
   );
 }
