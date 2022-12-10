@@ -2,7 +2,8 @@ import { React, useState } from "react";
 import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
-import ProfileNavbar from "../components/profileNavbar";
+import AdminNavbar from "../components/adminNavbar";
+import DatePicker from "react-datepicker";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
@@ -12,6 +13,8 @@ function Admin() {
   const [displayUserTransactions, setDisplayUserTransactions] = useState(false);
   const [queryResults, setQueryResults] = useState();
   const navigate = useNavigate();
+  // Date Componets and Function so user cant pick a 30 min interval that was before the current time
+  const [selectedDate, setSelectedDate] = useState(null);
 
   // builds the table of customer information
   // get rating query, sort by creation date along with user query,
@@ -24,14 +27,16 @@ function Admin() {
           <td>{user.get("firstname") + " " + user.get("lastname")}</td>
           <td>
             {user.get("approved") ? "Approved" : "Unapproved"}
-            <button class="m-2 btn btn-primary btn-sm btn-success"
+            <button
+              class="m-2 btn btn-primary btn-sm btn-success"
               onClick={() => {
                 approveUser(queryResults[index]);
               }}
             >
               Approve?
             </button>
-            <button class="m-2 btn btn-primary btn-sm btn-danger"
+            <button
+              class="m-2 btn btn-primary btn-sm btn-danger"
               onClick={() => {
                 goToMessages(
                   queryResults[index].get("username"),
@@ -44,7 +49,8 @@ function Admin() {
           </td>
           <td>{user.get("email")}</td>
           <td>
-            <button class="btn btn-secondary"
+            <button
+              class="btn btn-secondary"
               onClick={() => {
                 goToMessages(queryResults[index].get("username"));
               }}
@@ -53,13 +59,60 @@ function Admin() {
             </button>
           </td>
           <td>
-            <button class="btn btn-outline-dark" onClick={() => getUserTransactions(user.get("username"))}>
+            <button
+              class="btn btn-outline-dark"
+              onClick={() => getUserTransactions(user.get("username"))}
+            >
               View Transactions
             </button>
+          </td>
+          <td>
+            <button onClick={() => sendWarning(user)}>Send Warning</button>
+          </td>
+          <td>
+            <button onClick={() => removeUser(user)}>BLACKLIST</button>
           </td>
         </tr>
       );
     });
+  }
+
+  function sendWarning(user) {
+    async function warn(user) {
+      console.log(user);
+      // add strike
+      try {
+        const currStrikes = user.get("strikes");
+        user.set("strikes", currStrikes + 1);
+        if (currStrikes === 1) {
+          user.set("approved", false);
+          alert(user.get("username") + " has been banned.");
+        }
+        await user.save({ useMasterKey: true });
+        return true;
+      } catch (error) {
+        alert(`Error! ${error.message}`);
+        return false;
+      }
+    }
+    warn(user);
+    console.log("user: ", user);
+    goToMessages(user.get("username"), "Warning");
+  }
+
+  function removeUser(user) {
+    async function remove(user) {
+      try {
+        user.set("approved", false);
+        await user.save();
+        return true;
+      } catch (error) {
+        alert(`Error! ${error.message}`);
+        return false;
+      }
+    }
+    remove(user);
+    goToMessages(user.get("username"), "You have been banned");
   }
 
   function getProductRow() {
@@ -70,14 +123,16 @@ function Admin() {
           <td>{product.get("product_uploader")}</td>
           <td style={{ color: "Blue" }}>
             {product.get("approved") ? "Approved" : "Unapproved"}
-            <button class="m-2 btn btn-primary btn-sm btn-success"
+            <button
+              class="m-2 btn btn-primary btn-sm btn-success"
               onClick={() => {
                 approveProduct(queryResults[index]);
               }}
             >
               Approve
             </button>
-            <button class="m-2 btn btn-primary btn-sm btn-danger"
+            <button
+              class="m-2 btn btn-primary btn-sm btn-danger"
               onClick={() => {
                 goToMessages(
                   product.get("product_uploader"),
@@ -178,6 +233,26 @@ function Admin() {
     }
   }
 
+  async function getTransactionByDate() {
+    const transactionQuery = new Parse.Query("Orders").greaterThan(
+      "testdate",
+      selectedDate
+    );
+    try {
+      const transactionResults = await transactionQuery.find();
+      setQueryResults(transactionResults);
+      setDisplayProducts(false);
+      setDisplayUsers(false);
+      setDisplayMessgaes(false);
+      setDisplayTransactions(true);
+      setDisplayUserTransactions(false);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
   function getUserTransactionRow() {
     return queryResults.map((transaction, index) => {
       return (
@@ -241,6 +316,7 @@ function Admin() {
     try {
       product.set("approved", true);
       await product.save();
+      alert("Product approved");
       return true;
     } catch (error) {
       alert(`Error! ${error}`);
@@ -257,7 +333,7 @@ function Admin() {
 
   return (
     <section id="section_background">
-      <ProfileNavbar />
+      <AdminNavbar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
@@ -280,18 +356,74 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Username</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Full Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Approved?</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Email</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Send Message</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Transactions</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Username
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Full Name
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Approved?
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Email
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Send Message
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Transactions
+                  </th>
+                  <th>Warning</th>
+                  <th>Blacklist</th>
                 </tr>
               </thead>
               <tbody>{getCustomerRow()}</tbody>
@@ -302,12 +434,39 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Product Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Uploader Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Approved?</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Product Name
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Uploader Name
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Approved?
+                  </th>
                 </tr>
               </thead>
               <tbody>{getProductRow()}</tbody>
@@ -315,37 +474,136 @@ function Admin() {
           )}
 
           {displayTransactions && (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Product Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Buyer Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Seller Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Amount</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Time of Purchase</th>
-                </tr>
-              </thead>
-              <tbody>{getTransactionRow()}</tbody>
-            </table>
+            <div>
+              {/* Date Picker*/}
+              <div id="sellRoundedCorner">
+                <p id="Label">Choose Last Day to Bid for Product</p>
+                <p>
+                  <DatePicker
+                    id="productBidDate"
+                    placeholderText="Press here to enter Date"
+                    selected={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    showDisabledMonthNavigation
+                  />
+                </p>
+                <button onClick={getTransactionByDate}>View By Date</button>
+              </div>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th
+                      style={{
+                        color: "white",
+                        border: "solid",
+                        backgroundColor: "skyblue",
+                        padding: "10px",
+                        fontFamily: "Arial",
+                      }}
+                    >
+                      Product Name
+                    </th>
+                    <th
+                      style={{
+                        color: "white",
+                        border: "solid",
+                        backgroundColor: "skyblue",
+                        padding: "10px",
+                        fontFamily: "Arial",
+                      }}
+                    >
+                      Buyer Name
+                    </th>
+                    <th
+                      style={{
+                        color: "white",
+                        border: "solid",
+                        backgroundColor: "skyblue",
+                        padding: "10px",
+                        fontFamily: "Arial",
+                      }}
+                    >
+                      Seller Name
+                    </th>
+                    <th
+                      style={{
+                        color: "white",
+                        border: "solid",
+                        backgroundColor: "skyblue",
+                        padding: "10px",
+                        fontFamily: "Arial",
+                      }}
+                    >
+                      Amount
+                    </th>
+                    <th
+                      style={{
+                        color: "white",
+                        border: "solid",
+                        backgroundColor: "skyblue",
+                        padding: "10px",
+                        fontFamily: "Arial",
+                      }}
+                    >
+                      Time of Purchase
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>{getTransactionRow()}</tbody>
+              </table>
+            </div>
           )}
 
           {displayUserTransactions && (
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Product Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Seller Name</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Amount</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Time of Purchase</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Product Name
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Seller Name
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Amount
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Time of Purchase
+                  </th>
                 </tr>
               </thead>
               <tbody>{getUserTransactionRow()}</tbody>
@@ -356,12 +614,39 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Sender</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Topic</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Content</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Sender
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Topic
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Content
+                  </th>
                 </tr>
               </thead>
               <tbody>{getMessageRow()}</tbody>
