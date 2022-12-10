@@ -12,6 +12,7 @@ import { useParseQuery } from "@parse/react";
 import { useCart } from "react-use-cart";
 
 // to add: distinguish between admin/guest and regular user
+// on load set a  boolean for admin or regular or guest
 function Home() {
   const [toSignup, setToSignup] = React.useState(false);
   const [queryResults, setQueryResults] = useState();

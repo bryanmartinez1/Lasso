@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
-import ProfileNavbar from "../components/profileNavbar";
+import AdminNavbar from "../components/adminNavbar";
 import DatePicker from "react-datepicker";
 
 function Admin() {
@@ -325,7 +325,7 @@ function Admin() {
 
   return (
     <section id="section_background">
-      <ProfileNavbar />
+      <AdminNavbar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
