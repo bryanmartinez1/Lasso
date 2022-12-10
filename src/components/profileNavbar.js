@@ -65,7 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 // Added "Sell" here
-const pages = ["Home", "Shop by Category", "Auctions", "Orders & Returns"];
+const pages = ["Home"];
 const settings = ["Logout"];
 
 function HomeBar() {
@@ -83,7 +83,7 @@ function HomeBar() {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       console.log("Enter key pressed ✅");
-      navigate("/searchresult", {
+      navigate("/search", {
         state: {
           searchResult: document.getElementById("searchResult").value,
         },
