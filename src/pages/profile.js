@@ -557,48 +557,21 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>
                     Product Name
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>
                     Uploader Name
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>
                     Approved?
                   </th>
                   <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                    style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                    padding: "10px",fontFamily: "Arial",}}>
                     Bids
                   </th>
                 </tr>
@@ -611,10 +584,14 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>Bidder</th>
-                  <th>Bid Amount</th>
-                  <th>Accept Bid?</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Product</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Bidder</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Bid Amount</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Accept Bid?</th>
                 </tr>
               </thead>
               <tbody>{getBidRow()}</tbody>
@@ -625,9 +602,12 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Sender</th>
-                  <th>Topic</th>
-                  <th>Content</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Sender</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Topic</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Content</th>
                 </tr>
               </thead>
               <tbody>{getMessageRow()}</tbody>
@@ -638,10 +618,14 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Item</th>
-                  <th>Amount</th>
-                  <th>Rating</th>
-                  <th>Complaint</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Item</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Amount</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Rating</th>
+                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px",fontFamily: "Arial",}}>Complaint</th>
                 </tr>
               </thead>
               <tbody>{getOrderRow()}</tbody>

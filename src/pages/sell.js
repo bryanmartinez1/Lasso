@@ -108,6 +108,8 @@ function Sell() {
     myProduct.set("last_day_bid", selectedDate);
     myProduct.set("product_condition", productCondValue);
     myProduct.set("product_uploader", userName);
+    myProduct.set("sold", false);
+    myProduct.set("product_name_lower", productNameValue.toLowerCase());
 
     // Saves Function to Back4app Parse Server
     myProduct

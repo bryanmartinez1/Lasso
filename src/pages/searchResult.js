@@ -26,11 +26,38 @@ export default function SearchResult() {
   const [welcome, setWelcome] = useState(true);
 
   const doQuery = async function () {
-    const productQuery = new Parse.Query("Products");
-    const curr = await Parse.User.current();
+    // initializing quieres
+    const productTagQuery = new Parse.Object.extend("Products");
+    const productNameQuery = new Parse.Object.extend("Products");
+    const productDesQuery = new Parse.Object.extend("Products");
     try {
-      const productResults = await productQuery.find();
-      setCurrentUser(curr);
+      // Only keeps approved products to quieres
+      const aprrovedTag = new Parse.Query(productTagQuery);
+      const aprrovedName = new Parse.Query(productNameQuery);
+      const aprrovedDes = new Parse.Query(productDesQuery);
+      aprrovedTag.equalTo("approved", true);
+      aprrovedName.equalTo("approved", true);
+      aprrovedDes.equalTo("approved", true);
+
+      // Keeps products that contains what was searched in the tag/name/description
+      aprrovedTag.contains("product_tag", data.searchResult.toLowerCase());
+      aprrovedName.contains(
+        "product_name_lower",
+        data.searchResult.toLowerCase()
+      );
+      aprrovedDes.contains("product_des", data.searchResult.toLowerCase());
+
+      // Keeps products that have not been sold yet
+      aprrovedTag.equalTo("sold", false);
+      aprrovedName.equalTo("sold", false);
+      aprrovedDes.equalTo("sold", false);
+
+      //Combines the 3 quieres
+      const products = new Parse.Query("Products");
+      products._orQuery([aprrovedTag, aprrovedName, aprrovedDes]);
+
+      //Sets the results
+      const productResults = await products.find();
       setQueryResults(productResults);
       setWelcome(false);
       setShowProducts(true);
@@ -42,6 +69,9 @@ export default function SearchResult() {
   };
 
   function getProducts() {
+    if (queryResults === null) {
+      return <h1>Nothing found. try differnt search</h1>;
+    }
     return queryResults.map((product) => {
       return <Product product={product} />;
     });
