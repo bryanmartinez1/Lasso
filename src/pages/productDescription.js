@@ -116,6 +116,7 @@ export default function ProductDescription() {
   }
 
   // if an item is sold, remove the bidding box.
+  // need to handle not allowing bidding after end date.
   return (
     <div>
       <ProfileNavbar />
