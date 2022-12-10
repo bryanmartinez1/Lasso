@@ -10,6 +10,7 @@ import ScrollButtons from "../components/backtoTop";
 import Parse from "parse/dist/parse.min.js";
 import { useParseQuery } from "@parse/react";
 import { useCart } from "react-use-cart";
+import { useCart } from "react-use-cart";
 
 // to add: distinguish between admin/guest and regular user
 function Home() {
@@ -60,6 +61,7 @@ function Home() {
         )}
         {showProducts && (
           <div>
+            <h2 style={{ color: "purple" }}></h2>
             <div className="row justify-content-center">{getProducts()}</div>
           </div>
         )}

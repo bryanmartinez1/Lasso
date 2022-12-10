@@ -72,14 +72,24 @@ function HomeBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [toLogout, setToLogout] = React.useState(false);
-  const [toCart, setToCart] = React.useState(false);
-  const [toSell, setToSell] = React.useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const sell = () => navigate("/sell");
+  const cart = () => navigate("/cart");
+  const profile = () => navigate("/profile");
+  const admin = () => navigate("/admin");
 
-  if (toSell) {
-    return <Navigate to="/Sell" />;
-  }
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      console.log("Enter key pressed ✅");
+      navigate("/searchresult", {
+        state: {
+          searchResult: document.getElementById("searchResult").value,
+        },
+      });
+    }
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -97,23 +107,12 @@ function HomeBar() {
 
     // res.textContent;
   };
-
-  if (toCart) {
-    return <Navigate to="/cart" />;
-  }
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-  };
-  const gotoCart = () => {
-    setToCart(true);
-  };
-
-  const gotoSell = () => {
-    setToSell(true);
   };
 
   const doUserLogOut = async function () {
@@ -223,7 +222,12 @@ function HomeBar() {
             ))}
           </Box>
           <Box>
-            <Tooltip onClick={gotoSell} sx={{ p: 2 }}>
+            <Tooltip onClick={profile} sx={{ p: 2 }}>
+              <Button id="sellButton">Profile</Button>
+            </Tooltip>
+          </Box>
+          <Box>
+            <Tooltip onClick={sell} sx={{ p: 2 }}>
               <Button id="sellButton">Sell</Button>
             </Tooltip>
           </Box>
@@ -233,7 +237,10 @@ function HomeBar() {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
+              onChange={(event) => setSearch(event.target.value)}
               inputProps={{ "aria-label": "search" }}
+              id="searchResult"
+              onKeyDown={handleKeyDown}
             />
           </Search>
 
@@ -271,7 +278,7 @@ function HomeBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Shopping cart">
-              <IconButton onClick={gotoCart} sx={{ p: 2 }}>
+              <IconButton onClick={cart} sx={{ p: 2 }}>
                 <Avatar>
                   <ShoppingCart />
                 </Avatar>

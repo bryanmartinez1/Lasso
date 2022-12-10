@@ -4,6 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../styles/sell.css";
 import DatePicker from "react-datepicker";
 import Parse from "parse/dist/parse.min.js";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 
 var Products = Parse.Object.extend("Products");
 
@@ -14,6 +16,29 @@ function Sell() {
   const [product_bid, setProductBid] = useState("");
   const [product_des, setProductDes] = useState("");
 
+  const conditionOptions = ["new", "old", "used", "refurbished"];
+  const defaultCondition = conditionOptions[0];
+  const tagOptions = [
+    "other",
+    "phones",
+    "electronics",
+    "clothes",
+    "outdoor",
+    "jewelry",
+    "watches",
+    "handbags",
+    "gaming",
+    "cars",
+    "trading cards",
+    "computers",
+    "laptops",
+    "collectibles",
+    "indoor",
+    "books",
+    "movies",
+    "workout",
+  ];
+  const defaultTag = tagOptions[0];
   // Date Componets and Function so user cant pick a 30 min interval that was before the current time
   const [selectedDate, setSelectedDate] = useState(null);
   const filterPassedTime = (time) => {
@@ -80,7 +105,7 @@ function Sell() {
     myProduct.set("product_tag", productTagValue);
     myProduct.set("prod_num", +productBidValue);
     myProduct.set("product_des", productDesValue);
-    myProduct.set("date_posted", selectedDate);
+    myProduct.set("last_day_bid", selectedDate);
     myProduct.set("product_condition", productCondValue);
     myProduct.set("product_uploader", userName);
 
@@ -93,7 +118,7 @@ function Sell() {
           "Products created successful with name: " +
             myProduct.get("product_name") +
             " and date: " +
-            myProduct.get("date_posted")
+            myProduct.get("last_day_bid")
         );
       })
       .catch(function (error) {
@@ -106,8 +131,6 @@ function Sell() {
     document.getElementById("productBidDate").value = "";
     document.getElementById("productMinBid").value = "";
     document.getElementById("productDes").value = "";
-    document.getElementById("productTag").value = "";
-    document.getElementById("productCondition").value = "";
   }
 
   return (
@@ -169,6 +192,7 @@ function Sell() {
               <p>
                 <DatePicker
                   id="productBidDate"
+                  placeholderText="Press here to enter Date"
                   selected={selectedDate}
                   onChange={(date) => setSelectedDate(date)}
                   showTimeSelect
@@ -181,30 +205,24 @@ function Sell() {
             </div>
             {/* Product Condition */}
             <div id="sellRoundedCorner">
-              <p id="Label">Choose Product's Condition</p>
+              <p id="Label">Select Product's Condition</p>
               <p>
-                <input
-                  type="text"
-                  id="productCondition"
-                  value={product_condition}
-                  onChange={(event) => setProductCondition(event.target.value)}
-                  placeholder="Enter Product's Condition"
-                  maxLength="20"
-                ></input>
+                <Dropdown
+                  options={conditionOptions}
+                  placeholder={"Click to select Product's Condition"}
+                  onChange={({ value }) => setProductCondition(value)}
+                />
               </p>
             </div>
             {/* Product Tag */}
             <div id="sellRoundedCorner">
-              <p id="Label">Choose Product's Tag</p>
+              <p id="Label">Select Product's Tag</p>
               <p>
-                <input
-                  type="text"
-                  id="productTag"
-                  value={product_tag}
-                  onChange={(event) => setProductTag(event.target.value)}
-                  placeholder="ex. Phone, Electronics"
-                  maxLength="20"
-                ></input>
+                <Dropdown
+                  options={tagOptions}
+                  placeholder={"Click to select Product's Tag"}
+                  onChange={({ value }) => setProductTag(value)}
+                />
               </p>
             </div>
             <div id="button-container-div">
