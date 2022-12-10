@@ -3,8 +3,6 @@ import Parse from "parse/dist/parse.min.js";
 import ProfileNavbar from "../components/profileNavbar";
 import "../styles/profile.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import DescriptionsItem from "antd/lib/descriptions/Item";
-import SendMessage from "./sendMessage";
 
 function Profile() {
   const location = useLocation();
@@ -319,6 +317,22 @@ function Profile() {
             )}
             {order.get("rated") && order.get("rating")}
           </td>
+          <td>
+            <button
+              onClick={() =>
+                goToMessages(
+                  1,
+                  "Tad",
+                  "Complaint: " +
+                    order.get("product") +
+                    " Purchased from: " +
+                    order.get("seller")
+                )
+              }
+            >
+              File Complaint
+            </button>
+          </td>
         </tr>
       );
     });
@@ -627,6 +641,7 @@ function Profile() {
                   <th>Item</th>
                   <th>Amount</th>
                   <th>Rating</th>
+                  <th>Complaint</th>
                 </tr>
               </thead>
               <tbody>{getOrderRow()}</tbody>
