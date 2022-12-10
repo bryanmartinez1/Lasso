@@ -3,7 +3,6 @@ import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
 import ProfileNavbar from "../components/profileNavbar";
-import SendMessage from "./sendMessage";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);

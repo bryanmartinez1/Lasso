@@ -284,6 +284,11 @@ function Profile() {
       orderUpdate.set("rated", true);
       orderUpdate.set("rating", Number(rating));
       await orderUpdate.save();
+
+      if (rating === 1 || rating === 5) {
+        // flag buyer account, 3 of these will lock account and they have to be reapproved by Admin again
+      }
+
       alert("Rating Submitted");
       return true;
     } catch (error) {
