@@ -9,6 +9,7 @@ import Sell from "./pages/sell";
 import Admin from "./pages/admin";
 import SendMessage from "./pages/sendMessage";
 import Cart from "./pages/cart";
+import SearchResult from "./pages/searchResult";
 import ProductDescription from "./pages/productDescription";
 // import UserRegistration from "./auth/UserRegistration";
 import { App_Id, JavaScript_key, Host_Server } from "./KEYS.js";
@@ -33,6 +34,7 @@ function App() {
           path="/pages/productDescription"
           element={<ProductDescription />}
         />
+        <Route path="/searchResult" element={<SearchResult />} />
       </Routes>
     </Router>
   );

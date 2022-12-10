@@ -3,17 +3,19 @@ import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
 import ProfileNavbar from "../components/profileNavbar";
-import SendMessage from "./sendMessage";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
   const [displayProducts, setDisplayProducts] = useState(false);
   const [displayTransactions, setDisplayTransactions] = useState(false);
   const [displayMessages, setDisplayMessgaes] = useState(false);
+  const [displayUserTransactions, setDisplayUserTransactions] = useState(false);
   const [queryResults, setQueryResults] = useState();
   const navigate = useNavigate();
 
   // builds the table of customer information
+  // get rating query, sort by creation date along with user query,
+  // ratingResults[index].rating
   function getCustomerRow() {
     return queryResults.map((user, index) => {
       return (
@@ -29,6 +31,16 @@ function Admin() {
             >
               Approve?
             </button>
+            <button
+              onClick={() => {
+                goToMessages(
+                  queryResults[index].get("username"),
+                  "Account Rejected"
+                );
+              }}
+            >
+              Reject
+            </button>
           </td>
           <td>{user.get("email")}</td>
           <td>
@@ -38,6 +50,11 @@ function Admin() {
               }}
             >
               Messages
+            </button>
+          </td>
+          <td>
+            <button onClick={() => getUserTransactions(user.get("username"))}>
+              View Transactions
             </button>
           </td>
         </tr>
@@ -77,12 +94,13 @@ function Admin() {
   }
 
   function getTransactionRow() {
-    console.log(queryResults);
     return queryResults.map((transaction, index) => {
       return (
-        <tr key={("buyer", "product")}>
+        <tr key={index}>
           <td>{transaction.get("product")}</td>
           <td>{transaction.get("buyer")}</td>
+          <td>{transaction.get("seller")}</td>
+          <td>${transaction.get("amount")}</td>
           <td>{transaction.get("createdAt").toString()}</td>
         </tr>
       );
@@ -90,13 +108,14 @@ function Admin() {
   }
   // function to display users.
   async function usersOn() {
-    const userQuery = new Parse.Query("User");
+    const userQuery = new Parse.Query("User").descending("createdAt");
     try {
       const userResults = await userQuery.find();
       setQueryResults(userResults);
       setDisplayProducts(false);
       setDisplayUsers(true);
       setDisplayMessgaes(false);
+      setDisplayUserTransactions(false);
       setDisplayTransactions(false);
       return true;
     } catch (error) {
@@ -113,8 +132,8 @@ function Admin() {
       setDisplayProducts(true);
       setDisplayUsers(false);
       setDisplayMessgaes(false);
+      setDisplayUserTransactions(false);
       setDisplayTransactions(false);
-      console.log("checking approval: ", queryResults[0].get("approved"));
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
@@ -129,6 +148,7 @@ function Admin() {
       setQueryResults(orderResults);
       setDisplayProducts(false);
       setDisplayUsers(false);
+      setDisplayUserTransactions(false);
       setDisplayMessgaes(false);
       setDisplayTransactions(true);
       return true;
@@ -136,6 +156,39 @@ function Admin() {
       alert(`Error! ${error.message}`);
       return false;
     }
+  }
+
+  async function getUserTransactions(username) {
+    const transactionQuery = new Parse.Query("Orders").contains(
+      "buyer",
+      username
+    );
+    try {
+      const transactionResults = await transactionQuery.find();
+      setQueryResults(transactionResults);
+      setDisplayProducts(false);
+      setDisplayUsers(false);
+      setDisplayMessgaes(false);
+      setDisplayTransactions(false);
+      setDisplayUserTransactions(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  function getUserTransactionRow() {
+    return queryResults.map((transaction, index) => {
+      return (
+        <tr key={index}>
+          <td>{transaction.get("product")}</td>
+          <td>{transaction.get("seller")}</td>
+          <td>${transaction.get("amount")}</td>
+          <td>{transaction.get("createdAt").toString()}</td>
+        </tr>
+      );
+    });
   }
 
   async function userMessagesOn() {
@@ -147,6 +200,7 @@ function Admin() {
       setQueryResults(messageResults);
       setDisplayProducts(false);
       setDisplayUsers(false);
+      setDisplayUserTransactions(false);
       setDisplayTransactions(false);
       setDisplayMessgaes(true);
       return true;
@@ -174,6 +228,7 @@ function Admin() {
     try {
       user.set("approved", true);
       await user.save({ useMasterKey: true });
+      alert("User has been approved");
       return true;
     } catch (error) {
       alert(`Error! ${error}`);
@@ -230,6 +285,7 @@ function Admin() {
                   <th>Approved?</th>
                   <th>Email</th>
                   <th>Send Message</th>
+                  <th>Transactions</th>
                 </tr>
               </thead>
               <tbody>{getCustomerRow()}</tbody>
@@ -255,10 +311,26 @@ function Admin() {
                 <tr>
                   <th>Product Name</th>
                   <th>Buyer Name</th>
+                  <th>Seller Name</th>
+                  <th>Amount</th>
                   <th>Time of Purchase</th>
                 </tr>
               </thead>
               <tbody>{getTransactionRow()}</tbody>
+            </table>
+          )}
+
+          {displayUserTransactions && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Seller Name</th>
+                  <th>Amount</th>
+                  <th>Time of Purchase</th>
+                </tr>
+              </thead>
+              <tbody>{getUserTransactionRow()}</tbody>
             </table>
           )}
 
