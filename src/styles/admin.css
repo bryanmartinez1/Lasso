@@ -27,3 +27,16 @@
     font-weight: bolder;
     font-size: larger;
 }
+
+#backgrund{
+    background-image: url("../assets/background.png");
+    background-size: cover;
+    width: 100%;
+    text-align: center; 
+    font-weight: bold;
+    
+  }
+  td {
+    text-align: center;
+    vertical-align: middle;
+  }
