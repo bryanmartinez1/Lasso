@@ -46,6 +46,7 @@ function Login() {
       let isUserAdmin = await queryAdmins.first();
 
       if (isUserAdmin) {
+        localStorage.setItem("admin", "1");
         navigate("/Admin");
       } else {
         navigate("/Profile", {

@@ -76,6 +76,7 @@ function Homebar() {
   const [toSell, setToSell] = React.useState(false);
 
   const isloggedInUser = localStorage.getItem("user");
+  const isUserAdmin = localStorage.getItem("admin");
   const [isLoggedin, setIsLoggedin] = useState(isloggedInUser);
   console.log("isLoggedin", isLoggedin);
 
@@ -109,7 +110,8 @@ function Homebar() {
       const currentUser = await Parse.User.current();
 
       if (currentUser === null) {
-        localStorage.setItem("user", false);
+        localStorage.setItem("user", "0");
+        localStorage.setItem("admin", "0");
         alert("Success! No user is logged in anymore!");
         setIsLoggedin("0");
       }
@@ -144,14 +146,25 @@ function Homebar() {
   }
 
   if (isLoggedin === "1") {
-    var settings = ["Logout"];
-    var pages = [
-      "Home",
-      "Shop by Category",
-      "Orders & Returns",
-      "Sell",
-      "Profile",
-    ];
+    if (isUserAdmin === "1") {
+      var settings = ["Admin", "Logout"];
+      var pages = [
+        "Home",
+        "Shop by Category",
+        "Orders & Returns",
+        "Sell",
+        "Profile",
+      ];
+    } else {
+      var settings = ["Logout"];
+      var pages = [
+        "Home",
+        "Shop by Category",
+        "Orders & Returns",
+        "Sell",
+        "Profile",
+      ];
+    }
   } else {
     var settings = ["Login", "Sign Up"];
     var pages = ["Home", "Shop by Category", "Orders & Returns"];
@@ -180,6 +193,9 @@ function Homebar() {
     }
     if (res.textContent === "Logout") {
       doUserLogOut();
+    }
+    if (res.textContent === "Admin") {
+      navigate("/Admin");
     }
 
     // res.textContent;
