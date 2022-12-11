@@ -28,6 +28,8 @@ function Home() {
     const productQuery = new Parse.Query("Products");
     const curr = await Parse.User.current();
     try {
+      productQuery.equalTo("approved", true);
+      productQuery.equalTo("sold", false);
       const productResults = await productQuery.find();
       setCurrentUser(curr);
       setQueryResults(productResults);
