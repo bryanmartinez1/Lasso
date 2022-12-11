@@ -310,7 +310,7 @@ function Profile() {
                   max="5"
                   onChange={(event) => setRating(event.target.value)}
                 ></input>
-                <button onClick={() => addRating(queryResults[index])}>
+                <button class="m-2 btn btn-primary" onClick={() => addRating(queryResults[index])}>
                   Submit Rating
                 </button>
               </div>
@@ -318,7 +318,7 @@ function Profile() {
             {order.get("rated") && order.get("rating")}
           </td>
           <td>
-            <button
+            <button class="m-2 btn btn-secondary btn-outline-warning"
               onClick={() =>
                 goToMessages(
                   1,

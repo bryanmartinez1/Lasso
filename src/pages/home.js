@@ -57,9 +57,11 @@ function Home() {
       <div id="homebackground">
         <HomeBar />
         {welcome && (
+          <div class="center">
           <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
-            Click to access
+            Home Page
           </button>
+          </div>
         )}
         {showProducts && (
           <div>

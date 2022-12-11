@@ -50,7 +50,7 @@ function Admin() {
           <td>{user.get("email")}</td>
           <td>
             <button
-              class="btn btn-secondary"
+              class="btn btn-secondary btn-sm"
               onClick={() => {
                 goToMessages(queryResults[index].get("username"));
               }}
@@ -60,7 +60,7 @@ function Admin() {
           </td>
           <td>
             <button
-              class="btn btn-outline-dark"
+              class="btn btn-sm btn-outline-dark"
               onClick={() => getUserTransactions(user.get("username"))}
             >
               View Transactions
@@ -356,74 +356,34 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Username
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Full Name
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Approved?
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Email
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Send Message
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Transactions
                   </th>
-                  <th>Warning</th>
-                  <th>Blacklist</th>
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>Warning</th>
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>Blacklist</th>
                 </tr>
               </thead>
               <tbody>{getCustomerRow()}</tbody>

@@ -120,6 +120,8 @@ export default function ProductDescription() {
     <div>
       <ProfileNavbar />
       <div id="backdrop">
+      <form style={{width: "800px", height: "800px", border: "solid",backgroundColor: "floralwhite", padding: "10px",
+        textAlign: "center", display: "inline-block" }}>
         <h1 style={{ color: "purple" }}>Product Description</h1>
         <h3 class="text-center">{data.productname}</h3>
         <img id="image" src={img} />
@@ -136,6 +138,7 @@ export default function ProductDescription() {
         <button class="m-2 btn btn-primary btn-block" onClick={report}>
           Report
         </button>
+        </form>
       </div>
     </div>
   );
