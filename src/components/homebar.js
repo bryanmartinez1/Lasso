@@ -63,26 +63,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 // Added "Sell" here
-const pages = [
-  "Home",
-  "Shop by Category",
-  "Auctions",
-  "Orders & Returns",
-  "Sell",
-];
-const settings = ["Login", "Sign Up"];
+// const pages = ["Home", "Shop by Category", "Orders & Returns"];
 
-function HomeBar() {
+function Homebar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const [toSignup, setToSignup] = React.useState(false);
   const [toLogin, setToLogin] = React.useState(false);
   const [toCart, setToCart] = React.useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [toSell, setToSell] = React.useState(false);
+
+  const isloggedInUser = localStorage.getItem("user");
+  const [isLoggedin, setIsLoggedin] = useState(isloggedInUser);
+  console.log("isLoggedin", isLoggedin);
+
   //
   // Added this hook
   //
-  const [toSell, setToSell] = React.useState(false);
 
   const navigate = useNavigate();
   const cart = () => navigate("/cart");
@@ -103,19 +102,64 @@ function HomeBar() {
     }
   };
 
+  const doUserLogOut = async function () {
+    try {
+      await Parse.User.logOut();
+      // To verify that current user is now empty, currentAsync can be used
+      const currentUser = await Parse.User.current();
+
+      if (currentUser === null) {
+        localStorage.setItem("user", false);
+        alert("Success! No user is logged in anymore!");
+        setIsLoggedin("0");
+      }
+      // Update state variable holding current user
+      getCurrentUser();
+      navigate("/");
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  };
+
+  // Function that will return current user and also update current username
+  const getCurrentUser = async function () {
+    const currentUser = await Parse.User.current();
+    // Update state variable holding current user
+    setCurrentUser(currentUser);
+    return currentUser;
+  };
+
   if (toLogin) {
-    return <Navigate to="/login" />;
+    navigate("/login");
   }
 
   if (toSignup) {
-    return <Navigate to="/Signup" />;
+    navigate("/signup");
   }
+
+  if (toCart) {
+    navigate("/cart");
+  }
+
+  if (isLoggedin === "1") {
+    var settings = ["Logout"];
+    var pages = [
+      "Home",
+      "Shop by Category",
+      "Orders & Returns",
+      "Sell",
+      "Profile",
+    ];
+  } else {
+    var settings = ["Login", "Sign Up"];
+    var pages = ["Home", "Shop by Category", "Orders & Returns"];
+  }
+
   //
   // Added so that when true will move to sell
   //
-  if (toSell) {
-    return <Navigate to="/Sell" />;
-  }
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -132,15 +176,35 @@ function HomeBar() {
     }
     if (res.textContent === "Sign Up") {
       setToSignup(true);
-      navigate("/signup");
+      // navigate("/signup");
+    }
+    if (res.textContent === "Logout") {
+      doUserLogOut();
     }
 
     // res.textContent;
   };
 
-  if (toCart) {
-    return <Navigate to="/cart" />;
-  }
+  const handleClickedPage = (event) => {
+    const res = event.target;
+    console.log(res.textContent);
+    if (res.textContent === "Home") {
+      navigate("/");
+    }
+    if (res.textContent === "Shop by Category") {
+      navigate("/");
+    }
+    if (res.textContent === "Sell") {
+      navigate("/Sell");
+    }
+    if (res.textContent === "Profile") {
+      navigate("/Profile");
+    }
+    if (res.textContent === "Orders & Returns") {
+      navigate("/");
+    }
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -235,7 +299,7 @@ function HomeBar() {
                 //
                 // Change this frome handleCloseNavMenu to goToSell to initate the change of pages when clicked
                 //
-                onClick={gotoSell}
+                onClick={handleClickedPage}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
@@ -299,4 +363,4 @@ function HomeBar() {
     </AppBar>
   );
 }
-export default HomeBar;
+export default Homebar;

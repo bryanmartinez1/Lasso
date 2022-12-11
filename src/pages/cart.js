@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useCart } from "react-use-cart";
 import Product from "../components/Product";
-import HomeBar from "../components/homebar.js";
+import Homebar from "../components/homebar.js";
 import Footer from "../components/footer.js";
 import ScrollButtons from "../components/backtoTop";
 
@@ -16,7 +16,7 @@ export default function Cart() {
 
   return (
     <div>
-      <HomeBar />
+      <Homebar />
       <div className="products">
         {items.map((item) => {
           return <Product product={item} showItemData={false} />;

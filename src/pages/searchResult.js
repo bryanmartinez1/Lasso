@@ -21,7 +21,8 @@ export default function SearchResult() {
   return (
     <div>
       {" "}
-      {currentUser === null ? <HomeBar /> : <ProfileNavbar />}
+      <HomeBar />
+      {/* {currentUser === null ? <HomeBar /> : <ProfileNavbar />} */}
       <div>You searched {data.searchResult}</div>
     </div>
   );

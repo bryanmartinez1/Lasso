@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import Parse from "parse/dist/parse.min.js";
-import ProfileNavbar from "../components/profileNavbar";
+import Homebar from "../components/homebar";
 import "../styles/profile.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -432,7 +432,7 @@ function Profile() {
 
   return (
     <section>
-      <ProfileNavbar />
+      <Homebar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
@@ -557,21 +557,48 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Product Name
                   </th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Uploader Name
                   </th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Approved?
                   </th>
                   <th
-                    style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                    padding: "10px",fontFamily: "Arial",}}>
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Bids
                   </th>
                 </tr>
@@ -584,14 +611,50 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Product</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Bidder</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Bid Amount</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Accept Bid?</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Product
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Bidder
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Bid Amount
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Accept Bid?
+                  </th>
                 </tr>
               </thead>
               <tbody>{getBidRow()}</tbody>
@@ -602,12 +665,39 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Sender</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Topic</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Content</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Sender
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Topic
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Content
+                  </th>
                 </tr>
               </thead>
               <tbody>{getMessageRow()}</tbody>
@@ -618,14 +708,50 @@ function Profile() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Item</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Amount</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Rating</th>
-                  <th style={{ color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px",fontFamily: "Arial",}}>Complaint</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Item
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Amount
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Rating
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Complaint
+                  </th>
                 </tr>
               </thead>
               <tbody>{getOrderRow()}</tbody>

@@ -3,13 +3,14 @@ import "../styles/home.css";
 import products from "../products";
 import Product from "../components/Product";
 import { useNavigate, Navigate } from "react-router-dom";
-import HomeBar from "../components/homebar.js";
+import Homebar from "../components/homebar.js";
 import { Components } from "antd/lib/date-picker/generatePicker";
 import Footer from "../components/footer.js";
 import ScrollButtons from "../components/backtoTop";
 import Parse from "parse/dist/parse.min.js";
 import { useParseQuery } from "@parse/react";
 import { useCart } from "react-use-cart";
+import ProfileNavbar from "../components/profileNavbar";
 
 // to add: distinguish between admin/guest and regular user
 function Home() {
@@ -18,6 +19,8 @@ function Home() {
   const [showProducts, setShowProducts] = useState(false);
   const [welcome, setWelcome] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  // const loggedInUser = localStorage.getItem("user");
+  // const [isLoggedin, setIsLoggedin] = useState(loggedInUser);
 
   //for cart
   const { emptyCart, clearCartMetadata, items } = useCart();
@@ -52,7 +55,8 @@ function Home() {
   return (
     <section>
       <div id="homebackground">
-        <HomeBar />
+        {/* {loggedInUser ? <ProfileNavbar /> : <HomeBar />} */}
+        <Homebar />
         {welcome && (
           <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
             Click to access

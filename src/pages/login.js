@@ -4,6 +4,7 @@ import { React, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import Parse from "parse/dist/parse.min.js";
 import Profile from "./profile";
+import Homebar from "../components/homebar";
 
 function Login() {
   const [toSignup, setToSignup] = useState(false);
@@ -28,8 +29,10 @@ function Login() {
           "username"
         )} has successfully signed in!`
       );
+
+      localStorage.setItem("user", "1");
       // To verify that this is in fact the current user, `current` can be used
-      <Profile name={username} />;
+      // <Profile name={username} />;
 
       // checking if user is an admin
       const currentUser = await Parse.User.current();
@@ -79,6 +82,7 @@ function Login() {
   };
   return (
     <section class="vh-100">
+      <Homebar />
       <div class="container py-5 h-100">
         <div class="row">
           <div class="col-lg-6"></div>
