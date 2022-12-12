@@ -14,11 +14,13 @@ export default function ProductDescription() {
   console.log("Product name: ", data.productname);
   console.log("Product seller: ", data.sellername);
   console.log("Product Img URL: " + data.imgURL);
+  console.log("Last day to bid:", data.bidEnd);
   const img = data.imgURL;
 
   // pass all relevant info along with state,
   // query on bid request.
   const [bidAmount, setBidAmount] = useState();
+  const currDate = new Date();
   const navigate = useNavigate();
 
   function validateUser(curr) {
@@ -51,12 +53,17 @@ export default function ProductDescription() {
   }
 
   async function submitBid() {
+    console.log(bidAmount);
+    console.log("HEL:LL:");
     const curr = await Parse.User.current();
     const bidQuery = new Parse.Query("Bids");
     bidQuery
       .contains("buyer", curr.get("username"))
       .contains("seller", data.sellername)
       .contains("productname", data.productname);
+    const productQuery = new Parse.Query("Products")
+      .contains("product_name", data.productname)
+      .contains("product_uploader", data.sellername);
 
     try {
       const bidResult = await bidQuery.find();
@@ -94,7 +101,7 @@ export default function ProductDescription() {
     }
   }
 
-  async function report() {
+  /*async function report() {
     const text =
       "The item: " +
       data.productname +
@@ -114,7 +121,7 @@ export default function ProductDescription() {
     } catch (error) {
       alert("Error:" + error.message);
     }
-  }
+  }*/
 
   // need to pass sender too.
   function goToMessages(username, t) {
@@ -125,47 +132,42 @@ export default function ProductDescription() {
 
   return (
     <div>
-      <ProfileNavbar />
+      <HomeBar />
       <div id="backdrop">
-        <form
-          style={{
-            width: "800px",
-            height: "800px",
-            border: "solid",
-            backgroundColor: "floralwhite",
-            padding: "10px",
-            textAlign: "center",
-            display: "inline-block",
-          }}
+        <h1 style={{ color: "purple" }}>Product Description</h1>
+        <h3 class="text-center">{data.productname}</h3>
+        <img id="image" src={img} />
+        <br></br>
+        <div>Sold by: {data.sellername}</div>
+        {currDate < data.bidEnd && (
+          <div>
+            <input
+              type="number"
+              defaultValue={0}
+              onChange={(event) => setBidAmount(event.target.value)}
+            ></input>
+
+            <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
+              Submit Bid
+            </button>
+          </div>
+        )}
+        {currDate >= data.bidEnd && "BIDDING ENDED"}
+        <br></br>
+        <button
+          class="m-2 btn btn-primary btn-block"
+          onClick={() =>
+            goToMessages(
+              "Tad",
+              data.productname +
+                " sold by " +
+                data.sellername +
+                " has been reported"
+            )
+          }
         >
-          <h1 style={{ color: "purple" }}>Product Description</h1>
-          <h3 class="text-center">{data.productname}</h3>
-          <img id="image" src={img} />
-          <br></br>
-          <div>Sold by: {data.sellername}</div>
-          <input
-            type="number"
-            onChange={(event) => setBidAmount(event.target.value)}
-          ></input>
-          <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
-            Submit Bid
-          </button>
-          <br></br>
-          <button
-            class="m-2 btn btn-primary btn-block"
-            onClick={() =>
-              goToMessages(
-                "Tad",
-                data.productname +
-                  " sold by " +
-                  data.sellername +
-                  " has been reported"
-              )
-            }
-          >
-            Report
-          </button>
-        </form>
+          Report
+        </button>
       </div>
     </div>
   );

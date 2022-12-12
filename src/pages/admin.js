@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
 import AdminNavbar from "../components/adminNavbar";
 import DatePicker from "react-datepicker";
+import HomeBar from "../components/homebar.js";
 
 function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
@@ -348,7 +349,7 @@ function Admin() {
 
   return (
     <section id="section_background">
-      <AdminNavbar />
+      <HomeBar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
