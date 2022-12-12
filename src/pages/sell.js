@@ -17,21 +17,21 @@ function Sell() {
   const [product_des, setProductDes] = useState("");
 
   const conditionOptions = ["new", "old", "used", "refurbished"];
-  const defaultCondition = conditionOptions[0];
   const tagOptions = [
     "other",
-    "phones",
     "electronics",
+    "phones",
+    "computers",
+    "laptops",
     "clothes",
     "outdoor",
     "jewelry",
     "watches",
     "handbags",
     "gaming",
+    "vehicules",
     "cars",
-    "trading cards",
-    "computers",
-    "laptops",
+    "bicycles",
     "collectibles",
     "indoor",
     "books",
@@ -110,6 +110,7 @@ function Sell() {
     myProduct.set("product_uploader", userName);
     myProduct.set("sold", false);
     myProduct.set("product_name_lower", productNameValue.toLowerCase());
+    myProduct.set("product_des_lower", productDesValue.toLowerCase());
 
     // Saves Function to Back4app Parse Server
     myProduct

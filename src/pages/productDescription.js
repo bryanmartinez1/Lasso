@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import products from "../products";
 import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
@@ -19,6 +19,7 @@ export default function ProductDescription() {
   // pass all relevant info along with state,
   // query on bid request.
   const [bidAmount, setBidAmount] = useState();
+  const navigate = useNavigate();
 
   function validateUser(curr) {
     if (curr == null) {
@@ -115,29 +116,55 @@ export default function ProductDescription() {
     }
   }
 
-  // if an item is sold, remove the bidding box.
+  // need to pass sender too.
+  function goToMessages(username, t) {
+    navigate("/sendmessage", {
+      state: { recipient: username, topic: t },
+    });
+  }
+
   return (
     <div>
       <ProfileNavbar />
       <div id="backdrop">
-      <form style={{width: "800px", height: "800px", border: "solid",backgroundColor: "floralwhite", padding: "10px",
-        textAlign: "center", display: "inline-block" }}>
-        <h1 style={{ color: "purple" }}>Product Description</h1>
-        <h3 class="text-center">{data.productname}</h3>
-        <img id="image" src={img} />
-        <br></br>
-        <div>Sold by: {data.sellername}</div>
-        <input
-          type="number"
-          onChange={(event) => setBidAmount(event.target.value)}
-        ></input>
-        <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
-          Submit Bid
-        </button>
-        <br></br>
-        <button class="m-2 btn btn-primary btn-block" onClick={report}>
-          Report
-        </button>
+        <form
+          style={{
+            width: "800px",
+            height: "800px",
+            border: "solid",
+            backgroundColor: "floralwhite",
+            padding: "10px",
+            textAlign: "center",
+            display: "inline-block",
+          }}
+        >
+          <h1 style={{ color: "purple" }}>Product Description</h1>
+          <h3 class="text-center">{data.productname}</h3>
+          <img id="image" src={img} />
+          <br></br>
+          <div>Sold by: {data.sellername}</div>
+          <input
+            type="number"
+            onChange={(event) => setBidAmount(event.target.value)}
+          ></input>
+          <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
+            Submit Bid
+          </button>
+          <br></br>
+          <button
+            class="m-2 btn btn-primary btn-block"
+            onClick={() =>
+              goToMessages(
+                "Tad",
+                data.productname +
+                  " sold by " +
+                  data.sellername +
+                  " has been reported"
+              )
+            }
+          >
+            Report
+          </button>
         </form>
       </div>
     </div>

@@ -12,13 +12,11 @@ function Admin() {
   const [displayMessages, setDisplayMessgaes] = useState(false);
   const [displayUserTransactions, setDisplayUserTransactions] = useState(false);
   const [queryResults, setQueryResults] = useState();
+  const [ratingResults, setRatingResults] = useState();
   const navigate = useNavigate();
   // Date Componets and Function so user cant pick a 30 min interval that was before the current time
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // builds the table of customer information
-  // get rating query, sort by creation date along with user query,
-  // ratingResults[index].rating
   function getCustomerRow() {
     return queryResults.map((user, index) => {
       return (
@@ -48,9 +46,10 @@ function Admin() {
             </button>
           </td>
           <td>{user.get("email")}</td>
+          <td>{ratingResults[index].get("averagerating")}</td>
           <td>
             <button
-              class="btn btn-secondary btn-sm"
+              class="btn btn-secondary btn-sm btn-sm"
               onClick={() => {
                 goToMessages(queryResults[index].get("username"));
               }}
@@ -60,7 +59,7 @@ function Admin() {
           </td>
           <td>
             <button
-              class="btn btn-sm btn-outline-dark"
+              class="btn btn-sm btn-sm btn-outline-dark"
               onClick={() => getUserTransactions(user.get("username"))}
             >
               View Transactions
@@ -164,9 +163,12 @@ function Admin() {
   // function to display users.
   async function usersOn() {
     const userQuery = new Parse.Query("User").descending("createdAt");
+    const ratingQuery = new Parse.Query("Ratings").descending("createdAt");
     try {
       const userResults = await userQuery.find();
+      const ratingQueryResults = await ratingQuery.find();
       setQueryResults(userResults);
+      setRatingResults(ratingQueryResults);
       setDisplayProducts(false);
       setDisplayUsers(true);
       setDisplayMessgaes(false);
@@ -294,6 +296,18 @@ function Admin() {
           <td>
             <textarea readOnly value={message.get("content")}></textarea>
           </td>
+          <td>
+            <button
+              onClick={() =>
+                goToMessages(
+                  message.get("sender"),
+                  "RE: " + message.get("topicline")
+                )
+              }
+            >
+              Reply
+            </button>
+          </td>
         </tr>
       );
     });
@@ -302,6 +316,7 @@ function Admin() {
   const approveUser = async function (user) {
     try {
       user.set("approved", true);
+      user.set("flags", 0);
       await user.save({ useMasterKey: true });
       alert("User has been approved");
       return true;
@@ -356,34 +371,119 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Username
                   </th>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Full Name
                   </th>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Approved?
                   </th>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Email
                   </th>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Ratings
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Send Message
                   </th>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
                     Transactions
                   </th>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>Warning</th>
-                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
-                      padding: "10px", fontFamily: "Arial",}}>Blacklist</th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Warning
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Blacklist
+                  </th>
                 </tr>
               </thead>
               <tbody>{getCustomerRow()}</tbody>
@@ -606,6 +706,17 @@ function Admin() {
                     }}
                   >
                     Content
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Reply
                   </th>
                 </tr>
               </thead>

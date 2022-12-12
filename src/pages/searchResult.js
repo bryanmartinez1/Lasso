@@ -4,6 +4,7 @@ import HomeBar from "../components/homebar.js";
 import Parse from "parse/dist/parse.min.js";
 import Product from "../components/Product";
 import { useLocation } from "react-router-dom";
+import "react-dropdown/style.css";
 
 export default function SearchResult() {
   const location = useLocation();
@@ -11,15 +12,6 @@ export default function SearchResult() {
   if (data === null) {
     data.searchResult = "";
   }
-  const [currentUser, setCurrentUser] = useState("");
-  const getCurrentUser = async function () {
-    const currentUser = await Parse.User.current();
-    // Update state variable holding current user
-    setCurrentUser(currentUser);
-    return currentUser;
-  };
-
-  getCurrentUser();
 
   const [queryResults, setQueryResults] = useState();
   const [showProducts, setShowProducts] = useState(false);
@@ -30,31 +22,55 @@ export default function SearchResult() {
     const productTagQuery = new Parse.Object.extend("Products");
     const productNameQuery = new Parse.Object.extend("Products");
     const productDesQuery = new Parse.Object.extend("Products");
+    const productSellerQuery = new Parse.Object.extend("Products");
+
+    //setting sort
     try {
       // Only keeps approved products to quieres
-      const aprrovedTag = new Parse.Query(productTagQuery);
-      const aprrovedName = new Parse.Query(productNameQuery);
-      const aprrovedDes = new Parse.Query(productDesQuery);
-      aprrovedTag.equalTo("approved", true);
-      aprrovedName.equalTo("approved", true);
-      aprrovedDes.equalTo("approved", true);
+      const tag = new Parse.Query(productTagQuery);
+      const name = new Parse.Query(productNameQuery);
+      const descriptions = new Parse.Query(productDesQuery);
+      const seller = new Parse.Query(productSellerQuery);
 
       // Keeps products that contains what was searched in the tag/name/description
-      aprrovedTag.contains("product_tag", data.searchResult.toLowerCase());
-      aprrovedName.contains(
-        "product_name_lower",
+      tag.contains("product_tag", data.searchResult.toLowerCase());
+      name.contains("product_name_lower", data.searchResult.toLowerCase());
+      descriptions.contains(
+        "product_des_lower",
         data.searchResult.toLowerCase()
       );
-      aprrovedDes.contains("product_des", data.searchResult.toLowerCase());
-
-      // Keeps products that have not been sold yet
-      aprrovedTag.equalTo("sold", false);
-      aprrovedName.equalTo("sold", false);
-      aprrovedDes.equalTo("sold", false);
+      seller.contains("product_uploader", data.searchResult.toLowerCase());
 
       //Combines the 3 quieres
       const products = new Parse.Query("Products");
-      products._orQuery([aprrovedTag, aprrovedName, aprrovedDes]);
+      products._orQuery([tag, name, descriptions, seller]);
+
+      products.equalTo("approved", true);
+      products.equalTo("sold", false);
+
+      console.log("Sorting: " + data.sort);
+      console.log("Max:" + data.maxPrice);
+      console.log("Min:" + data.minPrice);
+
+      //Filtering out products with prices greater than the max price
+      if (data.maxPrice != -1) {
+        products.lessThanOrEqualTo("prod_num", data.maxPrice);
+      }
+      //Filtering out products with prices less than the min price
+      if (data.minPrice != 0) {
+        products.greaterThanOrEqualTo("prod_num", data.minPrice);
+      }
+      //
+      // Figure out how to sort for ratings
+      //
+      // Sorting
+      if (data.sort === "Rating") {
+        console.log("Sorting via Rating");
+      } else if (data.sort === "Price: Low to High") {
+        products.addAscending("prod_num");
+      } else if (data.sort === "Price: High to Low") {
+        products.addDescending("prod_num");
+      }
 
       //Sets the results
       const productResults = await products.find();
@@ -69,9 +85,6 @@ export default function SearchResult() {
   };
 
   function getProducts() {
-    if (queryResults === null) {
-      return <h1>Nothing found. try differnt search</h1>;
-    }
     return queryResults.map((product) => {
       return <Product product={product} />;
     });

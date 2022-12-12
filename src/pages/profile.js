@@ -29,14 +29,6 @@ function Profile() {
   const [rating, setRating] = useState();
 
   // On submitting rating check if average is below 3 with less than 2.
-  // to add: View bids on their items,
-  // put in a list of all the bids they can see, if they select a non-highest bid, they must
-  // provide a reason to the admins. In any case, also add balance changer, and upon sale
-  // they must click agree, then they must wait for the buyer to select pay on their end.
-  // on the buyer end their balance will decrease in their account
-  // then they will receive a message where they can click accept, and on their end they
-  // will raise their balance by the accepted paid amount, and also they will receive shipping details.
-  // Also have to add a delete message function.
   async function updateProfile() {
     try {
       const currentUser = await Parse.User.current();
@@ -264,6 +256,7 @@ function Profile() {
   }
 
   async function addRating(order) {
+    const curr = await Parse.User.current();
     // add rating to sellers rating
     const ratingQuery = new Parse.Query("Ratings");
     ratingQuery.contains("username", order.get("seller"));
@@ -276,6 +269,10 @@ function Profile() {
       ratingUpdate.set("objectId", ratingResults.id);
       ratingUpdate.set("ratings", ratingsChange);
       ratingUpdate.set("numratings", oldNumRatings + 1);
+      const ratingsum = ratingsChange.reduce(function (prev, curr) {
+        return prev + curr;
+      });
+      ratingUpdate.set("averageRating", ratingsum / (oldNumRatings + 1));
       await ratingUpdate.save();
 
       let orderUpdate = new Parse.Object("Orders");
@@ -284,8 +281,29 @@ function Profile() {
       orderUpdate.set("rating", Number(rating));
       await orderUpdate.save();
 
-      if (rating === 1 || rating === 5) {
-        // flag buyer account, 3 of these will lock account and they have to be reapproved by Admin again
+      if (rating < 2 || rating > 4) {
+        const flags = curr.get("flags");
+        console.log(flags);
+        curr.set("flags", flags + 1);
+        if (flags == 2) {
+          curr.set("approved", false);
+          alert(
+            "You have submitted 3 1 or 5 star ratings, and must speak with an admin to unlock your account again"
+          );
+          const message = new Parse.Object("Messages");
+          message.set("recipient", "Tad");
+          message.set("sender", curr.get("username"));
+          message.set(
+            "content",
+            "User has submitted 3 1 or 5 star ratings, please check their account."
+          );
+          message.set(
+            "topicline",
+            curr.get("username") + " has been flagged as suspicious"
+          );
+          message.save();
+        }
+        await curr.save();
       }
 
       alert("Rating Submitted");
@@ -311,7 +329,10 @@ function Profile() {
                   max="5"
                   onChange={(event) => setRating(event.target.value)}
                 ></input>
-                <button onClick={() => addRating(queryResults[index])}>
+                <button
+                  class="m-2 btn btn-primary"
+                  onClick={() => addRating(queryResults[index])}
+                >
                   Submit Rating
                 </button>
               </div>
@@ -320,6 +341,7 @@ function Profile() {
           </td>
           <td>
             <button
+              class="m-2 btn btn-secondary btn-outline-warning"
               onClick={() =>
                 goToMessages(
                   1,
@@ -373,7 +395,6 @@ function Profile() {
     });
   }
 
-  // separate balance into its own class adjust these accordingly.
   async function balanceOn() {
     const curr = await Parse.User.current();
     const balanceQuery = new Parse.Query("UserBalance");
