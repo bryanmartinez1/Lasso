@@ -5,6 +5,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import React, { useState } from "react";
 import Parse from "parse/dist/parse.min.js";
 // import { Button, Divider, Input } from "antd";
+import Homebar from "../components/homebar";
 
 import { App_Id, JavaScript_key, Host_Server } from "../KEYS.js";
 
@@ -95,6 +96,7 @@ function Signup() {
 
   return (
     <section class="vh-100">
+      <Homebar />
       <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100 main-div">
           <div class="col-lg-6"></div>

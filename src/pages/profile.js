@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import Parse from "parse/dist/parse.min.js";
-import ProfileNavbar from "../components/profileNavbar";
+import Homebar from "../components/homebar";
 import "../styles/profile.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -433,7 +433,7 @@ function Profile() {
 
   return (
     <section>
-      <ProfileNavbar />
+      <Homebar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
