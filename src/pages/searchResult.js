@@ -80,7 +80,8 @@ export default function SearchResult() {
   return (
     <div>
       {" "}
-      {currentUser === null ? <HomeBar /> : <ProfileNavbar />}
+      <HomeBar />
+      {/* {currentUser === null ? <HomeBar /> : <ProfileNavbar />} */}
       {welcome && (
         <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
           Show Results

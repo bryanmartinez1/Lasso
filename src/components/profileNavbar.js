@@ -68,7 +68,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const pages = ["Home"];
 const settings = ["Logout"];
 
-function HomeBar() {
+function ProfileNavbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [toLogout, setToLogout] = React.useState(false);
@@ -120,7 +120,9 @@ function HomeBar() {
       await Parse.User.logOut();
       // To verify that current user is now empty, currentAsync can be used
       const currentUser = await Parse.User.current();
+
       if (currentUser === null) {
+        localStorage.setItem("user", false);
         alert("Success! No user is logged in anymore!");
       }
       // Update state variable holding current user
@@ -290,4 +292,4 @@ function HomeBar() {
     </AppBar>
   );
 }
-export default HomeBar;
+export default ProfileNavbar;

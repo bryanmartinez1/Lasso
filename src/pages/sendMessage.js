@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import Parse from "parse/dist/parse.min.js";
 import { useLocation } from "react-router-dom";
-import HomeBar from "../components/homebar";
+import Homebar from "../components/homebar";
 import "../styles/sendMessages.css";
 
 const Messages = Parse.Object.extend("Messages");
@@ -38,7 +38,7 @@ function SendMessage() {
 
   return (
     <section id="section_background">
-      <HomeBar />
+      <Homebar />
       <div id="page">
         <div id="roundedCorner">
           <h1>Topic Line</h1>

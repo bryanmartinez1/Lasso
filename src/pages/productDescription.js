@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import products from "../products";
 import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
-import HomeBar from "../components/homebar";
+import Homebar from "../components/homebar";
 import "../styles/description.css";
 
 const Messages = Parse.Object.extend("Messages");
@@ -118,7 +118,7 @@ export default function ProductDescription() {
   // if an item is sold, remove the bidding box.
   return (
     <div>
-      <ProfileNavbar />
+      <Homebar />
       <div id="backdrop">
       <form style={{width: "800px", height: "800px", border: "solid",backgroundColor: "floralwhite", padding: "10px",
         textAlign: "center", display: "inline-block" }}>
