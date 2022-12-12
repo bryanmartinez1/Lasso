@@ -256,6 +256,7 @@ function Profile() {
   }
 
   async function addRating(order) {
+    const curr = await Parse.User.current();
     // add rating to sellers rating
     const ratingQuery = new Parse.Query("Ratings");
     ratingQuery.contains("username", order.get("seller"));
@@ -280,8 +281,29 @@ function Profile() {
       orderUpdate.set("rating", Number(rating));
       await orderUpdate.save();
 
-      if (rating === 1 || rating === 5) {
-        // flag buyer account, 3 of these will lock account and they have to be reapproved by Admin again
+      if (rating < 2 || rating > 4) {
+        const flags = curr.get("flags");
+        console.log(flags);
+        curr.set("flags", flags + 1);
+        if (flags == 2) {
+          curr.set("approved", false);
+          alert(
+            "You have submitted 3 1 or 5 star ratings, and must speak with an admin to unlock your account again"
+          );
+          const message = new Parse.Object("Messages");
+          message.set("recipient", "Tad");
+          message.set("sender", curr.get("username"));
+          message.set(
+            "content",
+            "User has submitted 3 1 or 5 star ratings, please check their account."
+          );
+          message.set(
+            "topicline",
+            curr.get("username") + " has been flagged as suspicious"
+          );
+          message.save();
+        }
+        await curr.save();
       }
 
       alert("Rating Submitted");

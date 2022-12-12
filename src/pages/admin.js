@@ -299,6 +299,18 @@ function Admin() {
           <td>
             <textarea readOnly value={message.get("content")}></textarea>
           </td>
+          <td>
+            <button
+              onClick={() =>
+                goToMessages(
+                  message.get("sender"),
+                  "RE: " + message.get("topicline")
+                )
+              }
+            >
+              Reply
+            </button>
+          </td>
         </tr>
       );
     });
@@ -307,6 +319,7 @@ function Admin() {
   const approveUser = async function (user) {
     try {
       user.set("approved", true);
+      user.set("flags", 0);
       await user.save({ useMasterKey: true });
       alert("User has been approved");
       return true;
@@ -725,29 +738,7 @@ function Admin() {
                       fontFamily: "Arial",
                     }}
                   >
-                    Sender
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Topic
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Content
+                    Reply
                   </th>
                 </tr>
               </thead>
