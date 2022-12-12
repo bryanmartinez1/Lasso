@@ -115,29 +115,37 @@ export default function ProductDescription() {
     }
   }
 
-  // if an item is sold, remove the bidding box.
   return (
     <div>
       <Homebar />
       <div id="backdrop">
-      <form style={{width: "800px", height: "800px", border: "solid",backgroundColor: "floralwhite", padding: "10px",
-        textAlign: "center", display: "inline-block" }}>
-        <h1 style={{ color: "purple" }}>Product Description</h1>
-        <h3 class="text-center">{data.productname}</h3>
-        <img id="image" src={img} />
-        <br></br>
-        <div>Sold by: {data.sellername}</div>
-        <input
-          type="number"
-          onChange={(event) => setBidAmount(event.target.value)}
-        ></input>
-        <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
-          Submit Bid
-        </button>
-        <br></br>
-        <button class="m-2 btn btn-primary btn-block" onClick={report}>
-          Report
-        </button>
+        <form
+          style={{
+            width: "800px",
+            height: "800px",
+            border: "solid",
+            backgroundColor: "floralwhite",
+            padding: "10px",
+            textAlign: "center",
+            display: "inline-block",
+          }}
+        >
+          <h1 style={{ color: "purple" }}>Product Description</h1>
+          <h3 class="text-center">{data.productname}</h3>
+          <img id="image" src={img} />
+          <br></br>
+          <div>Sold by: {data.sellername}</div>
+          <input
+            type="number"
+            onChange={(event) => setBidAmount(event.target.value)}
+          ></input>
+          <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
+            Submit Bid
+          </button>
+          <br></br>
+          <button class="m-2 btn btn-primary btn-block" onClick={report}>
+            Report
+          </button>
         </form>
       </div>
     </div>
