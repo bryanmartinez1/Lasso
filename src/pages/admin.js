@@ -456,24 +456,10 @@ function Admin() {
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
                   >
                     Warning
                   </th>
                   <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
                     style={{
                       color: "white",
                       border: "solid",
