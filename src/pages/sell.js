@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Homebar from "../components/homebar";
+import ProfileNavbar from "../components/profileNavbar";
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/sell.css";
 import DatePicker from "react-datepicker";
@@ -137,7 +137,7 @@ function Sell() {
 
   return (
     <div id="screen">
-      <Homebar />
+      <ProfileNavbar />
       <div id="display">
         <div id="bodyProducts">
           <article class="reg">

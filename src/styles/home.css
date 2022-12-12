@@ -4,5 +4,10 @@
   background: linear-gradient(217deg, rgba(245, 245, 245, 1), rgba(255, 0, 0, 0) 100%),
         linear-gradient(127deg, rgba(239, 234, 141, 1), rgba(243, 246, 243, 0) 100%);
 
-   
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
 }

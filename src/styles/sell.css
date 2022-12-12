@@ -3,6 +3,9 @@
     justify-content: flex-start;
     gap: 10 px;
     flex-direction: column;
+    background-image: url("../assets/background.png");
+    background-size: cover;
+    width: 100%;
 }
 #display {
     display: flex;

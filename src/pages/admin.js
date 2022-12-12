@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
-import Homebar from "../components/homebar";
+import AdminNavbar from "../components/adminNavbar";
 import DatePicker from "react-datepicker";
 
 function Admin() {
@@ -50,7 +50,7 @@ function Admin() {
           <td>{user.get("email")}</td>
           <td>
             <button
-              class="btn btn-secondary"
+              class="btn btn-secondary btn-sm"
               onClick={() => {
                 goToMessages(queryResults[index].get("username"));
               }}
@@ -60,7 +60,7 @@ function Admin() {
           </td>
           <td>
             <button
-              class="btn btn-outline-dark"
+              class="btn btn-sm btn-outline-dark"
               onClick={() => getUserTransactions(user.get("username"))}
             >
               View Transactions
@@ -333,7 +333,7 @@ function Admin() {
 
   return (
     <section id="section_background">
-      <Homebar />
+      <AdminNavbar />
       <div id="row_div">
         <div id="column_div">
           <div id="side_bar">
@@ -356,74 +356,34 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Username
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Full Name
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Approved?
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Email
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Send Message
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>
                     Transactions
                   </th>
-                  <th>Warning</th>
-                  <th>Blacklist</th>
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>Warning</th>
+                  <th style={{color: "white", border: "solid", backgroundColor: "skyblue",
+                      padding: "10px", fontFamily: "Arial",}}>Blacklist</th>
                 </tr>
               </thead>
               <tbody>{getCustomerRow()}</tbody>
@@ -434,39 +394,6 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Product Name
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Uploader Name
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Approved?
-                  </th>
                   <th
                     style={{
                       color: "white",
@@ -637,50 +564,6 @@ function Admin() {
                   >
                     Time of Purchase
                   </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Product Name
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Seller Name
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Amount
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Time of Purchase
-                  </th>
                 </tr>
               </thead>
               <tbody>{getUserTransactionRow()}</tbody>
@@ -691,39 +574,6 @@ function Admin() {
             <table className="table">
               <thead>
                 <tr>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Sender
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Topic
-                  </th>
-                  <th
-                    style={{
-                      color: "white",
-                      border: "solid",
-                      backgroundColor: "skyblue",
-                      padding: "10px",
-                      fontFamily: "Arial",
-                    }}
-                  >
-                    Content
-                  </th>
                   <th
                     style={{
                       color: "white",
