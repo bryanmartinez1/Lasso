@@ -14,7 +14,11 @@ export default function Product({ product }) {
           state={{
             productname: product.get("product_name"),
             sellername: product.get("product_uploader"),
-            imgURL: imageURL,}}>
+            imgURL: imageURL,
+            bidEnd: product.get("last_day_bid"),
+            highestBid: product.get("maxbid"),
+          }}
+        >
           <img src={imageURL} className="img-fluid" />
           <p>Name: {product.get("product_name")}</p>
           <p>Description: {product.get("product_des")}</p>
