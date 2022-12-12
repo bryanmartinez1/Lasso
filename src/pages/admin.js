@@ -17,9 +17,6 @@ function Admin() {
   // Date Componets and Function so user cant pick a 30 min interval that was before the current time
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // builds the table of customer information
-  // get rating query, sort by creation date along with user query,
-  // ratingResults[index].rating
   function getCustomerRow() {
     return queryResults.map((user, index) => {
       return (
