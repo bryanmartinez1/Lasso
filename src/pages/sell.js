@@ -111,7 +111,7 @@ function Sell() {
     myProduct.set("sold", false);
     myProduct.set("product_name_lower", productNameValue.toLowerCase());
     myProduct.set("product_des_lower", productDesValue.toLowerCase());
-
+    myProduct.set("minbid", productBidValue);
     // Saves Function to Back4app Parse Server
     myProduct
       .save()

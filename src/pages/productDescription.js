@@ -139,14 +139,16 @@ export default function ProductDescription() {
         <img id="image" src={img} />
         <br></br>
         <div>Sold by: {data.sellername}</div>
+        <div>Minimum Bid: ${data.minBid}</div>
         {currDate < data.bidEnd && (
           <div>
+            Bids open until {data.bidEnd.toString()}
+            <br></br>
             <input
               type="number"
               defaultValue={0}
               onChange={(event) => setBidAmount(event.target.value)}
             ></input>
-
             <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
               Submit Bid
             </button>
