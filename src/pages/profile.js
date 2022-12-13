@@ -298,7 +298,7 @@ function Profile() {
       const ratingsum = ratingsChange.reduce(function (prev, curr) {
         return prev + curr;
       });
-      ratingUpdate.set("averageRating", ratingsum / (oldNumRatings + 1));
+      ratingUpdate.set("averagerating", ratingsum / (oldNumRatings + 1));
       await ratingUpdate.save();
 
       let orderUpdate = new Parse.Object("Orders");

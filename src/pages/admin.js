@@ -185,6 +185,7 @@ function Admin() {
 
   async function producstOn() {
     const productQuery = new Parse.Query("Products");
+    productQuery.equalTo("sold", false);
     try {
       const productResults = await productQuery.find();
       setQueryResults(productResults);
@@ -238,7 +239,7 @@ function Admin() {
   }
 
   async function getTransactionByDate() {
-    const transactionQuery = new Parse.Query("Orders").greaterThan(
+    const transactionQuery = new Parse.Query("Orders").greaterThanOrEqualTo(
       "testdate",
       selectedDate
     );
@@ -543,8 +544,7 @@ function Admin() {
                     placeholderText="Press here to enter Date"
                     selected={selectedDate}
                     onChange={(date) => setSelectedDate(date)}
-                    showTimeSelect
-                    dateFormat="MMMM d, yyyy h:mm aa"
+                    dateFormat="MMMM d, yyyy"
                     showDisabledMonthNavigation
                   />
                 </p>

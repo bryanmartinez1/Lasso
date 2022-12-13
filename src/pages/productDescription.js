@@ -5,6 +5,7 @@ import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
 import HomeBar from "../components/homebar";
 import "../styles/description.css";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 const Messages = Parse.Object.extend("Messages");
 
@@ -29,7 +30,7 @@ export default function ProductDescription() {
       return false;
     }
     if (curr.get("approved") === false) {
-      alert("You can not sell a product till your account has been approved");
+      alert("You can not bid until your account has been approved");
       return false;
     }
     if (curr.get("username") == data.sellername) {
@@ -45,16 +46,15 @@ export default function ProductDescription() {
     }
     let checkBid = new Parse.Object("Bids");
     checkBid.set("objectId", bidResult[0].id);
-    if (checkBid.get("bidamount") >= bidAmount) {
+    if (checkBid.get("bidamount") >= Number(bidAmount)) {
       alert("You must enter a bid higher than your last");
       return false;
     }
+
     return true;
   }
 
   async function submitBid() {
-    console.log(bidAmount);
-    console.log("HEL:LL:");
     const curr = await Parse.User.current();
     const bidQuery = new Parse.Query("Bids");
     bidQuery
@@ -64,7 +64,6 @@ export default function ProductDescription() {
     const productQuery = new Parse.Query("Products")
       .contains("product_name", data.productname)
       .contains("product_uploader", data.sellername);
-
     try {
       const bidResult = await bidQuery.find();
       if (!validateUser(curr)) {
@@ -72,6 +71,10 @@ export default function ProductDescription() {
       }
       if (bidAmount <= 0) {
         alert("You must bid something more than $0");
+        return false;
+      }
+      if (bidAmount < data.minBid) {
+        alert("You must bid higher than the minimum");
         return false;
       }
       if (!validateBid(bidResult)) {

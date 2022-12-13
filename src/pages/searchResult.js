@@ -54,11 +54,11 @@ export default function SearchResult() {
 
       //Filtering out products with prices greater than the max price
       if (data.maxPrice != -1) {
-        products.lessThanOrEqualTo("prod_num", data.maxPrice);
+        products.lessThanOrEqualTo("minbid", data.maxPrice);
       }
       //Filtering out products with prices less than the min price
       if (data.minPrice != 0) {
-        products.greaterThanOrEqualTo("prod_num", data.minPrice);
+        products.greaterThanOrEqualTo("minbid", data.minPrice);
       }
       //
       // Figure out how to sort for ratings
@@ -67,7 +67,7 @@ export default function SearchResult() {
       if (data.sort === "Rating") {
         console.log("Sorting via Rating");
       } else if (data.sort === "Price: Low to High") {
-        products.addAscending("prod_num");
+        products.addAscending("minbid");
       } else if (data.sort === "Price: High to Low") {
         products.addDescending("prod_num");
       }
