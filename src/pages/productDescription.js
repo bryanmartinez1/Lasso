@@ -141,12 +141,13 @@ export default function ProductDescription() {
         <div>Sold by: {data.sellername}</div>
         {currDate < data.bidEnd && (
           <div>
+            Bids open until {data.bidEnd}
+            <br></br>
             <input
               type="number"
               defaultValue={0}
               onChange={(event) => setBidAmount(event.target.value)}
             ></input>
-
             <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
               Submit Bid
             </button>

@@ -48,6 +48,7 @@ function Admin() {
           </td>
           <td>{user.get("email")}</td>
           <td>{ratingResults[index].get("averagerating")}</td>
+          <td>{ratingResults[index].get("numratings")}</td>
           <td>
             <button
               class="btn btn-secondary btn-sm btn-sm"
@@ -426,6 +427,17 @@ function Admin() {
                     }}
                   >
                     Ratings
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Raters
                   </th>
                   <th
                     style={{

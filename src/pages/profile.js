@@ -18,6 +18,7 @@ function Profile() {
   const [displayBalance, setDisplayBalance] = useState(false);
   const [balanceChange, setBalanceChange] = useState();
   const [displayBids, setDisplayBids] = useState(false);
+  const [displaySales, setDisplaySales] = useState(false);
   // user data info for update profile
   const [currentUser, setCurrentUser] = useState(null);
   const [firstname, setFirstName] = useState();
@@ -66,6 +67,7 @@ function Profile() {
         setDisplayMessgaes(false);
         setDisplayBalance(false);
         setDisplayBids(false);
+        setDisplaySales(false);
         setDisplayPersonal(true);
       }
       return true;
@@ -87,6 +89,7 @@ function Profile() {
       setDisplayMessgaes(false);
       setDisplayBalance(false);
       setDisplayBids(false);
+      setDisplaySales(false);
       setDisplayProducts(true);
       return true;
     } catch (error) {
@@ -134,6 +137,7 @@ function Profile() {
       setDisplayPersonal(false);
       setDisplayMessgaes(false);
       setDisplayBalance(false);
+      setDisplaySales(false);
       setDisplayOrders(false);
       setDisplayBids(true);
       return true;
@@ -247,7 +251,29 @@ function Profile() {
       setDisplayMessgaes(false);
       setDisplayBalance(false);
       setDisplayBids(false);
+      setDisplaySales(false);
       setDisplayOrders(true);
+      return true;
+    } catch (error) {
+      alert(`Error! ${error.message}`);
+      return false;
+    }
+  }
+
+  async function userSalesOn() {
+    const curr = await Parse.User.current();
+    const orderQuery = new Parse.Query("Orders");
+    orderQuery.contains("seller", curr.get("username"));
+    try {
+      const orderResults = await orderQuery.find();
+      setQueryResults(orderResults);
+      setDisplayProducts(false);
+      setDisplayPersonal(false);
+      setDisplayMessgaes(false);
+      setDisplayBalance(false);
+      setDisplayBids(false);
+      setDisplayOrders(false);
+      setDisplaySales(true);
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
@@ -313,7 +339,19 @@ function Profile() {
       return false;
     }
   }
-  // replies?
+
+  function getSaleRow() {
+    return queryResults.map((order, index) => {
+      return (
+        <tr key={index}>
+          <td>{order.get("buyer")}</td>
+          <td>{order.get("product")}</td>
+          <td>${order.get("amount")}</td>
+        </tr>
+      );
+    });
+  }
+
   function getOrderRow() {
     return queryResults.map((order, index) => {
       return (
@@ -360,7 +398,6 @@ function Profile() {
       );
     });
   }
-
   async function userMessagesOn() {
     const curr = await Parse.User.current();
     const messageQuery = new Parse.Query("Messages");
@@ -373,6 +410,7 @@ function Profile() {
       setDisplayOrders(false);
       setDisplayBalance(false);
       setDisplayBids(false);
+      setDisplaySales(false);
       setDisplayMessgaes(true);
       return true;
     } catch (error) {
@@ -468,7 +506,10 @@ function Profile() {
               Your Products
             </button>
             <button id="side_nav_bt" onClick={userTransactionsOn}>
-              Your Orders
+              Your Purchases
+            </button>
+            <button id="side_nav_bt" onClick={userSalesOn}>
+              Your Sales
             </button>
             <button id="side_nav_bt" onClick={userMessagesOn}>
               Messages
@@ -777,6 +818,49 @@ function Profile() {
                 </tr>
               </thead>
               <tbody>{getOrderRow()}</tbody>
+            </table>
+          )}
+
+          {displaySales && (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Buyer
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Item
+                  </th>
+                  <th
+                    style={{
+                      color: "white",
+                      border: "solid",
+                      backgroundColor: "skyblue",
+                      padding: "10px",
+                      fontFamily: "Arial",
+                    }}
+                  >
+                    Amount
+                  </th>
+                </tr>
+              </thead>
+              <tbody>{getSaleRow()}</tbody>
             </table>
           )}
         </div>
