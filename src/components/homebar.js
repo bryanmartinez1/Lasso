@@ -62,8 +62,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-// Added "Sell" here
-// const pages = ["Home", "Shop by Category", "Orders & Returns"];
 
 function Homebar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

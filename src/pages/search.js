@@ -55,21 +55,21 @@ export default function Search() {
       <div class="center2">
       <div id="Sort_Filter">
         {" "}
-        <div>Max Price</div>
+        <div><strong>Max Price</strong></div>
         <input
           type="number"
           min="0"
           placeholder="Optional"
           id="maxPrice"
         ></input>
-        <div>Min Price</div>
+        <div><strong>Min Price</strong></div>
         <input
           type="number"
           placeholder="Optional"
           min="0"
           id="minPrice"
         ></input>
-        <div>Sort</div>
+        <div><strong>Sort</strong></div>
         <Dropdown
           options={sortOptions}
           value={deafultOption}
@@ -79,7 +79,7 @@ export default function Search() {
       
       </div>
       
-      <div>You searched {data.searchResult}</div>
+      <h4 class="m-3"><em>You searched  "{data.searchResult}"</em></h4>
       <button class="m-3 btn btn-primary btn-lg" onClick={navConfirmResult}>
         Confirm Search
       </button>
