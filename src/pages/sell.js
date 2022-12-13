@@ -143,9 +143,9 @@ function Sell() {
         <div id="bodyProducts">
           <article class="reg">
             {" "}
-            <h2>Add Product</h2>
+            <h2>Add Product Description</h2>
             {/* Product Name */}
-            <div id="sellRoundedCorner">
+            <div id="sellRoundedCorner2">
               <p id="Label">Enter Product's Name</p>
               <p>
                 <input
@@ -159,7 +159,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Min Bid */}
-            <div id="sellRoundedCorner">
+            <div id="sellRoundedCorner2">
               <p id="Label">Enter Minimum Bid</p>
               <p>
                 <text> $</text>
@@ -175,7 +175,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Image */}
-            <div id="sellRoundedCorner">
+            <div id="sellRoundedCorner2">
               <p id="Label">Insert Image of Product</p>
               <p>
                 <input
@@ -190,7 +190,7 @@ function Sell() {
               </p>
             </div>
             {/* Date Picker*/}
-            <div id="sellRoundedCorner">
+            <div id="sellRoundedCorner2">
               <p id="Label">Choose Last Day to Bid for Product</p>
               <p>
                 <DatePicker
@@ -207,7 +207,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Condition */}
-            <div id="sellRoundedCorner">
+            <div id="sellRoundedCorner2">
               <p id="Label">Select Product's Condition</p>
               <p>
                 <Dropdown
@@ -218,7 +218,7 @@ function Sell() {
               </p>
             </div>
             {/* Product Tag */}
-            <div id="sellRoundedCorner">
+            <div id="sellRoundedCorner2">
               <p id="Label">Select Product's Tag</p>
               <p>
                 <Dropdown
