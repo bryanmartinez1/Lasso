@@ -68,7 +68,7 @@ function SendMessage() {
             <div>/1000 Characters</div>
           </div>
         </div>
-        <button onClick={createMessage}>Send</button>
+        <button class="btn btn-primary btn-lg" onClick={createMessage}>Send</button>
       </div>
     </section>
   );

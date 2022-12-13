@@ -29,6 +29,19 @@
     font-size: larger;
 }
 
+#sellRoundedCorner {
+    border-radius: 15px;
+    border: solid;
+    background: #94d0f5;
+    padding: 10px;
+    margin: 20px;
+    width: 97%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 #backgrund{
     background-image: url("../assets/background.png");
     background-size: cover;

@@ -548,7 +548,7 @@ function Admin() {
                     showDisabledMonthNavigation
                   />
                 </p>
-                <button onClick={getTransactionByDate}>View By Date</button>
+                <button class="btn btn-primary" onClick={getTransactionByDate}>View By Date</button>
               </div>
               <table className="table">
                 <thead>

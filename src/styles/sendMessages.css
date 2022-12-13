@@ -1,5 +1,6 @@
 #section_background {
-    background: white;
+    background-image: url("../assets/background.png");
+    background-size: cover;
     min-height: 100vh;
 }
 
@@ -31,9 +32,11 @@
 
 #roundedCorner {
     border-radius: 15px;
-    background: #EDEDED;
+    border-radius: 15px;
+    border: solid;
+    background: #94d0f5;
     padding: 10px;
-    margin: 5px;
+    margin: 20px;
     width: 600px;
     display: flex;
     justify-content: center;

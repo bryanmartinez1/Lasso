@@ -107,7 +107,7 @@ function Profile() {
           <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
           <td>
             {!product.get("sold") && (
-              <button
+              <button class="btn btn-secondary"
                 onClick={() => {
                   productBidsOn(queryResults[index]);
                 }}
@@ -156,7 +156,7 @@ function Profile() {
           <td>{bid.get("buyer")}</td>
           <td>${bid.get("bidamount")}</td>
           <td>
-            <button
+            <button class="btn btn-success"
               onClick={() =>
                 acceptBid(bid, index).then(
                   goToMessages(index, "Tad", "Chose non-highest bid")
@@ -607,7 +607,7 @@ function Profile() {
                   <button
                     onClick={withdraw}
                     style={{ marginLeft: "25px" }}
-                    className="btn btn-success"
+                    className="btn btn-secondary"
                   >
                     Withdraw
                   </button>
@@ -763,7 +763,7 @@ function Profile() {
                   </th>
                 </tr>
               </thead>
-              <tbody>{getMessageRow()}</tbody>
+              <tbody id="msg">{getMessageRow()}</tbody>
             </table>
           )}
 

@@ -49,8 +49,10 @@ export default function Search() {
 
   return (
     <div>
+      <div id="homebackground">
       {" "}
       <HomeBar />
+      <div class="center2">
       <div id="Sort_Filter">
         {" "}
         <div>Max Price</div>
@@ -74,11 +76,15 @@ export default function Search() {
           id="sort"
           onChange={({ value }) => setSort(value)}
         />
+      
       </div>
+      
       <div>You searched {data.searchResult}</div>
       <button class="m-3 btn btn-primary btn-lg" onClick={navConfirmResult}>
         Confirm Search
       </button>
+      </div>
+      </div>
     </div>
   );
 }
