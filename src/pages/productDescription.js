@@ -139,9 +139,10 @@ export default function ProductDescription() {
         <img id="image" src={img} />
         <br></br>
         <div>Sold by: {data.sellername}</div>
+        <div>Minimum Bid: ${data.minBid}</div>
         {currDate < data.bidEnd && (
           <div>
-            Bids open until {data.bidEnd}
+            Bids open until {data.bidEnd.toString()}
             <br></br>
             <input
               type="number"

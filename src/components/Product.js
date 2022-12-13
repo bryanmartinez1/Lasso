@@ -16,7 +16,7 @@ export default function Product({ product }) {
             sellername: product.get("product_uploader"),
             imgURL: imageURL,
             bidEnd: product.get("last_day_bid"),
-            highestBid: product.get("maxbid"),
+            minBid: product.get("minbid"),
           }}
         >
           <img src={imageURL} className="img-fluid" />
