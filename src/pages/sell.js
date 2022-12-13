@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ProfileNavbar from "../components/profileNavbar";
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/sell.css";
 import DatePicker from "react-datepicker";
 import Parse from "parse/dist/parse.min.js";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+import Homebar from "../components/homebar";
 
 var Products = Parse.Object.extend("Products");
 
@@ -138,7 +138,7 @@ function Sell() {
 
   return (
     <div id="screen">
-      <ProfileNavbar />
+      <Homebar />
       <div id="display">
         <div id="bodyProducts">
           <article class="reg">
