@@ -1,4 +1,4 @@
-# Tutorial Used for some functions :https://www.youtube.com/watch?v=1DklrGoAxDE&t=1288s
+# Tutorial Used for functions of the form getXRow, and for basic html: https://www.youtube.com/watch?v=1DklrGoAxDE&t=1288s
 # Back4App documentation used for a lot of code too : https://www.back4app.com/docs
 
 # Getting Started with Create React App
