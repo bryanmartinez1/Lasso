@@ -4,3 +4,7 @@
   align-items: center;
   height: 600px;
 }
+
+#homebackground {
+  background: #fff3df;
+}

@@ -62,8 +62,10 @@
     font-weight: bolder;
 }
 
-#sellRoundedCorner {
+.sellRoundedCorner {
     border-radius: 15px;
+    border: solid;
+    background-color: #FAF9F6;
     padding: 10px;
     margin: 5px;
     width: auto;
@@ -72,7 +74,7 @@
 #sellRoundedCorner2 {
     border-radius: 15px;
     height: 110px;
-    background: white;
+    background-color: #FAF9F6;
     border: solid;
     padding: 10px;
     margin: 5px;

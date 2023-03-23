@@ -142,7 +142,7 @@ function Sell() {
         <div id="bodyProducts">
           <article class="reg">
             {" "}
-            <h2>Add Product Description</h2>
+            <h2>Add Product </h2>
             {/* Product Name */}
             <div id="sellRoundedCorner2">
               <p id="Label">Enter Product's Name</p>
@@ -241,7 +241,7 @@ function Sell() {
         <div id="bodyProducts">
           <img id="display_image" ref={imageRef} src={result} alt=""></img>
           {/* Product Description */}
-          <div id="sellRoundedCorner">
+          <div className="sellRoundedCorner">
             <p id="Label">Enter Product's Description</p>
             <p>
               <textarea

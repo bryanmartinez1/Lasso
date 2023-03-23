@@ -18,28 +18,30 @@ function Home() {
   const [showProducts, setShowProducts] = useState(false);
   const [welcome, setWelcome] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [search, setSearch] = useState("");
+  const [show, setShow] = useState(false);
 
   //for cart
   const { emptyCart, clearCartMetadata, items } = useCart();
 
   // filter products to only display approved
-  const doQuery = async function () {
-    const productQuery = new Parse.Query("Products");
-    const curr = await Parse.User.current();
+
+  async function doQuery(search) {
+    let productQuery = new Parse.Query("Products");
+
+    productQuery.equalTo("approved", true);
+    productQuery.equalTo("sold", false);
+
     try {
-      productQuery.equalTo("approved", true);
-      productQuery.equalTo("sold", false);
       const productResults = await productQuery.find();
-      setCurrentUser(curr);
       setQueryResults(productResults);
-      setWelcome(false);
-      setShowProducts(true);
+      setShow(true);
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
       return false;
     }
-  };
+  }
 
   if (toSignup) {
     return <Navigate to="/Signup" />;
@@ -50,25 +52,14 @@ function Home() {
       return <Product product={product} />;
     });
   }
-
+  if (show === false) {
+    doQuery(search);
+  }
   return (
     <section>
       <div id="homebackground">
         <HomeBar />
-        {welcome && (
-          <div class="center">
-            <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
-              Home Page
-            </button>
-          </div>
-        )}
-        {showProducts && (
-          <div>
-            <h2 style={{ color: "purple" }}></h2>
-            <div className="row justify-content-center">{getProducts()}</div>
-          </div>
-        )}
-
+        {show && <div className="display">{getProducts()}</div>}
         <ScrollButtons />
         <Footer />
       </div>

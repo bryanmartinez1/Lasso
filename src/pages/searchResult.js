@@ -6,6 +6,8 @@ import Dropdown from "react-dropdown";
 import { useLocation } from "react-router-dom";
 import "../styles/search.css";
 import { useEffect } from "react";
+import Footer from "../components/footer.js";
+import ScrollButtons from "../components/backtoTop";
 
 export default function SearchResult() {
   const location = useLocation();
@@ -124,6 +126,8 @@ export default function SearchResult() {
         </div>
       </div>
       {show && <div className="display">{showSearch()}</div>}
+      <ScrollButtons />
+      <Footer />
     </div>
   );
 }

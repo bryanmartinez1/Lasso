@@ -107,7 +107,8 @@ function Profile() {
           <td>{product.get("approved") ? "Approved" : "Unapproved"}</td>
           <td>
             {!product.get("sold") && (
-              <button class="btn btn-secondary"
+              <button
+                class="btn btn-secondary"
                 onClick={() => {
                   productBidsOn(queryResults[index]);
                 }}
@@ -156,7 +157,8 @@ function Profile() {
           <td>{bid.get("buyer")}</td>
           <td>${bid.get("bidamount")}</td>
           <td>
-            <button class="btn btn-success"
+            <button
+              class="btn btn-success"
               onClick={() =>
                 acceptBid(bid, index).then(
                   goToMessages(index, "Tad", "Chose non-highest bid")
@@ -311,7 +313,7 @@ function Profile() {
         const flags = curr.get("flags");
         console.log(flags);
         curr.set("flags", flags + 1);
-        if (flags == 2) {
+        if (flags === 2) {
           curr.set("approved", false);
           alert(
             "You have submitted 3 1 or 5 star ratings, and must speak with an admin to unlock your account again"
