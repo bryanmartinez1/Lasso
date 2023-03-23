@@ -1,13 +1,9 @@
 #section_background {
-  background: linear-gradient(
-    rgba(255, 255, 255, 0.7),
-    rgba(255,255,255, 0.3)
-  ), url(https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v1013-p-0009a_1-krxfulwe.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=19eaa1b284bd38ab2d07b004d203fa80);
   min-height: 100vh;
 }
 #side_bar {
-  background: #89CFF0;
   min-height: 100vh;
+  background: #7d736b;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -33,12 +29,8 @@
   font-size: larger;
 }
 
-#head{
-  color: rgb(77, 1, 77);
-}
-
 #box1{
-  background-image: url("../assets/background.png");
+  background-color: #fff3df;
   background-size: cover;
   width: 100%;
   text-align: center;
@@ -59,7 +51,6 @@
   height: 50px;
   padding:10px;
   border:none;
-  background-color: rgb(112, 17, 200);
   font-weight: bold;
   color: white;
   font-size: 18px;
@@ -70,15 +61,12 @@
   height: 50px;
   padding:10px;
   border:none;
-  background-color: rgb(31, 108, 224);
   font-weight: bold;
   color: white;
   font-size: 14px;
   border-radius: 5px;
 }
 form{
-  
-  background-color: aliceblue;
   padding: 0px 60px;
   width: 800px;
   height: fit-content;
@@ -86,8 +74,6 @@ form{
   border-radius: 10px;
 }
 #msg{
-  background: linear-gradient(217deg, rgba(245, 245, 245, 1), rgba(255, 0, 0, 0) 100%),
-          linear-gradient(127deg, rgba(239, 234, 141, 1), rgba(243, 246, 243, 0) 100%);
-          background-repeat: no-repeat;
-          background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
 }

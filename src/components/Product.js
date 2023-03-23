@@ -11,6 +11,7 @@ export default function Product({ product }) {
     <div className="col-md-2 m-5 card p-2">
       <div>
         <Link
+          className="words"
           to="/pages/productDescription"
           state={{
             productname: product.get("product_name"),
@@ -20,10 +21,10 @@ export default function Product({ product }) {
             minBid: product.get("minbid"),
           }}
         >
-          <img src={imageURL} className="imageHome"  />
-          <p>Name: {product.get("product_name")}</p>
-          <p>Description: {product.get("product_des")}</p>
-          <p>Tags: {product.get("product_tag")}</p>
+          <img src={imageURL} className="imageHome" />
+          <p>{product.get("product_name")}</p>
+          <p>${product.get("prod_num")}</p>
+          <p>{product.get("product_tag")}</p>
         </Link>
       </div>
     </div>

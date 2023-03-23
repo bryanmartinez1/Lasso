@@ -68,32 +68,19 @@ function Homebar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const [toSignup, setToSignup] = React.useState(false);
-  const [toLogin, setToLogin] = React.useState(false);
-  const [toCart, setToCart] = React.useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [toSell, setToSell] = React.useState(false);
 
   const isloggedInUser = localStorage.getItem("user");
   const isUserAdmin = localStorage.getItem("admin");
   const [isLoggedin, setIsLoggedin] = useState(isloggedInUser);
   console.log("isLoggedin", isLoggedin);
 
-  //
-  // Added this hook
-  //
-
   const navigate = useNavigate();
   const cart = () => navigate("/cart");
-  const signup = () => navigate("/sell");
-  const login = () => navigate("/login");
-  const sell = () => navigate("/sell");
-  const profile = () => navigate("/profile");
-  const admin = () => navigate("/admin");
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      console.log("Enter key pressed ✅");
-      navigate("/search", {
+      navigate("/searchresult", {
         state: {
           searchResult: document.getElementById("searchResult").value,
         },
@@ -131,41 +118,21 @@ function Homebar() {
     return currentUser;
   };
 
-  if (toLogin) {
-    navigate("/login");
-  }
-
   if (toSignup) {
     navigate("/signup");
-  }
-
-  if (toCart) {
-    navigate("/cart");
   }
 
   if (isLoggedin === "1") {
     if (isUserAdmin === "1") {
       var settings = ["Admin", "Logout"];
-      var pages = [
-        "Home",
-        "Shop by Category",
-        "Orders & Returns",
-        "Sell",
-        "Profile",
-      ];
+      var pages = ["Sell", "Profile"];
     } else {
       var settings = ["Logout"];
-      var pages = [
-        "Home",
-        "Shop by Category",
-        "Orders & Returns",
-        "Sell",
-        "Profile",
-      ];
+      var pages = ["Sell", "Profile"];
     }
   } else {
     var settings = ["Login", "Sign Up"];
-    var pages = ["Home", "Shop by Category", "Orders & Returns"];
+    var pages = [];
   }
 
   //
@@ -202,12 +169,6 @@ function Homebar() {
   const handleClickedPage = (event) => {
     const res = event.target;
     console.log(res.textContent);
-    if (res.textContent === "Home") {
-      navigate("/");
-    }
-    if (res.textContent === "Shop by Category") {
-      navigate("/");
-    }
     if (res.textContent === "Sell") {
       navigate("/Sell");
     }
@@ -219,6 +180,9 @@ function Homebar() {
     }
   };
 
+  function toHome() {
+    navigate("/");
+  }
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -226,22 +190,19 @@ function Homebar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const gotoCart = () => {
-    setToCart(true);
-  };
-  //
-  // Sets the hook to true to initate the if statement from above and navigate to sell page
-  //
-  const gotoSell = () => {
-    setToSell(true);
-  };
 
   return (
     <AppBar position="static" style={{ background: "#362419" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-          <img src={logo} alt="Logo" width="50" height="50" />
+          <img
+            src={logo}
+            alt="Logo"
+            width="50"
+            height="50"
+            onClick={() => toHome()}
+          />
           <Typography
             variant="h6"
             noWrap

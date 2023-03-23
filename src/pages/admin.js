@@ -2,7 +2,6 @@ import { React, useState } from "react";
 import Parse from "parse/dist/parse.min.js";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
-import AdminNavbar from "../components/adminNavbar";
 import DatePicker from "react-datepicker";
 import HomeBar from "../components/homebar.js";
 
@@ -548,7 +547,9 @@ function Admin() {
                     showDisabledMonthNavigation
                   />
                 </p>
-                <button class="btn btn-primary" onClick={getTransactionByDate}>View By Date</button>
+                <button class="btn btn-primary" onClick={getTransactionByDate}>
+                  View By Date
+                </button>
               </div>
               <table className="table">
                 <thead>

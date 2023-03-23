@@ -38,7 +38,6 @@ function Sell() {
     "movies",
     "workout",
   ];
-  const defaultTag = tagOptions[0];
   // Date Componets and Function so user cant pick a 30 min interval that was before the current time
   const [selectedDate, setSelectedDate] = useState(null);
   const filterPassedTime = (time) => {

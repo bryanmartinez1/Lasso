@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import ProfileNavbar from "../components/profileNavbar";
 import HomeBar from "../components/homebar.js";
 import Parse from "parse/dist/parse.min.js";
 import Product from "../components/Product";
+import Dropdown from "react-dropdown";
 import { useLocation } from "react-router-dom";
-import "react-dropdown/style.css";
+import "../styles/search.css";
+import { useEffect } from "react";
 
 export default function SearchResult() {
   const location = useLocation();
@@ -13,78 +14,91 @@ export default function SearchResult() {
     data.searchResult = "";
   }
 
+  const [sort, setSort] = useState("Default");
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1000000000);
+  const [show, setShow] = useState(false);
   const [queryResults, setQueryResults] = useState();
-  const [showProducts, setShowProducts] = useState(false);
-  const [welcome, setWelcome] = useState(true);
+  const sortOptions = [
+    "Default",
+    "Low to High",
+    "High to Low",
+    "A - Z",
+    "Z - A",
+  ];
 
-  const doQuery = async function () {
-    // initializing quieres
+  const changeMin = (event) => {
+    let newMin = event.target.value;
+    if (newMin <= maxPrice) {
+      setMinPrice(newMin);
+      return;
+    }
+    alert("Min Price can not be greater than current max price");
+  };
+  const changeMax = (event) => {
+    let newMax = event.target.value;
+    if (newMax >= minPrice) {
+      setMaxPrice(newMax);
+      return;
+    }
+    alert("Min Price can not be greater than current max price");
+  };
+
+  useEffect(() => {
+    console.log("Search: " + data.searchResult);
+    console.log("Sort: " + sort);
+    console.log("Min Price: " + minPrice);
+    console.log("Max Price: " + maxPrice);
+    doSearch(data.searchResult, sort, minPrice, maxPrice);
+  }, [data.searchResult, sort, minPrice, maxPrice]);
+
+  async function doSearch(search, sortVal, minVal, maxVal) {
     const productTagQuery = new Parse.Object.extend("Products");
     const productNameQuery = new Parse.Object.extend("Products");
     const productDesQuery = new Parse.Object.extend("Products");
     const productSellerQuery = new Parse.Object.extend("Products");
 
-    //setting sort
     try {
-      // Only keeps approved products to quieres
       const tag = new Parse.Query(productTagQuery);
       const name = new Parse.Query(productNameQuery);
       const descriptions = new Parse.Query(productDesQuery);
       const seller = new Parse.Query(productSellerQuery);
 
-      // Keeps products that contains what was searched in the tag/name/description
-      tag.contains("product_tag", data.searchResult.toLowerCase());
-      name.contains("product_name_lower", data.searchResult.toLowerCase());
-      descriptions.contains(
-        "product_des_lower",
-        data.searchResult.toLowerCase()
-      );
-      seller.contains("product_uploader", data.searchResult.toLowerCase());
+      tag.contains("product_tag", search.toLowerCase());
+      name.contains("product_name_lower", search.toLowerCase());
+      descriptions.contains("product_des_lower", search.toLowerCase());
+      seller.contains("product_uploader", search.toLowerCase());
 
-      //Combines the 3 quieres
       const products = new Parse.Query("Products");
       products._orQuery([tag, name, descriptions, seller]);
 
       products.equalTo("approved", true);
       products.equalTo("sold", false);
-
-      console.log("Sorting: " + data.sort);
-      console.log("Max:" + data.maxPrice);
-      console.log("Min:" + data.minPrice);
-
-      //Filtering out products with prices greater than the max price
-      if (data.maxPrice != -1) {
-        products.lessThanOrEqualTo("minbid", data.maxPrice);
+      products.greaterThanOrEqualTo("prod_num", Number(minVal));
+      products.lessThanOrEqualTo("prod_num", Number(maxVal));
+      if (sortVal === "Low to High") {
+        products.addAscending("prod_num");
       }
-      //Filtering out products with prices less than the min price
-      if (data.minPrice != 0) {
-        products.greaterThanOrEqualTo("minbid", data.minPrice);
-      }
-      //
-      // Figure out how to sort for ratings
-      //
-      // Sorting
-      if (data.sort === "Rating") {
-        console.log("Sorting via Rating");
-      } else if (data.sort === "Price: Low to High") {
-        products.addAscending("minbid");
-      } else if (data.sort === "Price: High to Low") {
+      if (sortVal === "High to Low") {
         products.addDescending("prod_num");
       }
-
-      //Sets the results
+      if (sortVal === "A - Z") {
+        products.addAscending("product_name");
+      }
+      if (sortVal === "Z - A") {
+        products.addDescending("product_name");
+      }
       const productResults = await products.find();
       setQueryResults(productResults);
-      setWelcome(false);
-      setShowProducts(true);
+      setShow(true);
       return true;
     } catch (error) {
       alert(`Error! ${error.message}`);
       return false;
     }
-  };
+  }
 
-  function getProducts() {
+  function showSearch() {
     return queryResults.map((product) => {
       return <Product product={product} />;
     });
@@ -94,18 +108,22 @@ export default function SearchResult() {
     <div>
       {" "}
       <HomeBar />
-      {/* {currentUser === null ? <HomeBar /> : <ProfileNavbar />} */}
-      {welcome && (
-        <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
-          Show Results
-        </button>
-      )}
-      {showProducts && (
+      <div className="secondaryBar">
+        <Dropdown
+          options={sortOptions}
+          placeholder="Sort By"
+          onChange={({ value }) => setSort(value)}
+        />
         <div>
-          <h2 style={{ color: "purple" }}></h2>
-          <div className="row justify-content-center">{getProducts()}</div>
+          Min Price: ${"   "}
+          <input type="number" onChange={changeMin} />
         </div>
-      )}
+        <div>
+          Max Price: ${"   "}
+          <input type="number" onChange={changeMax} />
+        </div>
+      </div>
+      {show && <div className="display">{showSearch()}</div>}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../styles/home.css";
-import products from "../products";
 import Product from "../components/Product";
 import { useNavigate, Navigate } from "react-router-dom";
 import HomeBar from "../components/homebar.js";
@@ -58,9 +57,9 @@ function Home() {
         <HomeBar />
         {welcome && (
           <div class="center">
-          <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
-            Home Page
-          </button>
+            <button class="m-3 btn btn-primary btn-lg" onClick={doQuery}>
+              Home Page
+            </button>
           </div>
         )}
         {showProducts && (

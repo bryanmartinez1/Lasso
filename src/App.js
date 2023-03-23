@@ -1,5 +1,3 @@
-// import logo from "./logo.svg";
-
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
 import Signup from "./pages/signup";
@@ -9,7 +7,6 @@ import Sell from "./pages/sell";
 import Admin from "./pages/admin";
 import SendMessage from "./pages/sendMessage";
 import Cart from "./pages/cart";
-import Search from "./pages/search";
 import SearchResult from "./pages/searchResult";
 import ProductDescription from "./pages/productDescription";
 // import UserRegistration from "./auth/UserRegistration";
@@ -35,7 +32,6 @@ function App() {
           path="/pages/productDescription"
           element={<ProductDescription />}
         />
-        <Route path="/search" element={<Search />} />
         <Route path="/searchResult" element={<SearchResult />} />
       </Routes>
     </Router>

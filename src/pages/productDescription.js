@@ -1,11 +1,8 @@
 import { React, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import products from "../products";
-import ProfileNavbar from "../components/profileNavbar";
 import Parse from "parse/dist/parse.min.js";
 import HomeBar from "../components/homebar";
 import "../styles/description.css";
-import { ConstructionOutlined } from "@mui/icons-material";
 
 const Messages = Parse.Object.extend("Messages");
 
@@ -33,7 +30,7 @@ export default function ProductDescription() {
       alert("You can not bid until your account has been approved");
       return false;
     }
-    if (curr.get("username") == data.sellername) {
+    if (curr.get("username") === data.sellername) {
       alert("You can't bid on your own product");
       return false;
     }
