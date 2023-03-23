@@ -577,7 +577,10 @@ function Profile() {
                     onChange={(event) => setPassword(event.target.value)}
                   ></input>
                   <br></br>
-                  <button id="bt" onClick={updateProfile}>
+                  <button
+                    className="btn btn-primary btn-lg btn-block"
+                    onClick={updateProfile}
+                  >
                     Submit Changes
                   </button>
                 </div>
@@ -589,7 +592,7 @@ function Profile() {
             <form>
               {displayBalance && (
                 <div>
-                  <h1 style={{ color: "Blue" }}>Balance</h1>
+                  <h1>Balance</h1>
                   <h2 style={{ color: "red" }}>
                     ${queryResults.get("amount").toFixed(2)}
                   </h2>
@@ -624,9 +627,8 @@ function Profile() {
                 <tr>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -635,9 +637,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -646,9 +647,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -657,9 +657,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -678,9 +677,8 @@ function Profile() {
                 <tr>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -689,9 +687,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -700,9 +697,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -711,9 +707,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -732,9 +727,8 @@ function Profile() {
                 <tr>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -743,9 +737,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -754,9 +747,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -775,9 +767,8 @@ function Profile() {
                 <tr>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -786,9 +777,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -797,9 +787,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -808,9 +797,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -829,9 +817,8 @@ function Profile() {
                 <tr>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -840,9 +827,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}
@@ -851,9 +837,8 @@ function Profile() {
                   </th>
                   <th
                     style={{
-                      color: "white",
+                      color: "black",
                       border: "solid",
-                      backgroundColor: "skyblue",
                       padding: "10px",
                       fontFamily: "Arial",
                     }}

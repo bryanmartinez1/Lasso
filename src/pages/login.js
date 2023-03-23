@@ -3,7 +3,6 @@ import "../styles/login.css";
 import { React, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import Parse from "parse/dist/parse.min.js";
-import Profile from "./profile";
 import Homebar from "../components/homebar";
 
 function Login() {
