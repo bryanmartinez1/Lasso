@@ -20,13 +20,38 @@ export default function SearchResult() {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000000000);
   const [show, setShow] = useState(false);
+  const [category, setCategory] = useState("none");
   const [queryResults, setQueryResults] = useState();
+
   const sortOptions = [
     "Default",
     "Low to High",
     "High to Low",
     "A - Z",
     "Z - A",
+  ];
+
+  const categoryOptions = [
+    "none",
+    "other",
+    "electronics",
+    "phones",
+    "computers",
+    "laptops",
+    "clothes",
+    "outdoor",
+    "jewelry",
+    "watches",
+    "handbags",
+    "gaming",
+    "vehicules",
+    "cars",
+    "bicycles",
+    "collectibles",
+    "indoor",
+    "books",
+    "movies",
+    "workout",
   ];
 
   const changeMin = (event) => {
@@ -51,10 +76,10 @@ export default function SearchResult() {
     console.log("Sort: " + sort);
     console.log("Min Price: " + minPrice);
     console.log("Max Price: " + maxPrice);
-    doSearch(data.searchResult, sort, minPrice, maxPrice);
-  }, [data.searchResult, sort, minPrice, maxPrice]);
+    doSearch(data.searchResult, sort, minPrice, maxPrice, category);
+  }, [data.searchResult, sort, minPrice, maxPrice, category]);
 
-  async function doSearch(search, sortVal, minVal, maxVal) {
+  async function doSearch(search, sortVal, minVal, maxVal, categoryVal) {
     const productTagQuery = new Parse.Object.extend("Products");
     const productNameQuery = new Parse.Object.extend("Products");
     const productDesQuery = new Parse.Object.extend("Products");
@@ -90,6 +115,10 @@ export default function SearchResult() {
       if (sortVal === "Z - A") {
         products.addDescending("product_name");
       }
+
+      if (categoryVal !== "none") {
+        products.equalTo("product_tag", categoryVal);
+      }
       const productResults = await products.find();
       setQueryResults(productResults);
       setShow(true);
@@ -124,6 +153,11 @@ export default function SearchResult() {
           Max Price: ${"   "}
           <input type="number" onChange={changeMax} />
         </div>
+        <Dropdown
+          options={categoryOptions}
+          placeholder="Category"
+          onChange={({ value }) => setCategory(value)}
+        />
       </div>
       {show && <div className="display">{showSearch()}</div>}
       <ScrollButtons />
