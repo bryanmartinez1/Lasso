@@ -134,7 +134,6 @@ export default function ProductDescription() {
     <div>
       <HomeBar />
       <div id="backdrop">
-        <h1 style={{ color: "purple" }}>Product Description</h1>
         <h3 class="text-center">{data.productname}</h3>
         <img id="image" src={img} />
         <br></br>
