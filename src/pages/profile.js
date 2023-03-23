@@ -497,7 +497,7 @@ function Profile() {
       <Homebar />
       <div id="row_div">
         <div id="column_div">
-          <div id="side_bar">
+          <div className="side_bar">
             <button id="side_nav_bt" onClick={personalInfoOn}>
               Personal Info
             </button>
