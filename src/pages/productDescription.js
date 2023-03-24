@@ -131,7 +131,7 @@ export default function ProductDescription() {
   }
 
   return (
-    <div>
+    <div className="backGround">
       <HomeBar />
       <div id="backdrop">
         <h3 class="text-center">{data.productname}</h3>
