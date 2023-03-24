@@ -1,6 +1,6 @@
 .secondaryBar {
-    height: 50px;
     width: 100%;
+    flex-wrap: wrap;
     background-color: #4b3932;
     color: aliceblue;
     font-size: 1.10rem;
@@ -17,4 +17,5 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content:center;
+    background-color: #fff3df;
 }

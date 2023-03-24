@@ -57,15 +57,18 @@ export default function SearchResult() {
   const changeMin = (event) => {
     let newMin = event.target.value;
     if (newMin <= maxPrice) {
-      setMinPrice(newMin);
+      setMinPrice(Number(newMin));
       return;
     }
     alert("Min Price can not be greater than current max price");
   };
   const changeMax = (event) => {
     let newMax = event.target.value;
+    if (newMax === 0) {
+      newMax = 1000000000;
+    }
     if (newMax >= minPrice) {
-      setMaxPrice(newMax);
+      setMaxPrice(Number(newMax));
       return;
     }
     alert("Min Price can not be greater than current max price");
@@ -101,8 +104,9 @@ export default function SearchResult() {
 
       products.equalTo("approved", true);
       products.equalTo("sold", false);
-      products.greaterThanOrEqualTo("prod_num", Number(minVal));
-      products.lessThanOrEqualTo("prod_num", Number(maxVal));
+      products.greaterThanOrEqualTo("prod_num", minVal);
+      products.lessThanOrEqualTo("prod_num", maxVal);
+
       if (sortVal === "Low to High") {
         products.addAscending("prod_num");
       }
@@ -119,6 +123,7 @@ export default function SearchResult() {
       if (categoryVal !== "none") {
         products.equalTo("product_tag", categoryVal);
       }
+
       const productResults = await products.find();
       setQueryResults(productResults);
       setShow(true);
