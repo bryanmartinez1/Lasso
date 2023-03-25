@@ -43,7 +43,6 @@
 }
 
 #backgrund{
-    background-image: url("../assets/background.png");
     background-size: cover;
     width: 100%;
     text-align: center; 
