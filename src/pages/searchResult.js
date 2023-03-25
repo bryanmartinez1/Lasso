@@ -22,6 +22,7 @@ export default function SearchResult() {
   const [show, setShow] = useState(false);
   const [category, setCategory] = useState("none");
   const [queryResults, setQueryResults] = useState();
+  const [condition, setCondition] = useState("none");
 
   const sortOptions = [
     "Default",
@@ -30,7 +31,7 @@ export default function SearchResult() {
     "A - Z",
     "Z - A",
   ];
-
+  const conditionOptions = ["none", "new", "used", "old", "refurbished"];
   const categoryOptions = [
     "none",
     "other",
@@ -55,20 +56,20 @@ export default function SearchResult() {
   ];
 
   const changeMin = (event) => {
-    let newMin = event.target.value;
+    let newMin = Number(event.target.value);
     if (newMin <= maxPrice) {
-      setMinPrice(Number(newMin));
+      setMinPrice(newMin);
       return;
     }
     alert("Min Price can not be greater than current max price");
   };
   const changeMax = (event) => {
-    let newMax = event.target.value;
+    let newMax = Number(event.target.value);
     if (newMax === 0) {
       newMax = 1000000000;
     }
     if (newMax >= minPrice) {
-      setMaxPrice(Number(newMax));
+      setMaxPrice(newMax);
       return;
     }
     alert("Min Price can not be greater than current max price");
@@ -79,10 +80,17 @@ export default function SearchResult() {
     console.log("Sort: " + sort);
     console.log("Min Price: " + minPrice);
     console.log("Max Price: " + maxPrice);
-    doSearch(data.searchResult, sort, minPrice, maxPrice, category);
-  }, [data.searchResult, sort, minPrice, maxPrice, category]);
+    doSearch(data.searchResult, sort, minPrice, maxPrice, category, condition);
+  }, [data.searchResult, sort, minPrice, maxPrice, category, condition]);
 
-  async function doSearch(search, sortVal, minVal, maxVal, categoryVal) {
+  async function doSearch(
+    search,
+    sortVal,
+    minVal,
+    maxVal,
+    categoryVal,
+    conditionVal
+  ) {
     const productTagQuery = new Parse.Object.extend("Products");
     const productNameQuery = new Parse.Object.extend("Products");
     const productDesQuery = new Parse.Object.extend("Products");
@@ -124,6 +132,10 @@ export default function SearchResult() {
         products.equalTo("product_tag", categoryVal);
       }
 
+      if (conditionVal !== "none") {
+        products.equalTo("product_condition", conditionVal);
+      }
+
       const productResults = await products.find();
       setQueryResults(productResults);
       setShow(true);
@@ -162,6 +174,11 @@ export default function SearchResult() {
           options={categoryOptions}
           placeholder="Category"
           onChange={({ value }) => setCategory(value)}
+        />
+        <Dropdown
+          options={conditionOptions}
+          placeholder="Condition"
+          onChange={({ value }) => setCondition(value)}
         />
       </div>
       {show && <div className="display">{showSearch()}</div>}
