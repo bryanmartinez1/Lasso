@@ -83,6 +83,8 @@ function Homebar() {
       navigate("/searchresult", {
         state: {
           searchResult: document.getElementById("searchResult").value,
+          seller: "",
+          tag: "",
         },
       });
     }

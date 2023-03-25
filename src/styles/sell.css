@@ -1,6 +1,7 @@
 #screen {
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
     gap: 10 px;
     flex-direction: column;
     background-size: cover;
@@ -21,7 +22,6 @@
     gap: 10 px;
     flex-direction: column;
     width: 600px;
-    height: 100 vh;
 }
 
 #display_image {
@@ -65,7 +65,7 @@
 .sellRoundedCorner {
     border-radius: 15px;
     border: solid;
-    background-color: #FAF9F6;
+    background-color: white;
     padding: 10px;
     margin: 5px;
     width: auto;
@@ -74,7 +74,7 @@
 #sellRoundedCorner2 {
     border-radius: 15px;
     height: 110px;
-    background-color: #FAF9F6;
+    background-color: white;
     border: solid;
     padding: 10px;
     margin: 5px;

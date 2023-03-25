@@ -16,7 +16,6 @@ export default function ProductDescription() {
   time = time.slice(16, 21);
 
   let hour = time.slice(0, 2);
-  console.log(hour);
 
   if (Number(hour) > 12) {
     let a = Number(hour) - 12;
@@ -123,6 +122,26 @@ export default function ProductDescription() {
     alert("Added to Cart");
   }
 
+  function viewOtherSellerProducts() {
+    navigate("/searchresult", {
+      state: {
+        searchResult: "",
+        seller: data.seller,
+        tag: "",
+      },
+    });
+  }
+
+  function viewOtherTagProducts() {
+    navigate("/searchresult", {
+      state: {
+        searchResult: "",
+        seller: "",
+        tag: data.tag,
+      },
+    });
+  }
+
   return (
     <div className="backGround">
       <HomeBar />
@@ -130,17 +149,19 @@ export default function ProductDescription() {
         <img className="productImg" src={data.imgURL}></img>
         <div className="info">
           <div className="name">{data.product}</div>
-          <div className="left">Sold By: {data.seller}</div>
+          <div className="seller" onClick={() => viewOtherSellerProducts()}>
+            Sold By: {data.seller}
+          </div>
 
           {currDate < data.bidEnd && (
             <div className="info">
-              <div className="left">
-                Last Day to Bid: {" " + date + " " + time}
-              </div>
+              <div className="right">Bid By: {" " + date + " " + time}</div>
               <div className="right">Minimum Bid: ${data.minBid}</div>
               <input
+                className="inputBid"
                 type="number"
                 defaultValue={0}
+                min={0}
                 onChange={(event) => setBidAmount(event.target.value)}
               ></input>
               <button
@@ -167,7 +188,7 @@ export default function ProductDescription() {
                   )
                 }
               >
-                Report
+                Report this Seller
               </button>
             </div>
           )}
@@ -175,32 +196,11 @@ export default function ProductDescription() {
         </div>
       </div>
       <div className="bottomPart">
-        <div className="leftBottom">Condition: {" " + data.condition}</div>
-        <div className="leftBottom">Description</div>
-        <div className="leftBottom">{data.description}</div>
+        <div onClick={() => viewOtherTagProducts()}>Tag: {" " + data.tag}</div>
+        <div>Condition: {" " + data.condition}</div>
+        <div>Description</div>
+        <div>{data.description}</div>
       </div>
     </div>
   );
 }
-
-// {
-//   <div id="backdrop">
-//     <h3 class="text-center">{data.product}</h3>
-//     <img id="image" src={data.imgURL} />
-//     <br></br>
-//     <div>Sold by: {data.seller}</div>
-//     <div>Minimum Bid: ${data.minBid}</div>
-//     <br></br>
-//     <button
-//       class="m-2 btn btn-primary btn-block"
-//       onClick={() =>
-//         goToMessages(
-//           "Tad",
-//           data.product + " sold by " + data.seller + " has been reported"
-//         )
-//       }
-//     >
-//       Report
-//     </button>
-//   </div>;
-// }

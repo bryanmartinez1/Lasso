@@ -23,6 +23,7 @@ export default function SearchResult() {
   const [category, setCategory] = useState("none");
   const [queryResults, setQueryResults] = useState();
   const [condition, setCondition] = useState("none");
+  const [tagChanged, setTagChanged] = useState(false);
 
   const sortOptions = [
     "Default",
@@ -74,14 +75,31 @@ export default function SearchResult() {
     }
     alert("Min Price can not be greater than current max price");
   };
-
+  function changingCategory(value) {
+    setCategory(value);
+    setTagChanged(true);
+  }
   useEffect(() => {
     console.log("Search: " + data.searchResult);
     console.log("Sort: " + sort);
     console.log("Min Price: " + minPrice);
     console.log("Max Price: " + maxPrice);
-    doSearch(data.searchResult, sort, minPrice, maxPrice, category, condition);
-  }, [data.searchResult, sort, minPrice, maxPrice, category, condition]);
+    let tag;
+    if (data.tag !== "" && tagChanged === false) {
+      tag = data.tag;
+    } else {
+      tag = category;
+    }
+    doSearch(data.searchResult, sort, minPrice, maxPrice, tag, condition);
+  }, [
+    data.searchResult,
+    sort,
+    minPrice,
+    maxPrice,
+    category,
+    condition,
+    tagChanged,
+  ]);
 
   async function doSearch(
     search,
@@ -115,6 +133,9 @@ export default function SearchResult() {
       products.greaterThanOrEqualTo("prod_num", minVal);
       products.lessThanOrEqualTo("prod_num", maxVal);
 
+      if (data.seller !== "") {
+        products.equalTo("product_uploader", data.seller);
+      }
       if (sortVal === "Low to High") {
         products.addAscending("prod_num");
       }
@@ -173,7 +194,7 @@ export default function SearchResult() {
         <Dropdown
           options={categoryOptions}
           placeholder="Category"
-          onChange={({ value }) => setCategory(value)}
+          onChange={({ value }) => changingCategory(value)}
         />
         <Dropdown
           options={conditionOptions}
