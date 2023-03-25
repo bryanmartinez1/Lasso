@@ -9,11 +9,22 @@ const Messages = Parse.Object.extend("Messages");
 export default function ProductDescription() {
   const location = useLocation();
   const data = location.state;
-  console.log("Product name: ", data.productname);
-  console.log("Product seller: ", data.sellername);
-  console.log("Product Img URL: " + data.imgURL);
-  console.log("Last day to bid:", data.bidEnd);
-  const img = data.imgURL;
+  let date = data.bidEnd.toString();
+  let time = date;
+
+  date = date.slice(4, 15);
+  time = time.slice(16, 21);
+
+  let hour = time.slice(0, 2);
+  console.log(hour);
+
+  if (Number(hour) > 12) {
+    let a = Number(hour) - 12;
+    time = time.replace(hour, a.toString());
+    time += " PM";
+  } else {
+    time += " AM";
+  }
 
   // pass all relevant info along with state,
   // query on bid request.
@@ -30,7 +41,7 @@ export default function ProductDescription() {
       alert("You can not bid until your account has been approved");
       return false;
     }
-    if (curr.get("username") === data.sellername) {
+    if (curr.get("username") === data.seller) {
       alert("You can't bid on your own product");
       return false;
     }
@@ -56,11 +67,11 @@ export default function ProductDescription() {
     const bidQuery = new Parse.Query("Bids");
     bidQuery
       .contains("buyer", curr.get("username"))
-      .contains("seller", data.sellername)
-      .contains("productname", data.productname);
+      .contains("seller", data.seller)
+      .contains("productname", data.product);
     const productQuery = new Parse.Query("Products")
-      .contains("product_name", data.productname)
-      .contains("product_uploader", data.sellername);
+      .contains("product_name", data.product)
+      .contains("product_uploader", data.seller);
     try {
       const bidResult = await bidQuery.find();
       if (!validateUser(curr)) {
@@ -82,9 +93,9 @@ export default function ProductDescription() {
       if (bidResult.length === 0) {
         let myBid = new Parse.Object("Bids");
         myBid.set("buyer", curr.get("username"));
-        myBid.set("seller", data.sellername);
+        myBid.set("seller", data.seller);
         myBid.set("bidamount", Number(bidAmount));
-        myBid.set("productname", data.productname);
+        myBid.set("productname", data.product);
         await myBid.save().then(alert("Your bid has been submitted!"));
       }
       // update old bid
@@ -101,75 +112,95 @@ export default function ProductDescription() {
     }
   }
 
-  /*async function report() {
-    const text =
-      "The item: " +
-      data.productname +
-      " posted by " +
-      data.sellername +
-      " has been reported. Please investigate ASAP.";
-    const topic = "Report";
-    try {
-      const message = new Messages();
-      message.set("recipient", "Tad");
-      message.set("sender", "Anonymous");
-      message.set("content", text);
-      message.set("topicline", topic);
-      message.save();
-      alert("Report was sent successfully, please do not report again.");
-      return true;
-    } catch (error) {
-      alert("Error:" + error.message);
-    }
-  }*/
-
   // need to pass sender too.
   function goToMessages(username, t) {
     navigate("/sendmessage", {
       state: { recipient: username, topic: t },
     });
   }
+  // Will be Async Function
+  function addToCart() {
+    alert("Added to Cart");
+  }
 
   return (
     <div className="backGround">
       <HomeBar />
-      <div id="backdrop">
-        <h3 class="text-center">{data.productname}</h3>
-        <img id="image" src={img} />
-        <br></br>
-        <div>Sold by: {data.sellername}</div>
-        <div>Minimum Bid: ${data.minBid}</div>
-        {currDate < data.bidEnd && (
-          <div>
-            Bids open until {data.bidEnd.toString()}
-            <br></br>
-            <input
-              type="number"
-              defaultValue={0}
-              onChange={(event) => setBidAmount(event.target.value)}
-            ></input>
-            <button class="m-2 btn btn-primary btn-success" onClick={submitBid}>
-              Submit Bid
-            </button>
-          </div>
-        )}
-        {currDate >= data.bidEnd && "BIDDING ENDED"}
-        <br></br>
-        <button
-          class="m-2 btn btn-primary btn-block"
-          onClick={() =>
-            goToMessages(
-              "Tad",
-              data.productname +
-                " sold by " +
-                data.sellername +
-                " has been reported"
-            )
-          }
-        >
-          Report
-        </button>
+      <div className="topPart">
+        <img className="productImg" src={data.imgURL}></img>
+        <div className="info">
+          <div className="name">{data.product}</div>
+          <div className="left">Sold By: {data.seller}</div>
+
+          {currDate < data.bidEnd && (
+            <div className="info">
+              <div className="left">
+                Last Day to Bid: {" " + date + " " + time}
+              </div>
+              <div className="right">Minimum Bid: ${data.minBid}</div>
+              <input
+                type="number"
+                defaultValue={0}
+                onChange={(event) => setBidAmount(event.target.value)}
+              ></input>
+              <button
+                class="m-2 btn btn-primary btn-success"
+                onClick={submitBid}
+              >
+                Submit Bid
+              </button>
+              <button
+                class="m-2 btn btn-primary btn-block"
+                onClick={() => addToCart()}
+              >
+                Add to Cart
+              </button>
+              <button
+                class="m-2 btn btn-primary btn-danger"
+                onClick={() =>
+                  goToMessages(
+                    "Tad",
+                    data.product +
+                      " sold by " +
+                      data.seller +
+                      " has been reported"
+                  )
+                }
+              >
+                Report
+              </button>
+            </div>
+          )}
+          {currDate >= data.bidEnd && "BIDDING ENDED"}
+        </div>
+      </div>
+      <div className="bottomPart">
+        <div className="leftBottom">Condition: {" " + data.condition}</div>
+        <div className="leftBottom">Description</div>
+        <div className="leftBottom">{data.description}</div>
       </div>
     </div>
   );
 }
+
+// {
+//   <div id="backdrop">
+//     <h3 class="text-center">{data.product}</h3>
+//     <img id="image" src={data.imgURL} />
+//     <br></br>
+//     <div>Sold by: {data.seller}</div>
+//     <div>Minimum Bid: ${data.minBid}</div>
+//     <br></br>
+//     <button
+//       class="m-2 btn btn-primary btn-block"
+//       onClick={() =>
+//         goToMessages(
+//           "Tad",
+//           data.product + " sold by " + data.seller + " has been reported"
+//         )
+//       }
+//     >
+//       Report
+//     </button>
+//   </div>;
+// }

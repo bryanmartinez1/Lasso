@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "./Images/logo_s.jpg";
-import "../styles/description.css";
+import "../styles/product.css";
 
 export default function Product({ product }) {
   const stringify = JSON.stringify(product.get("prod_img"));
@@ -14,11 +14,14 @@ export default function Product({ product }) {
           className="words"
           to="/pages/productDescription"
           state={{
-            productname: product.get("product_name"),
-            sellername: product.get("product_uploader"),
+            product: product.get("product_name"),
+            seller: product.get("product_uploader"),
             imgURL: imageURL,
             bidEnd: product.get("last_day_bid"),
             minBid: product.get("minbid"),
+            condition: product.get("product_condition"),
+            description: product.get("product_des"),
+            tag: product.get("product_tag"),
           }}
         >
           <img src={imageURL} className="imageHome" />

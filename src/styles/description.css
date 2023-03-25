@@ -5,29 +5,54 @@
     background-color: #fff3df;
 }
 
-#image {
-    width: 500px;
-    height: 500px;
-}
-.imageHome{
+.topPart {
     width: 100%;
-    height: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.size {
-    width: 50px;
+.productImg {
+    width: 350px;
 }
 
-#backdrop {
-    width: 100%;
-    text-align: center;
-    margin-top: 0px;
-    font-weight: bold;
+.info {
+    display: flex;
+    flex-direction: column;
 }
 
-.words {
-    text-decoration: none;
-    color:#252525;
+.name {
+    font-size: 3rem;
     font-weight: bolder;
+}
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+
+.bottomPart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
+    align-items: center;
+}
+.leftBottom {
+    width: 100%;
+}
+
+
+
+/* Buttons */
+
+.cartButton {
+    height: 40px;
+    width: 250px;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 5px;
+    border: none;
 }

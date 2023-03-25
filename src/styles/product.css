@@ -1,0 +1,33 @@
+.backGround {
+    min-height: 100vh;
+    height: 100%;
+
+    background-color: #fff3df;
+}
+
+#image {
+    width: 500px;
+    height: 500px;
+}
+.imageHome{
+    width: 100%;
+    height: 200px;
+}
+
+.size {
+    width: 50px;
+}
+
+#backdrop {
+    width: 100%;
+    text-align: center;
+    margin-top: 0px;
+    font-weight: bold;
+}
+
+.words {
+    text-decoration: none;
+    color:#252525;
+    font-weight: bolder;
+    text-align: center;
+}
