@@ -7,4 +7,12 @@
 
 #homebackground {
   background: #fff3df;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.display {
+  flex: 1;
 }
