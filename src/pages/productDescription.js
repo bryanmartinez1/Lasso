@@ -145,61 +145,65 @@ export default function ProductDescription() {
   return (
     <div className="backGround">
       <HomeBar />
-      <div className="topPart">
-        <img className="productImg" src={data.imgURL}></img>
-        <div className="info">
-          <div className="name">{data.product}</div>
-          <div className="seller" onClick={() => viewOtherSellerProducts()}>
-            Sold By: {data.seller}
-          </div>
-
-          {currDate < data.bidEnd && (
-            <div className="info">
-              <div className="right">Bid By: {" " + date + " " + time}</div>
-              <div className="right">Minimum Bid: ${data.minBid}</div>
-              <input
-                className="inputBid"
-                type="number"
-                defaultValue={0}
-                min={0}
-                onChange={(event) => setBidAmount(event.target.value)}
-              ></input>
-              <button
-                class="m-2 btn btn-primary btn-success"
-                onClick={submitBid}
-              >
-                Submit Bid
-              </button>
-              <button
-                class="m-2 btn btn-primary btn-block"
-                onClick={() => addToCart()}
-              >
-                Add to Cart
-              </button>
-              <button
-                class="m-2 btn btn-primary btn-danger"
-                onClick={() =>
-                  goToMessages(
-                    "Tad",
-                    data.product +
-                      " sold by " +
-                      data.seller +
-                      " has been reported"
-                  )
-                }
-              >
-                Report this Seller
-              </button>
+      <div className="holder">
+        <div className="topPart">
+          <img className="productImg" src={data.imgURL}></img>
+          <div className="info">
+            <div className="name">{data.product}</div>
+            <div className="link" onClick={() => viewOtherSellerProducts()}>
+              Sold By: {data.seller}
             </div>
-          )}
-          {currDate >= data.bidEnd && "BIDDING ENDED"}
+
+            {currDate < data.bidEnd && (
+              <div className="info">
+                <div className="right">Bid By: {" " + date + " " + time}</div>
+                <div className="right">Minimum Bid: ${data.minBid}</div>
+                <input
+                  className="inputBid"
+                  type="number"
+                  defaultValue={0}
+                  min={0}
+                  onChange={(event) => setBidAmount(event.target.value)}
+                ></input>
+                <button
+                  class="m-2 btn btn-primary btn-success"
+                  onClick={submitBid}
+                >
+                  Submit Bid
+                </button>
+                <button
+                  class="m-2 btn btn-primary btn-block"
+                  onClick={() => addToCart()}
+                >
+                  Add to Cart
+                </button>
+                <button
+                  class="m-2 btn btn-primary btn-danger"
+                  onClick={() =>
+                    goToMessages(
+                      "Tad",
+                      data.product +
+                        " sold by " +
+                        data.seller +
+                        " has been reported"
+                    )
+                  }
+                >
+                  Report this Seller
+                </button>
+              </div>
+            )}
+            {currDate >= data.bidEnd && "BIDDING ENDED"}
+          </div>
         </div>
-      </div>
-      <div className="bottomPart">
-        <div onClick={() => viewOtherTagProducts()}>Tag: {" " + data.tag}</div>
-        <div>Condition: {" " + data.condition}</div>
-        <div>Description</div>
-        <div>{data.description}</div>
+        <div className="bottomPart">
+          <div className="link" onClick={() => viewOtherTagProducts()}>
+            Tag: {" " + data.tag}
+          </div>
+          <div>Condition: {" " + data.condition}</div>
+          <div>Description</div>
+          <div>{data.description}</div>
+        </div>
       </div>
     </div>
   );

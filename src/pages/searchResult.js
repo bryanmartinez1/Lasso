@@ -174,7 +174,7 @@ export default function SearchResult() {
   }
 
   return (
-    <div>
+    <div className="background">
       {" "}
       <HomeBar />
       <div className="secondaryBar">
@@ -204,7 +204,10 @@ export default function SearchResult() {
       </div>
       {show && <div className="display">{showSearch()}</div>}
       <ScrollButtons />
-      <Footer />
+      <div className="toBottom">
+        {" "}
+        <Footer />
+      </div>
     </div>
   );
 }
