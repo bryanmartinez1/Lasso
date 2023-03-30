@@ -204,10 +204,7 @@ export default function SearchResult() {
       </div>
       {show && <div className="display">{showSearch()}</div>}
       <ScrollButtons />
-      <div className="toBottom">
-        {" "}
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }

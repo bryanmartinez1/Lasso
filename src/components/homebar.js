@@ -127,7 +127,7 @@ function Homebar() {
   if (isLoggedin === "1") {
     if (isUserAdmin === "1") {
       var settings = ["Admin", "Logout"];
-      var pages = ["Sell", "Profile"];
+      var pages = ["Sell", "Profile", "Admin"];
     } else {
       var settings = ["Logout"];
       var pages = ["Sell", "Profile"];
@@ -177,8 +177,8 @@ function Homebar() {
     if (res.textContent === "Profile") {
       navigate("/Profile");
     }
-    if (res.textContent === "Orders & Returns") {
-      navigate("/");
+    if (res.textContent === "Admin") {
+      navigate("/Admin");
     }
   };
 

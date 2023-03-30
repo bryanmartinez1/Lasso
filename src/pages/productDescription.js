@@ -193,17 +193,20 @@ export default function ProductDescription() {
                 </button>
               </div>
             )}
-            {currDate >= data.bidEnd && "BIDDING ENDED"}
+            {currDate >= data.bidEnd && (
+              <div className="ended">BIDDING ENDED</div>
+            )}
           </div>
         </div>
         <div className="bottomPart">
           <div className="link" onClick={() => viewOtherTagProducts()}>
             Tag: {" " + data.tag}
           </div>
-          <div>Condition: {" " + data.condition}</div>
-          <div>Description</div>
-          <div>{data.description}</div>
+          <div className="title">Condition: {" " + data.condition}</div>
+          <div className="title">Description</div>
+          <div className="des">{data.description}</div>
         </div>
+        <div className="buffer" />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
-#section_background {
-    background: white;
+.background {
+    background: #fff3df;
     min-height: 100vh;
+    height: 100%
 }
 #side_bar {
     background-color: #4b3932;;
@@ -32,7 +33,6 @@
 #sellRoundedCorner {
     border-radius: 15px;
     border: solid;
-    background: #94d0f5;
     padding: 10px;
     margin: 20px;
     width: 97%;
@@ -64,7 +64,7 @@
   }
   
   th[scope="col"] {
-      background-color: #696969;
+      /* background-color: #696969; */
       color: #fff;
   }
   

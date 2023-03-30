@@ -349,7 +349,7 @@ function Admin() {
   }
 
   return (
-    <section id="section_background">
+    <section id="section_background" className="background">
       <HomeBar />
       <div id="row_div">
         <div id="column_div">
